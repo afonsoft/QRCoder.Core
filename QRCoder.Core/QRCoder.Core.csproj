@@ -1,0 +1,71 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+    <PackageId>QRCoder.Core</PackageId>
+    <Version>1.0.0</Version>
+    <AssemblyName>QRCoder.Core</AssemblyName>
+	<Authors>Afonso Dutra Nogueira Filho</Authors>
+	<Copyright>AFONSOFT © 2024</Copyright>
+	<Company>AFONSOFT</Company>
+	<LangVersion>9.0</LangVersion>
+	<OutputType>Library</OutputType>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<GenerateAssemblyTitleAttribute>true</GenerateAssemblyTitleAttribute>
+	<GenerateAssemblyDescriptionAttribute>true</GenerateAssemblyDescriptionAttribute>
+	<GenerateAssemblyConfigurationAttribute>true</GenerateAssemblyConfigurationAttribute>
+	<GenerateAssemblyCompanyAttribute>true</GenerateAssemblyCompanyAttribute>
+	<GenerateAssemblyProductAttribute>true</GenerateAssemblyProductAttribute>
+	<GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
+	<IsPackable>true</IsPackable>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<IncludeSymbols>true</IncludeSymbols>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	<Deterministic>true</Deterministic>
+	<DeterministicSourcePaths>false</DeterministicSourcePaths>
+	<OpenApiGenerateDocumentsOnBuild>false</OpenApiGenerateDocumentsOnBuild>
+	<!-- Set the CheckEolTargetFramework property to false to fix the warning -->
+	<CheckEolTargetFramework>false</CheckEolTargetFramework>
+	<ServerGarbageCollection>true</ServerGarbageCollection>
+	<GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
+	<UseWindowsThreadPool>true</UseWindowsThreadPool>
+	<PublishAot>false</PublishAot>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageProjectUrl>https://github.com/Afonsoft/QRCoder.Core/</PackageProjectUrl>
+    <PackageIcon>nuget-icon.png</PackageIcon>
+    <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
+    <PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
+    <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>QRCoder,written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 6.0.0.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
+    <None Include="Assets\nuget-readme.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	</PropertyGroup>
+	<PropertyGroup>
+		<!-- Include symbol files (*.pdb) in the built .nupkg -->
+		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="(5.0.3,7.0.0]" />
+		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.1" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+	</ItemGroup>
+
+	
+	
+
+
+</Project>

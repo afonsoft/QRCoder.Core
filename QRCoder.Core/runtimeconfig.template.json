@@ -1,0 +1,7 @@
+{
+  "configProperties": {
+    "System.Drawing.EnableUnixSupport": true,
+    "System.GC.Server": true,
+    "System.GC.DynamicAdaptationMode": 1
+  }
+}
