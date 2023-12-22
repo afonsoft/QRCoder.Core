@@ -38,7 +38,7 @@ jobs:
       - name: Install Coverlet Tools
         run: dotnet tool install --global --ignore-failed-sources coverlet.console
       - name: Prepare analysis on SonarQube
-        run: dotnet sonarscanner begin /o:"afonsoft-github" /k:"QrCode.Core" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONNAR_TOKEN}} /d:sonar.scm.provider=git /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.cs.vstest.reportsPaths=resultTest/*.trx /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml
+        run: dotnet sonarscanner begin /o:"afonsoft" /k:"QrCode.Core" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONNAR_TOKEN}} /d:sonar.scm.provider=git /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.cs.vstest.reportsPaths=resultTest/*.trx /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml
       - name: Build
         run: dotnet build --configuration $BUILD_CONFIG
       - name: Run QrCodeCore.Tests
