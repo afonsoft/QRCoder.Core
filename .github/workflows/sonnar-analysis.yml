@@ -25,6 +25,10 @@ jobs:
               6.0.x
               7.0.x
               8.0.x
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Update to Nuget
         run: nuget update -self
       - name: Clear NuGet cache
