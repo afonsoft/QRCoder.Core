@@ -1,0 +1,45 @@
+name: Sonarqube
+on:
+  workflow_dispatch:
+  page_build:
+  release:
+    types:
+      - created
+
+jobs:
+  sonarqube-analysis:
+
+    env:
+      BUILD_CONFIG: 'Debug'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.2.0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+           dotnet-version: | 
+              5.0.x
+              6.0.x
+              7.0.x
+              8.0.x
+      - name: Update to Nuget
+        run: nuget update -self
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
+      - name: Install SonarQube Tools
+        run: dotnet tool install --global --ignore-failed-sources dotnet-sonarscanner
+      - name: Install Coverlet Tools
+        run: dotnet tool install --global --ignore-failed-sources coverlet.console
+      - name: Fix Permission
+        run: chmod 777 sonar/ -R
+      - name: Prepare analysis on SonarQube
+        run: dotnet sonarscanner begin /o:"afonsoft-QrCode" /k:"QrCode" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONNAR_TOKEN}} /d:sonar.scm.provider=git /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.cs.vstest.reportsPaths=resultTest/*.trx /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml
+      - name: Build
+        run: dotnet build --configuration $BUILD_CONFIG
+      - name: Run QrCodeCore.Tests
+        run: dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --collect:"Code Coverage" --logger "trx;LogFileName=Eaf.AspNetCore.Tests.trx" --results-directory resultTest/ --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+      - name: Run Code Analysis
+        run: dotnet sonarscanner end /d:sonar.login=${{secrets.SONNAR_TOKEN}}

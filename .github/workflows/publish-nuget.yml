@@ -1,0 +1,41 @@
+name: Publish Nuget
+on:
+  workflow_dispatch:
+  page_build:
+  release:
+    types:
+      - created
+
+jobs:
+  build-and-publish:
+
+    env:
+      BUILD_CONFIG: 'Release'
+      NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS: '30'
+      NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS: '30'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.2.0
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+           dotnet-version: | 
+              5.0.x
+              6.0.x
+              7.0.x
+              8.0.x
+      - name: Update to Nuget
+        run: nuget update -self
+      - name: Clear NuGet cache
+        run: dotnet nuget locals all --clear
+      - name: Build
+        run: dotnet build --configuration $BUILD_CONFIG --verbosity normal
+      - name: Pack
+        run: dotnet pack --configuration $BUILD_CONFIG /p:ContinuousIntegrationBuild=true
+      - name: Publish Github
+        run: dotnet nuget push **\*.nupkg --source 'https://nuget.pkg.github.com/afonsoft/index.json' --api-key ${{secrets.GIT_TOKEN}} --skip-duplicate
+      - name: Publish Nuget
+        run: dotnet nuget push **\*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{secrets.NUGET_TOKEN}} --skip-duplicate

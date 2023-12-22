@@ -1,0 +1,30 @@
+name: Snyk Analysis
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+ 
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+         dotnet-version: | 
+            5.0.x
+            6.0.x
+            7.0.x
+            8.0.x
+      - name: Dotnet Restore 
+        run: dotnet restore --ignore-failed-sources
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --workdir /home/runner/work/QrCode.Core/

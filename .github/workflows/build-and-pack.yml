@@ -1,0 +1,31 @@
+name: Builds
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-pack:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.2.0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+       dotnet-version: | 
+          5.0.x
+          6.0.x
+          7.0.x
+          8.0.x
+    - name: Update to Nuget
+      run: nuget update -self
+    - name: Clear NuGet cache
+      run: dotnet nuget locals all --clear
+    - name: Build Release 
+      run: dotnet build  --configuration Release --verbosity normal
+
