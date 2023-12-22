@@ -38,7 +38,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration Debug
       - name: Run QrCodeCore.Tests
-        run: dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --collect:"Code Coverage" --logger "trx;LogFileName=Eaf.AspNetCore.Tests.trx" --results-directory resultTest/ --no-build --no-restore --configuration release -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
+        run: dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --collect:"Code Coverage" --logger "trx;LogFileName=QRCoder.Core.Tests.trx" --results-directory resultTest/ --no-build --no-restore --configuration debug -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
       - name: Run Code Analysis
         run: dotnet sonarscanner end /d:sonar.login=${{secrets.SONNAR_TOKEN}}
       - name: Upload coverage reports to Codecov
