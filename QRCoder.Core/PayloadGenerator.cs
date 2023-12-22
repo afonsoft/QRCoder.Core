@@ -11,6 +11,11 @@ namespace QRCoder.Core
     {
         public abstract class Payload
         {
+            protected Payload()
+            {
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            }
+
             public virtual int Version
             { get { return -1; } }
 
