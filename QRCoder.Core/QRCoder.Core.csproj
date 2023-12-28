@@ -43,8 +43,18 @@
     <PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
     <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Description>QRCoder,written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 6.0.0.</Description>
+    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 6.0.0.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="runtimeconfig.template.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="runtimeconfig.template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
