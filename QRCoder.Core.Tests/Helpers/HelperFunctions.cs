@@ -49,7 +49,7 @@ namespace QRCoder.Core.Tests.Helpers
 #if NET5_0 || NET6_0_OR_GREATER
             AppDomain.CurrentDomain.BaseDirectory;
 #else
-            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).Replace("file:\\", "");
+            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase) + "\\";
 #endif
         }
 
