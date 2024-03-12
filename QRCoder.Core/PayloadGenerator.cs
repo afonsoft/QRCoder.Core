@@ -269,7 +269,7 @@ namespace QRCoder.Core
                         return $"geo:{this.latitude},{this.longitude}";
 
                     case GeolocationEncoding.GoogleMaps:
-                        return $"http://maps.google.com/maps?q={this.latitude},{this.longitude}";
+                        return $"https://maps.google.com/maps?q={this.latitude},{this.longitude}";
 
                     default:
                         return "geo:";
@@ -336,7 +336,8 @@ namespace QRCoder.Core
 
             public override string ToString()
             {
-                return (!this.url.StartsWith("http") ? "http://" + this.url : this.url);
+                var urlFix = this.url.Replace("http:", "https:");
+                return (!urlFix.StartsWith("https") ? "https://" + this.url : this.url);
             }
         }
 
