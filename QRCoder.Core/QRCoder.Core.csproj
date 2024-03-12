@@ -6,7 +6,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <PackageId>QRCoder.Core</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
 	<Copyright>AFONSOFT © 2024</Copyright>
@@ -71,7 +71,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="System.Drawing.Common" Version="[5.0.3,7.0.0)" />
-		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.1" PrivateAssets="All" />
+		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
