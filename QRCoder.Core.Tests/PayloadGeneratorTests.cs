@@ -630,7 +630,7 @@ namespace QRCoder.Core.Tests
 
             var generator = new PayloadGenerator.Geolocation(latitude, longitude, encoding);
 
-            generator.ToString().ShouldBe("http://maps.google.com/maps?q=51.227741,6.773456");
+            generator.ToString().ShouldBe("https://maps.google.com/maps?q=51.227741,6.773456");
         }
 
         [Fact]
@@ -710,7 +710,7 @@ namespace QRCoder.Core.Tests
 
             var generator = new PayloadGenerator.Url(url);
 
-            generator.ToString().ShouldBe("http://code-bude.net");
+            generator.ToString().ShouldBe("https://code-bude.net");
         }
 
         [Fact]
