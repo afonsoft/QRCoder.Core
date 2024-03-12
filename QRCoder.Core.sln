@@ -7,6 +7,32 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QRCoder.Core", "QRCoder.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QRCoder.Core.Tests", "QRCoder.Core.Tests\QRCoder.Core.Tests.csproj", "{1B51624B-9915-4ED6-8FC1-1B7C472246E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution-items", "solution-items", "{2B0CDADF-78AC-4F72-9947-0E651F075A69}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CEE9666A-9C6B-4EEB-AC80-516820E6C0EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{70547FAB-9DF7-4558-8B04-49B25BAC311D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{961732E3-3980-46E0-8CA4-DA4BCB7C907B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\ISSUE_TEMPLATE.md = .github\ISSUE_TEMPLATE.md
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{C823921A-DA8E-4378-8910-9F22513AE27D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-pack.yml = .github\workflows\build-and-pack.yml
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\publish-nuget.yml = .github\workflows\publish-nuget.yml
+		.github\workflows\snyk-analysis.yml = .github\workflows\snyk-analysis.yml
+		.github\workflows\sonnar-analysis.yml = .github\workflows\sonnar-analysis.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +79,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AA6BE23A-7813-4D2A-835E-B673631AE9F1} = {70547FAB-9DF7-4558-8B04-49B25BAC311D}
+		{1B51624B-9915-4ED6-8FC1-1B7C472246E5} = {CEE9666A-9C6B-4EEB-AC80-516820E6C0EA}
+		{961732E3-3980-46E0-8CA4-DA4BCB7C907B} = {2B0CDADF-78AC-4F72-9947-0E651F075A69}
+		{C823921A-DA8E-4378-8910-9F22513AE27D} = {961732E3-3980-46E0-8CA4-DA4BCB7C907B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1845CDF-5EE5-456F-B6C8-717E4E2284F4}
