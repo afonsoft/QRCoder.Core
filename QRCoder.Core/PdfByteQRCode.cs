@@ -75,17 +75,19 @@ namespace QRCoder.Core
             using (var msPng = new MemoryStream())
             {
                 msPng.Write(pngArray, 0, pngArray.Length);
-                var img = System.Drawing.Image.FromStream(msPng);
-                using (var msJpeg = new MemoryStream())
+                using (var img = System.Drawing.Image.FromStream(msPng))
                 {
-                    // Create JPEG with specified quality
-                    var jpgImageCodecInfo = ImageCodecInfo.GetImageEncoders().First(x => x.MimeType == "image/jpeg");
-                    var jpgEncoderParameters = new EncoderParameters(1)
+                    using (var msJpeg = new MemoryStream())
                     {
-                        Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, jpgQuality) }
-                    };
-                    img.Save(msJpeg, jpgImageCodecInfo, jpgEncoderParameters);
-                    jpgArray = msJpeg.ToArray();
+                        // Create JPEG with specified quality
+                        var jpgImageCodecInfo = ImageCodecInfo.GetImageEncoders().First(x => x.MimeType == "image/jpeg");
+                        var jpgEncoderParameters = new EncoderParameters(1)
+                        {
+                            Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, jpgQuality) }
+                        };
+                        img.Save(msJpeg, jpgImageCodecInfo, jpgEncoderParameters);
+                        jpgArray = msJpeg.ToArray();
+                    }
                 }
             }
 

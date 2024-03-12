@@ -9,6 +9,9 @@
 		<IsTestProject>true</IsTestProject>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+		<WindowsSdkPackageVersion>10.0.19041.18</WindowsSdkPackageVersion>
+		<DisableWinExeOutputInference>true</DisableWinExeOutputInference>
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="assets\noun_Scientist_2909361.svg" />
@@ -22,18 +25,18 @@
 	  </Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-		<PackageReference Include="xunit" Version="2.6.3" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="xunit" Version="2.7.0" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7" />
 		<PackageReference Include="shouldly" Version="4.2.1" />
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="coverlet.collector" Version="3.2.0">
+		<PackageReference Include="coverlet.collector" Version="6.0.1">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.msbuild" Version="3.2.0">
+		<PackageReference Include="coverlet.msbuild" Version="6.0.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>

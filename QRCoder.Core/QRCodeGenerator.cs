@@ -455,21 +455,26 @@ namespace QRCoder.Core
 
                 for (var x = 0; x < size; x++)
                 {
-                    for (var y = 0; y < x; y++)
+                    if (selectedPattern.HasValue)
                     {
-                        if (!IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                        for (var y = 0; y < x; y++)
                         {
-                            qrCode.ModuleMatrix[y][x] ^= methods[selectedPattern.Value](x, y);
-                            qrCode.ModuleMatrix[x][y] ^= methods[selectedPattern.Value](y, x);
+                            if (!IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            {
+                                qrCode.ModuleMatrix[y][x] ^= methods[selectedPattern.Value](x, y);
+                                qrCode.ModuleMatrix[x][y] ^= methods[selectedPattern.Value](y, x);
+                            }
+                        }
+
+                        if (!IsBlocked(new Rectangle(x, x, 1, 1), blockedModules))
+                        {
+                            qrCode.ModuleMatrix[x][x] ^= methods[selectedPattern.Value](x, x);
                         }
                     }
-
-                    if (!IsBlocked(new Rectangle(x, x, 1, 1), blockedModules))
-                    {
-                        qrCode.ModuleMatrix[x][x] ^= methods[selectedPattern.Value](x, x);
-                    }
                 }
-                return selectedPattern.Value - 1;
+                if (selectedPattern.HasValue)
+                    return selectedPattern.Value - 1;
+                return 0;
             }
 
             public static void PlaceDataWords(ref QRCodeData qrCode, string data, ref List<Rectangle> blockedModules)

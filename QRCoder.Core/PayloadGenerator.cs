@@ -686,11 +686,13 @@ namespace QRCoder.Core
                 /// </summary>
                 [Description("Bitcoin")]
                 Bitcoin,
+
                 /// <summary>
                 /// BitcoinCash
                 /// </summary>
                 [Description("BitcoinCash")]
                 BitcoinCash,
+
                 /// <summary>
                 /// Litecoin
                 /// </summary>
@@ -1478,7 +1480,7 @@ namespace QRCoder.Core
                 if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.singledirectdebit || authority == AuthorityType.singlepayment || authority == AuthorityType.contact || (authority == AuthorityType.contact_v2 && oldWayFilled))
                 {
 #pragma warning restore CS0612
-                    if (!Regex.IsMatch(account.Replace(" ", ""), @"^[0-9]{1,9}$"))
+                    if (string.IsNullOrEmpty(account) || !Regex.IsMatch(account.Replace(" ", ""), @"^[0-9]{1,9}$"))
                         throw new BezahlCodeException("The account entered isn't valid.");
                     this.account = account.Replace(" ", "").ToUpper();
                     if (!Regex.IsMatch(bnc.Replace(" ", ""), @"^[0-9]{1,9}$"))
