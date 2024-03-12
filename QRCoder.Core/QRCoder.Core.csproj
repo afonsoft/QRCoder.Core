@@ -36,6 +36,7 @@
 	<GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
 	<UseWindowsThreadPool>true</UseWindowsThreadPool>
 	<PublishAot>false</PublishAot>
+	<NoWarn>$(NoWarn);CS1591;SYSLIB0001;SYSLIB0002;SYSLIB0003;MSB3277</NoWarn>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/Afonsoft/QRCoder.Core/</PackageProjectUrl>
     <PackageIcon>nuget-icon.png</PackageIcon>

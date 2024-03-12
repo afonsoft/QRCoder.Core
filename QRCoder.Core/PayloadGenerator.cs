@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -631,7 +632,7 @@ namespace QRCoder.Core
             /// <summary>
             /// Generates a Bitcoin like cryptocurrency payment payload. QR Codes with this payload can open a payment app.
             /// </summary>
-            /// <param name="currencyName">Bitcoin like cryptocurrency address of the payment receiver</param>
+            /// <param name="currencyType">Bitcoin like cryptocurrency address of the payment receiver</param>
             /// <param name="address">Bitcoin like cryptocurrency address of the payment receiver</param>
             /// <param name="amount">Amount of coins to transfer</param>
             /// <param name="label">Reference label</param>
@@ -675,26 +676,50 @@ namespace QRCoder.Core
                 return $"{Enum.GetName(typeof(BitcoinLikeCryptoCurrencyType), currencyType).ToLower()}:{address}{query}";
             }
 
+            /// <summary>
+            /// BitcoinLikeCryptoCurrencyType
+            /// </summary>
             public enum BitcoinLikeCryptoCurrencyType
             {
+                /// <summary>
+                ///Bitcoin
+                /// </summary>
+                [Description("Bitcoin")]
                 Bitcoin,
+                /// <summary>
+                /// BitcoinCash
+                /// </summary>
+                [Description("BitcoinCash")]
                 BitcoinCash,
+                /// <summary>
+                /// Litecoin
+                /// </summary>
+                [Description("Litecoin")]
                 Litecoin
             }
         }
 
+        /// <summary>
+        /// Bitcoin Address
+        /// </summary>
         public class BitcoinAddress : BitcoinLikeCryptoCurrencyAddress
         {
             public BitcoinAddress(string address, double? amount, string label = null, string message = null)
                 : base(BitcoinLikeCryptoCurrencyType.Bitcoin, address, amount, label, message) { }
         }
 
+        /// <summary>
+        /// BitcoinCash Address
+        /// </summary>
         public class BitcoinCashAddress : BitcoinLikeCryptoCurrencyAddress
         {
             public BitcoinCashAddress(string address, double? amount, string label = null, string message = null)
                 : base(BitcoinLikeCryptoCurrencyType.BitcoinCash, address, amount, label, message) { }
         }
 
+        /// <summary>
+        /// Litecoin Address
+        /// </summary>
         public class LitecoinAddress : BitcoinLikeCryptoCurrencyAddress
         {
             public LitecoinAddress(string address, double? amount, string label = null, string message = null)
@@ -1370,7 +1395,6 @@ namespace QRCoder.Core
             /// <param name="mandateId">Manadate id (Mandatsreferenz)</param>
             /// <param name="dateOfSignature">Signature date (Erteilungsdatum des Mandats)</param>
             /// <param name="reason">Reason (Verwendungszweck)</param>
-            /// <param name="postingKey">Transfer Key (Textschlüssel, z.B. Spendenzahlung = 69)</param>
             /// <param name="sepaReference">SEPA reference (SEPA-Referenz)</param>
             /// <param name="currency">Currency (Währung)</param>
             /// <param name="executionDate">Execution date (Ausführungsdatum)</param>
