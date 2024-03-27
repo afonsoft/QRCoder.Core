@@ -48,7 +48,7 @@
     <PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
     <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 6.0.0.</Description>
+    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 7.0.0.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -75,9 +75,9 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="[5.0.3,7.0.0)" />
+		<PackageReference Include="System.Drawing.Common" Version="[6.0.0,7.0.0)" />
 		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />

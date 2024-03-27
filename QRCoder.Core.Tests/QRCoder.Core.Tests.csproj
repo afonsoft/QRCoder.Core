@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net8.0;net6.0-windows;net8.0-windows;net48</TargetFrameworks>
-		<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
+		<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
 		<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">true</UseWPF>
 		<DefineConstants Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">$(DefineConstants);WINDOWS</DefineConstants>
-		<EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">true</EnableWindowsTargeting>	
+		<EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</EnableWindowsTargeting>	
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
@@ -30,15 +30,18 @@
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.7" />
 		<PackageReference Include="shouldly" Version="4.2.1" />
 		<PackageReference Include="NUnit3TestAdapter" version="4.5.0" />
-		<PackageReference Include="NUnit.Analyzers" Version="4.0.1" />
+		<PackageReference Include="NUnit.Analyzers" Version="4.1.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="coverlet.collector" Version="6.0.1">
+		<PackageReference Include="coverlet.collector" Version="6.0.2">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.msbuild" Version="6.0.1">
+		<PackageReference Include="coverlet.msbuild" Version="6.0.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
