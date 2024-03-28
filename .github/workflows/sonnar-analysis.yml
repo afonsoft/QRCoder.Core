@@ -26,9 +26,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
            dotnet-version: | 
-              5.0.x
               6.0.x
-              7.0.x
               8.0.x
       - name: Update to Nuget
         run: nuget update -self
@@ -41,7 +39,7 @@ jobs:
       - name: Prepare analysis on SonarQube
         run: dotnet sonarscanner begin /o:"afonsoft" /k:"QrCode.Core" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONNAR_TOKEN}} /d:sonar.scm.provider=git /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.cs.vstest.reportsPaths=resultTest/*.trx /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml
       - name: Build
-        run: dotnet build --configuration Debug
+        run: dotnet build QRCoder.Core.sln --configuration Debug
       - name: Run QrCodeCore.Tests
         run: dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --collect:"Code Coverage" --logger "trx;LogFileName=QRCoder.Core.Tests.trx" --results-directory resultTest/ --no-build --no-restore --configuration debug -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
       - name: Run Code Analysis

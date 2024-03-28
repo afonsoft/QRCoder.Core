@@ -18,14 +18,12 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
        dotnet-version: | 
-          5.0.x
           6.0.x
-          7.0.x
           8.0.x
     - name: Update to Nuget
       run: nuget update -self
     - name: Clear NuGet cache
       run: dotnet nuget locals all --clear
     - name: Build Release 
-      run: dotnet build  --configuration Release --verbosity normal
+      run: dotnet build QRCoder.Core.sln --configuration Release --verbosity normal
 
