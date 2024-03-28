@@ -12,7 +12,7 @@
 ## Info
 
 QRCoder.Core is a simple library, written in C#.NET, based on [QrCode](https://github.com/codebude/QRCoder) which enables you to create QR codes. It is available as .NET Core version on NuGet.
-written in C#.NET, which enables you to create QR codes Use [System.Drawing.Common below 6.0.0](https://learn.microsoft.com/pt-br/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
+written in C#.NET, which enables you to create QR codes Use [System.Drawing.Common below 7.0.0](https://learn.microsoft.com/pt-br/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
 
 
 ***
@@ -20,7 +20,7 @@ written in C#.NET, which enables you to create QR codes Use [System.Drawing.Comm
 ## Documentation
 
 👉 *Your first place to go should be our wiki. Here you can find a detailed documentation of the QRCoder and its functions.*
-* [**QRCode Wiki**](https://github.com/codebude/QRCoder/wiki)
+* [**QRCode Wiki**](https://github.com/codebude/QRCoder/wiki) or [**QRCode.Core Wiki**](https://github.com/afonsoft/QRCoder.Core/wiki)
 
 ## Usage / Quick start
 
