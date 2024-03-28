@@ -7,7 +7,7 @@
 <table>
 <tr>
 <td><a href="P_QRCoder_Core_QRCodeData_ModuleMatrix.md">ModuleMatrix</a></td>
-<td> </td></tr>
+<td>Module Matrix</td></tr>
 <tr>
 <td><a href="P_QRCoder_Core_QRCodeData_Version.md">Version</a></td>
 <td> </td></tr>

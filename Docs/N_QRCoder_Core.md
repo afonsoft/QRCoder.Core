@@ -12,31 +12,31 @@
 <td>AbstractQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_ArtQRCode.md">ArtQRCode</a></td>
-<td> </td></tr>
+<td>ArtQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_ArtQRCodeHelper.md">ArtQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_AsciiQRCode.md">AsciiQRCode</a></td>
-<td> </td></tr>
+<td>AsciiQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_AsciiQRCodeHelper.md">AsciiQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_Base64QRCode.md">Base64QRCode</a></td>
-<td> </td></tr>
+<td>Base64QRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_Base64QRCodeHelper.md">Base64QRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_BitmapByteQRCode.md">BitmapByteQRCode</a></td>
-<td> </td></tr>
+<td>BitmapByteQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_BitmapByteQRCodeHelper.md">BitmapByteQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator.md">PayloadGenerator</a></td>
-<td> </td></tr>
+<td>PayloadGenerator</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_BezahlCode.md">PayloadGenerator.BezahlCode</a></td>
 <td> </td></tr>
@@ -51,19 +51,19 @@
 <td>BitcoinCash Address</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_BitcoinLikeCryptoCurrencyAddress.md">PayloadGenerator.BitcoinLikeCryptoCurrencyAddress</a></td>
-<td> </td></tr>
+<td>Bitcoin Like Crypto Currency Address</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Bookmark.md">PayloadGenerator.Bookmark</a></td>
-<td> </td></tr>
+<td>Bookmark</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_CalendarEvent.md">PayloadGenerator.CalendarEvent</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_ContactData.md">PayloadGenerator.ContactData</a></td>
-<td> </td></tr>
+<td>ContactData</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Geolocation.md">PayloadGenerator.Geolocation</a></td>
-<td> </td></tr>
+<td>Geolocation</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Girocode.md">PayloadGenerator.Girocode</a></td>
 <td> </td></tr>
@@ -75,10 +75,10 @@
 <td>Litecoin Address</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Mail.md">PayloadGenerator.Mail</a></td>
-<td> </td></tr>
+<td>Mail</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_MMS.md">PayloadGenerator.MMS</a></td>
-<td> </td></tr>
+<td>MMS</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_MoneroTransaction.md">PayloadGenerator.MoneroTransaction</a></td>
 <td> </td></tr>
@@ -90,10 +90,10 @@
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a></td>
-<td> </td></tr>
+<td>Payload</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_PhoneNumber.md">PayloadGenerator.PhoneNumber</a></td>
-<td> </td></tr>
+<td>PhoneNumber</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_RussiaPaymentOrder.md">PayloadGenerator.RussiaPaymentOrder</a></td>
 <td> </td></tr>
@@ -111,16 +111,16 @@
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_SkypeCall.md">PayloadGenerator.SkypeCall</a></td>
-<td> </td></tr>
+<td>SkypeCall</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_SlovenianUpnQr.md">PayloadGenerator.SlovenianUpnQr</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_SMS.md">PayloadGenerator.SMS</a></td>
-<td> </td></tr>
+<td>SMS</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_SwissQrCode.md">PayloadGenerator.SwissQrCode</a></td>
-<td> </td></tr>
+<td>SwissQrCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_SwissQrCode_AdditionalInformation.md">PayloadGenerator.SwissQrCode.AdditionalInformation</a></td>
 <td> </td></tr>
@@ -150,46 +150,46 @@
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_Url.md">PayloadGenerator.Url</a></td>
-<td> </td></tr>
+<td>Url</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_WhatsAppMessage.md">PayloadGenerator.WhatsAppMessage</a></td>
-<td> </td></tr>
+<td>WhatsAppMessage</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PayloadGenerator_WiFi.md">PayloadGenerator.WiFi</a></td>
-<td> </td></tr>
+<td>WiFi</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PdfByteQRCode.md">PdfByteQRCode</a></td>
-<td> </td></tr>
+<td>PdfByteQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PdfByteQRCodeHelper.md">PdfByteQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PngByteQRCode.md">PngByteQRCode</a></td>
-<td> </td></tr>
+<td>PngByteQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PngByteQRCodeHelper.md">PngByteQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PostscriptQRCode.md">PostscriptQRCode</a></td>
-<td> </td></tr>
+<td>PostscriptQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_PostscriptQRCodeHelper.md">PostscriptQRCodeHelper</a></td>
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCode.md">QRCode</a></td>
-<td> </td></tr>
+<td>QRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeData.md">QRCodeData</a></td>
-<td> </td></tr>
+<td>QRCodeData</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeGenerator.md">QRCodeGenerator</a></td>
-<td> </td></tr>
+<td>QRCodeGenerator</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeHelper.md">QRCodeHelper</a></td>
-<td> </td></tr>
+<td>QRCodeHelper</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_SvgQRCode.md">SvgQRCode</a></td>
-<td> </td></tr>
+<td>SvgQRCode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_SvgQRCode_SvgLogo.md">SvgQRCode.SvgLogo</a></td>
 <td>Represents a logo graphic that can be rendered on a SvgQRCode</td></tr>
@@ -286,13 +286,13 @@
 <td> </td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeData_Compression.md">QRCodeData.Compression</a></td>
-<td> </td></tr>
+<td>Compression</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeGenerator_ECCLevel.md">QRCodeGenerator.ECCLevel</a></td>
 <td>Error correction level. These define the tolerance levels for how much of the code can be lost before the code cannot be recovered.</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_QRCodeGenerator_EciMode.md">QRCodeGenerator.EciMode</a></td>
-<td> </td></tr>
+<td>EciMode</td></tr>
 <tr>
 <td><a href="T_QRCoder_Core_SvgQRCode_SizingMode.md">SvgQRCode.SizingMode</a></td>
 <td>Mode of sizing attribution on svg root node</td></tr>

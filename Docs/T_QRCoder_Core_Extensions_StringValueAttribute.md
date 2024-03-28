@@ -7,7 +7,7 @@ Used to represent a string value for a value in an enum
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core_Extensions.md">QRCoder.Core.Extensions</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**

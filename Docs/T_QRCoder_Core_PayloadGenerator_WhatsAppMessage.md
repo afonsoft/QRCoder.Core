@@ -1,13 +1,13 @@
 # PayloadGenerator.WhatsAppMessage Class
 
 
-\[Missing &lt;summary&gt; documentation for "T:QRCoder.Core.PayloadGenerator.WhatsAppMessage"\]
+WhatsAppMessage
 
 
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core.md">QRCoder.Core</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**
@@ -31,20 +31,20 @@ public ref class WhatsAppMessage : public PayloadGenerator.Payload
 <td>Let's you compose a WhatApp message. When scanned the user is asked to choose a contact who will receive the message.</td></tr>
 <tr>
 <td><a href="M_QRCoder_Core_PayloadGenerator_WhatsAppMessage__ctor_1.md">PayloadGenerator.WhatsAppMessage(String, String)</a></td>
-<td>Initializes a new instance of the PayloadGenerator.WhatsAppMessage class</td></tr>
+<td>Let's you compose a WhatApp message and send it the receiver number.</td></tr>
 </table>
 
 ## Properties
 <table>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_EccLevel.md">EccLevel</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>ECCLevel<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_EciMode.md">EciMode</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>EciMode<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_Version.md">Version</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>Version<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 </table>
 
 ## Methods

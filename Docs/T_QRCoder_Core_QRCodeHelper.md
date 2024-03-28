@@ -1,13 +1,13 @@
 # QRCodeHelper Class
 
 
-\[Missing &lt;summary&gt; documentation for "T:QRCoder.Core.QRCodeHelper"\]
+QRCodeHelper
 
 
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core.md">QRCoder.Core</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**
@@ -28,7 +28,7 @@ public ref class QRCodeHelper abstract sealed
 <table>
 <tr>
 <td><a href="M_QRCoder_Core_QRCodeHelper_GetQRCode.md">GetQRCode</a></td>
-<td> </td></tr>
+<td>GetQRCode</td></tr>
 </table>
 
 ## See Also

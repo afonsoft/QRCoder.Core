@@ -1,13 +1,13 @@
 # PayloadGenerator.BitcoinLikeCryptoCurrencyAddress Class
 
 
-\[Missing &lt;summary&gt; documentation for "T:QRCoder.Core.PayloadGenerator.BitcoinLikeCryptoCurrencyAddress"\]
+Bitcoin Like Crypto Currency Address
 
 
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core.md">QRCoder.Core</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**
@@ -36,13 +36,13 @@ public ref class BitcoinLikeCryptoCurrencyAddress : public PayloadGenerator.Payl
 <table>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_EccLevel.md">EccLevel</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>ECCLevel<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_EciMode.md">EciMode</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>EciMode<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 <tr>
 <td><a href="P_QRCoder_Core_PayloadGenerator_Payload_Version.md">Version</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
+<td>Version<br />(Inherited from <a href="T_QRCoder_Core_PayloadGenerator_Payload.md">PayloadGenerator.Payload</a>)</td></tr>
 </table>
 
 ## Methods

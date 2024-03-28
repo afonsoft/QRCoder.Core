@@ -1,27 +1,25 @@
 # SvgQRCode Class
 
 
-\[Missing &lt;summary&gt; documentation for "T:QRCoder.Core.SvgQRCode"\]
+SvgQRCode
 
 
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core.md">QRCoder.Core</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**
 ``` C#
-public class SvgQRCode : AbstractQRCode, IDisposable
+public class SvgQRCode : AbstractQRCode
 ```
 **C++**
 ``` C++
-public ref class SvgQRCode : public AbstractQRCode, 
-	IDisposable
+public ref class SvgQRCode : public AbstractQRCode
 ```
 
 <table><tr><td><strong>Inheritance</strong></td><td><a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>  →  <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>  →  SvgQRCode</td></tr>
-<tr><td><strong>Implements</strong></td><td><a href="https://learn.microsoft.com/dotnet/api/system.idisposable" target="_blank" rel="noopener noreferrer">IDisposable</a></td></tr>
 </table>
 
 
@@ -46,14 +44,17 @@ public ref class SvgQRCode : public AbstractQRCode,
 ## Methods
 <table>
 <tr>
-<td><a href="M_QRCoder_Core_AbstractQRCode_Dispose.md">Dispose</a></td>
+<td><a href="M_QRCoder_Core_AbstractQRCode_Dispose.md">Dispose()</a></td>
+<td>Dispose<br />(Inherited from <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>)</td></tr>
+<tr>
+<td><a href="M_QRCoder_Core_AbstractQRCode_Dispose_1.md">Dispose(Boolean)</a></td>
 <td><br />(Inherited from <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>)</td></tr>
 <tr>
 <td><a href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)" target="_blank" rel="noopener noreferrer">Equals</a></td>
 <td>Determines whether the specified object is equal to the current object.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr>
 <tr>
-<td><a href="https://learn.microsoft.com/dotnet/api/system.object.finalize" target="_blank" rel="noopener noreferrer">Finalize</a></td>
-<td>Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr>
+<td><a href="M_QRCoder_Core_AbstractQRCode_Finalize.md">Finalize</a></td>
+<td><br />(Inherited from <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>)</td></tr>
 <tr>
 <td><a href="M_QRCoder_Core_SvgQRCode_GetGraphic_3.md">GetGraphic(Int32)</a></td>
 <td>Returns a QR code as SVG string</td></tr>

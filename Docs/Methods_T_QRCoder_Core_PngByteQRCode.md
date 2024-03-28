@@ -6,14 +6,14 @@
 ## Methods
 <table>
 <tr>
-<td><a href="M_QRCoder_Core_AbstractQRCode_Dispose.md">Dispose</a></td>
-<td><br />(Inherited from <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>)</td></tr>
+<td><a href="M_QRCoder_Core_AbstractQRCode_Dispose.md">Dispose()</a></td>
+<td>Dispose<br />(Inherited from <a href="T_QRCoder_Core_AbstractQRCode.md">AbstractQRCode</a>)</td></tr>
 <tr>
 <td><a href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)" target="_blank" rel="noopener noreferrer">Equals</a></td>
 <td>Determines whether the specified object is equal to the current object.<br />(Inherited from <a href="https://learn.microsoft.com/dotnet/api/system.object" target="_blank" rel="noopener noreferrer">Object</a>)</td></tr>
 <tr>
 <td><a href="M_QRCoder_Core_PngByteQRCode_GetGraphic.md">GetGraphic(Int32, Boolean)</a></td>
-<td> </td></tr>
+<td>Creates a black white PNG of the QR code, using 1-bit grayscale.</td></tr>
 <tr>
 <td><a href="M_QRCoder_Core_PngByteQRCode_GetGraphic_1.md">GetGraphic(Int32, Byte[], Byte[], Boolean)</a></td>
 <td>Creates 2-color PNG of the QR code, using 1-bit indexed color. Accepts 3-byte RGB colors for normal images and 4-byte RGBA-colors for transparent images.</td></tr>

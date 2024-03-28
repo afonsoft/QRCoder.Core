@@ -9,5 +9,5 @@
 <table>
 <tr>
 <td><a href="T_QRCoder_Core_Exceptions_DataTooLongException.md">DataTooLongException</a></td>
-<td> </td></tr>
+<td>DataTooLongException</td></tr>
 </table>

@@ -7,7 +7,7 @@
 <table>
 <tr>
 <td><a href="M_QRCoder_Core_QRCodeHelper_GetQRCode.md">GetQRCode</a></td>
-<td> </td></tr>
+<td>GetQRCode</td></tr>
 </table>
 
 ## See Also

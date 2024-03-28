@@ -1,13 +1,13 @@
 # QRCodeData(Byte[], QRCodeData.Compression) Constructor
 
 
-Initializes a new instance of the <a href="T_QRCoder_Core_QRCodeData.md">QRCodeData</a> class
+QRCodeData
 
 
 
 ## Definition
 **Namespace:** <a href="N_QRCoder_Core.md">QRCoder.Core</a>  
-**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+4632349aa2a984532af965c24d83952cef07f5b3  
+**Assembly:** QRCoder.Core (in QRCoder.Core.dll) Version: 1.0.2+100b048b01076590efe500a3be242a5faeb43294  
 **XMLNS for XAML:** Not mapped to an xmlns.
 
 **C#**
@@ -29,7 +29,14 @@ QRCodeData(
 
 
 #### Parameters
-<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.byte" target="_blank" rel="noopener noreferrer">Byte</a>[]</dt><dd>\[Missing &lt;param name="rawData"/&gt; documentation for "M:QRCoder.Core.QRCodeData.#ctor(System.Byte[],QRCoder.Core.QRCodeData.Compression)"\]</dd><dt>  <a href="T_QRCoder_Core_QRCodeData_Compression.md">QRCodeData.Compression</a></dt><dd>\[Missing &lt;param name="compressMode"/&gt; documentation for "M:QRCoder.Core.QRCodeData.#ctor(System.Byte[],QRCoder.Core.QRCodeData.Compression)"\]</dd></dl>
+<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.byte" target="_blank" rel="noopener noreferrer">Byte</a>[]</dt><dd>rawData</dd><dt>  <a href="T_QRCoder_Core_QRCodeData_Compression.md">QRCodeData.Compression</a></dt><dd>compressMode</dd></dl>
+
+## Exceptions
+<table>
+<tr>
+<td><a href="https://learn.microsoft.com/dotnet/api/system.exception" target="_blank" rel="noopener noreferrer">Exception</a></td>
+<td>Exception</td></tr>
+</table>
 
 ## See Also
 
