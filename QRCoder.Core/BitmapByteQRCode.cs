@@ -5,8 +5,11 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
+    /// <summary>
+    /// BitmapByteQRCode
+    /// </summary>
     // ReSharper disable once InconsistentNaming
-    public class BitmapByteQRCode : AbstractQRCode, IDisposable
+    public class BitmapByteQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections

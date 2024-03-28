@@ -7,7 +7,10 @@ using static QRCoder.Core.QRCodeGenerator;
 // pull request raised to extend library used.
 namespace QRCoder.Core
 {
-    public class ArtQRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// ArtQRCode
+    /// </summary>
+    public class ArtQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections

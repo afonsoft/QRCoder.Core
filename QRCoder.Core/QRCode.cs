@@ -5,7 +5,10 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
-    public class QRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// QRCode
+    /// </summary>
+    public class QRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections
@@ -127,8 +130,28 @@ namespace QRCoder.Core
         }
     }
 
+    /// <summary>
+    /// QRCodeHelper
+    /// </summary>
     public static class QRCodeHelper
     {
+        /// <summary>
+        /// GetQRCode
+        /// </summary>
+        /// <param name="plainText"></param>
+        /// <param name="pixelsPerModule"></param>
+        /// <param name="darkColor"></param>
+        /// <param name="lightColor"></param>
+        /// <param name="eccLevel"></param>
+        /// <param name="forceUtf8"></param>
+        /// <param name="utf8BOM"></param>
+        /// <param name="eciMode"></param>
+        /// <param name="requestedVersion"></param>
+        /// <param name="icon"></param>
+        /// <param name="iconSizePercent"></param>
+        /// <param name="iconBorderWidth"></param>
+        /// <param name="drawQuietZones"></param>
+        /// <returns></returns>
         public static Bitmap GetQRCode(string plainText, int pixelsPerModule, Color darkColor, Color lightColor, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, Bitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())

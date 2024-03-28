@@ -5,7 +5,10 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
-    public class AsciiQRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// AsciiQRCode
+    /// </summary>
+    public class AsciiQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections

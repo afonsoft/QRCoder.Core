@@ -7,8 +7,14 @@ namespace QRCoder.Core
     using System.IO;
     using System.IO.Compression;
 
+    /// <summary>
+    /// QRCodeData
+    /// </summary>
     public class QRCodeData : IDisposable
     {
+        /// <summary>
+        /// Module Matrix
+        /// </summary>
         public List<BitArray> ModuleMatrix { get; set; }
 
         public QRCodeData(int version)
@@ -20,10 +26,21 @@ namespace QRCoder.Core
                 this.ModuleMatrix.Add(new BitArray(size));
         }
 
+        /// <summary>
+        /// QRCodeData
+        /// </summary>
+        /// <param name="pathToRawData">pathToRawData</param>
+        /// <param name="compressMode">compressMode</param>
         public QRCodeData(string pathToRawData, Compression compressMode) : this(File.ReadAllBytes(pathToRawData), compressMode)
         {
         }
 
+        /// <summary>
+        /// QRCodeData
+        /// </summary>
+        /// <param name="rawData">rawData</param>
+        /// <param name="compressMode">compressMode</param>
+        /// <exception cref="Exception">Exception</exception>
         public QRCodeData(byte[] rawData, Compression compressMode)
         {
             var bytes = new List<byte>(rawData);
@@ -89,6 +106,11 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// GetRawData
+        /// </summary>
+        /// <param name="compressMode">compressMode</param>
+        /// <returns></returns>
         public byte[] GetRawData(Compression compressMode)
         {
             var bytes = new List<byte>();
@@ -151,6 +173,11 @@ namespace QRCoder.Core
             return rawData;
         }
 
+        /// <summary>
+        /// SaveRawData
+        /// </summary>
+        /// <param name="filePath">filePath</param>
+        /// <param name="compressMode">compressMode</param>
         public void SaveRawData(string filePath, Compression compressMode)
         {
             File.WriteAllBytes(filePath, GetRawData(compressMode));
@@ -165,10 +192,23 @@ namespace QRCoder.Core
 
         public void Dispose()
         {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
             this.ModuleMatrix = null;
             this.Version = 0;
         }
 
+        ~QRCodeData()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Compression
+        /// </summary>
         public enum Compression
         {
             Uncompressed,

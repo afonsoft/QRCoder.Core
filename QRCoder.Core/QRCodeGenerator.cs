@@ -6,6 +6,9 @@ using System.Text;
 
 namespace QRCoder.Core
 {
+    /// <summary>
+    /// QRCodeGenerator
+    /// </summary>
     public class QRCodeGenerator : IDisposable
     {
         private static readonly char[] alphanumEncTable = { ' ', '$', '%', '*', '+', '-', '.', '/', ':' };
@@ -20,6 +23,9 @@ namespace QRCoder.Core
         private static readonly List<Antilog> galoisField = CreateAntilogTable();
         private static readonly Dictionary<char, int> alphanumEncDict = CreateAlphanumEncDict();
 
+        /// <summary>
+        /// EciMode
+        /// </summary>
         public enum EciMode
         {
             Default = 0,

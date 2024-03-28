@@ -4,7 +4,10 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
-    public class PostscriptQRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// PostscriptQRCode
+    /// </summary>
+    public class PostscriptQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections

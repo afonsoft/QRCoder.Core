@@ -5,7 +5,7 @@ namespace QRCoder.Core
     /// <summary>
     /// AbstractQRCode
     /// </summary>
-    public abstract class AbstractQRCode
+    public abstract class AbstractQRCode : IDisposable
     {
         /// <summary>
         /// QRCodeData
@@ -43,10 +43,25 @@ namespace QRCoder.Core
             this.QrCodeData = data;
         }
 
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose()
         {
-            this.QrCodeData?.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // Cleanup
+            if (disposing)
+                this.QrCodeData?.Dispose();
             this.QrCodeData = null;
+        }
+
+        ~AbstractQRCode()
+        {
+            Dispose(false);
         }
     }
 }

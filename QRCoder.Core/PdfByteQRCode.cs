@@ -10,8 +10,11 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
+    /// <summary>
+    /// PdfByteQRCode
+    /// </summary>
     // ReSharper disable once InconsistentNaming
-    public class PdfByteQRCode : AbstractQRCode, IDisposable
+    public class PdfByteQRCode : AbstractQRCode
     {
         private readonly byte[] pdfBinaryComment = new byte[] { 0x25, 0xe2, 0xe3, 0xcf, 0xd3 };
 
@@ -26,7 +29,7 @@ namespace QRCoder.Core
         }
 
         /// <summary>
-        /// Creates a PDF document with a black & white QR code
+        /// Creates a PDF document with a black white QR code
         /// </summary>
         /// <param name="pixelsPerModule"></param>
         /// <returns></returns>

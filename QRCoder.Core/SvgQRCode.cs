@@ -8,7 +8,10 @@ using static QRCoder.Core.SvgQRCode;
 
 namespace QRCoder.Core
 {
-    public class SvgQRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// SvgQRCode
+    /// </summary>
+    public class SvgQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections

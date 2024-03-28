@@ -26,6 +26,9 @@ namespace QRCoder.Core.Extensions
         }
     }
 
+    /// <summary>
+    /// CustomExtensions
+    /// </summary>
     public static class CustomExtensions
     {
         /// <summary>

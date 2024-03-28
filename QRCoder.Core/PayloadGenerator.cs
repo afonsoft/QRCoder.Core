@@ -8,8 +8,14 @@ using System.Text.RegularExpressions;
 
 namespace QRCoder.Core
 {
+    /// <summary>
+    /// PayloadGenerator
+    /// </summary>
     public static class PayloadGenerator
     {
+        /// <summary>
+        /// Payload
+        /// </summary>
         public abstract class Payload
         {
             protected Payload()
@@ -17,18 +23,30 @@ namespace QRCoder.Core
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             }
 
+            /// <summary>
+            /// Version
+            /// </summary>
             public virtual int Version
             { get { return -1; } }
 
+            /// <summary>
+            /// ECCLevel
+            /// </summary>
             public virtual QRCodeGenerator.ECCLevel EccLevel
             { get { return QRCodeGenerator.ECCLevel.M; } }
 
+            /// <summary>
+            /// EciMode
+            /// </summary>
             public virtual QRCodeGenerator.EciMode EciMode
             { get { return QRCodeGenerator.EciMode.Default; } }
 
             public abstract override string ToString();
         }
 
+        /// <summary>
+        /// WiFi
+        /// </summary>
         public class WiFi : Payload
         {
             private readonly string ssid, password, authenticationMode;
@@ -66,6 +84,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Mail
+        /// </summary>
         public class Mail : Payload
         {
             private readonly string mailReceiver, subject, message;
@@ -120,6 +141,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// SMS
+        /// </summary>
         public class SMS : Payload
         {
             private readonly string number, subject;
@@ -184,6 +208,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// MMS
+        /// </summary>
         public class MMS : Payload
         {
             private readonly string number, subject;
@@ -243,6 +270,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Geolocation
+        /// </summary>
         public class Geolocation : Payload
         {
             private readonly string latitude, longitude;
@@ -283,6 +313,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// PhoneNumber
+        /// </summary>
         public class PhoneNumber : Payload
         {
             private readonly string number;
@@ -302,6 +335,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// SkypeCall
+        /// </summary>
         public class SkypeCall : Payload
         {
             private readonly string skypeUsername;
@@ -321,6 +357,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Url
+        /// </summary>
         public class Url : Payload
         {
             private readonly string url;
@@ -341,6 +380,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// WhatsAppMessage
+        /// </summary>
         public class WhatsAppMessage : Payload
         {
             private readonly string number, message;
@@ -348,7 +390,7 @@ namespace QRCoder.Core
             /// <summary>
             /// Let's you compose a WhatApp message and send it the receiver number.
             /// </summary>
-            /// <param name="number">Receiver phone number where the <number> is a full phone number in international format.
+            /// <param name="number">Receiver phone number where the number is a full phone number in international format.
             /// Omit any zeroes, brackets, or dashes when adding the phone number in international format.
             /// Use: 1XXXXXXXXXX | Don't use: +001-(XXX)XXXXXXX
             /// </param>
@@ -376,6 +418,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Bookmark
+        /// </summary>
         public class Bookmark : Payload
         {
             private readonly string url, title;
@@ -397,6 +442,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// ContactData
+        /// </summary>
         public class ContactData : Payload
         {
             private readonly string firstname;
@@ -624,6 +672,9 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Bitcoin Like Crypto Currency Address
+        /// </summary>
         public class BitcoinLikeCryptoCurrencyAddress : Payload
         {
             private readonly BitcoinLikeCryptoCurrencyType currencyType;
@@ -729,6 +780,9 @@ namespace QRCoder.Core
                 : base(BitcoinLikeCryptoCurrencyType.Litecoin, address, amount, label, message) { }
         }
 
+        /// <summary>
+        /// SwissQrCode
+        /// </summary>
         public class SwissQrCode : Payload
         {
             //Keep in mind, that the ECC level has to be set to "M" when generating a SwissQrCode!

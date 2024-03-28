@@ -2,6 +2,9 @@
 
 namespace QRCoder.Core.Exceptions
 {
+    /// <summary>
+    /// DataTooLongException
+    /// </summary>
     public class DataTooLongException : Exception
     {
         public DataTooLongException(string eccLevel, string encodingMode, int maxSizeByte) : base(

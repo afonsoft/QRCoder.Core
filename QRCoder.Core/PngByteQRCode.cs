@@ -5,7 +5,10 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
-    public sealed class PngByteQRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// PngByteQRCode
+    /// </summary>
+    public sealed class PngByteQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections
@@ -18,7 +21,7 @@ namespace QRCoder.Core
         }
 
         /// <summary>
-        /// Creates a black & white PNG of the QR code, using 1-bit grayscale.
+        /// Creates a black  white PNG of the QR code, using 1-bit grayscale.
         /// </summary>
         public byte[] GetGraphic(int pixelsPerModule, bool drawQuietZones = true)
         {

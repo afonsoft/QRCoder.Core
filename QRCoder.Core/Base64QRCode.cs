@@ -7,7 +7,10 @@ using static QRCoder.Core.QRCodeGenerator;
 
 namespace QRCoder.Core
 {
-    public class Base64QRCode : AbstractQRCode, IDisposable
+    /// <summary>
+    /// Base64QRCode
+    /// </summary>
+    public class Base64QRCode : AbstractQRCode
     {
         private QRCode qr;
 
