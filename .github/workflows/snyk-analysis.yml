@@ -18,7 +18,7 @@ jobs:
             6.0.x
             8.0.x
       - name: Dotnet Restore 
-        run: dotnet restore --ignore-failed-sources
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/dotnet@master
         continue-on-error: true
