@@ -1,108 +1,102 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0"
-         DefaultTargets="Build"
-         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<!-- Import the common properties to support NuGet restore -->
-	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
-	        Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
-	<PropertyGroup>
-		<!-- A target framework version is required by Visual Studio.  It can be any version with a targeting pack installed. -->
-		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-		<!-- The configuration and platform will be used to determine which assemblies to include from solution and
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Import the common properties to support NuGet restore -->
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <!-- A target framework version is required by Visual Studio.  It can be any version with a targeting pack installed. -->
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <!-- The configuration and platform will be used to determine which assemblies to include from solution and
 				 project documentation sources -->
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{1acb79c9-fe69-4873-91ac-85a2177986c2}</ProjectGuid>
-		<SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
-		<!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
-		<AssemblyName>QRCoder.Core</AssemblyName>
-		<RootNamespace>QRCoder.Core</RootNamespace>
-		<Name>QRCoder.Core</Name>
-		<!-- SHFB properties -->
-		<FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
-		<OutputPath>.\Docs\</OutputPath>
-		<HtmlHelpName>QRCoder.Core</HtmlHelpName>
-		<Language>en-US</Language>
-		<DocumentationSources>
-			<DocumentationSource sourceFile="QRCoder.Core.sln"/>
-		</DocumentationSources>
-		<HelpFileFormat>Markdown</HelpFileFormat>
-		<SyntaxFilters>C#, Managed C++, XAML Usage, ASP.NET</SyntaxFilters>
-		<PresentationStyle>Markdown</PresentationStyle>
-		<CleanIntermediates>True</CleanIntermediates>
-		<KeepLogFile>False</KeepLogFile>
-		<DisableCodeBlockComponent>False</DisableCodeBlockComponent>
-		<IndentHtml>False</IndentHtml>
-		<BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
-		<SaveComponentCacheCapacity>200</SaveComponentCacheCapacity>
-		<HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
-		<BinaryTOC>True</BinaryTOC>
-		<IncludeFavorites>True</IncludeFavorites>
-		<WebsiteSdkLinkType>Msdn</WebsiteSdkLinkType>
-		<AppendMarkdownFileExtensionsToUrls>True</AppendMarkdownFileExtensionsToUrls>
-		<CatalogProductId>VS</CatalogProductId>
-		<CatalogVersion>100</CatalogVersion>
-		<VendorName>QRCoder.Core</VendorName>
-		<ProductTitle>QRCoder.Core</ProductTitle>
-		<TocOrder>-1</TocOrder>
-		<TocParentId>-1</TocParentId>
-		<TocParentVersion>100</TocParentVersion>
-		<TopicVersion>100</TopicVersion>
-		<MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
-		<PlugInConfigurations>
-			<PlugInConfig id="Assembly Binding Redirection"
-			              enabled="True">
-				<configuration useGAC="true">
-					<assemblyBinding/>
-					<ignoreIfUnresolved>
-						<assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder"/>
-						<assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback"/>
-					</ignoreIfUnresolved>
-				</configuration>
-			</PlugInConfig>
-		</PlugInConfigurations>
-		<HelpTitle>QRCoder.Core Docs</HelpTitle>
-		<HelpFileVersion>1.0.0.0</HelpFileVersion>
-		<NamingMethod>MemberName</NamingMethod>
-		<ContentPlacement>AboveNamespaces</ContentPlacement>
-		<RootNamespaceContainer>True</RootNamespaceContainer>
-		<NamespaceGrouping>False</NamespaceGrouping>
-		<MaximumGroupParts>2</MaximumGroupParts>
-		<Preliminary>False</Preliminary>
-		<SdkLinkTarget>Blank</SdkLinkTarget>
-	</PropertyGroup>
-	<!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1acb79c9-fe69-4873-91ac-85a2177986c2}</ProjectGuid>
+    <SHFBSchemaVersion>2017.9.26.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
+    <AssemblyName>QRCoder.Core</AssemblyName>
+    <RootNamespace>QRCoder.Core</RootNamespace>
+    <Name>QRCoder.Core</Name>
+    <!-- SHFB properties -->
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
+    <OutputPath>.\Docs\</OutputPath>
+    <HtmlHelpName>QRCoder.Core</HtmlHelpName>
+    <Language>en-US</Language>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="QRCoder.Core\QRCoder.Core.csproj" />
+    </DocumentationSources>
+    <HelpFileFormat>Markdown</HelpFileFormat>
+    <SyntaxFilters>C#, Managed C++, XAML Usage, ASP.NET</SyntaxFilters>
+    <PresentationStyle>Markdown</PresentationStyle>
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>False</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <IndentHtml>False</IndentHtml>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <SaveComponentCacheCapacity>200</SaveComponentCacheCapacity>
+    <HtmlSdkLinkType>Msdn</HtmlSdkLinkType>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>True</IncludeFavorites>
+    <WebsiteSdkLinkType>Msdn</WebsiteSdkLinkType>
+    <AppendMarkdownFileExtensionsToUrls>True</AppendMarkdownFileExtensionsToUrls>
+    <CatalogProductId>VS</CatalogProductId>
+    <CatalogVersion>100</CatalogVersion>
+    <VendorName>QRCoder.Core</VendorName>
+    <ProductTitle>QRCoder.Core</ProductTitle>
+    <TocOrder>-1</TocOrder>
+    <TocParentId>-1</TocParentId>
+    <TocParentVersion>100</TocParentVersion>
+    <TopicVersion>100</TopicVersion>
+    <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
+    <PlugInConfigurations>
+      <PlugInConfig id="Assembly Binding Redirection" enabled="True">
+        <configuration useGAC="true">
+          <assemblyBinding />
+          <ignoreIfUnresolved>
+            <assemblyIdentity name="BusinessObjects.Licensing.KeycodeDecoder" />
+            <assemblyIdentity name="Microsoft.VisualStudio.TestTools.UITest.Playback" />
+          </ignoreIfUnresolved>
+        </configuration>
+      </PlugInConfig>
+    </PlugInConfigurations>
+    <HelpTitle>QRCoder.Core Docs</HelpTitle>
+    <HelpFileVersion>1.0.0.0</HelpFileVersion>
+    <NamingMethod>MemberName</NamingMethod>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <NamespaceGrouping>False</NamespaceGrouping>
+    <MaximumGroupParts>2</MaximumGroupParts>
+    <Preliminary>False</Preliminary>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
+  </PropertyGroup>
+  <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' ">
   </PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
-	<!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->
-	<Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets"
-	        Condition="'$(MSBuildRestoreSessionId)' != ''"/>
-	<!-- Import the SHFB build targets during build -->
-	<Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets"
-	        Condition="'$(MSBuildRestoreSessionId)' == ''"/>
-	<!-- The pre-build and post-build event properties must appear *after* the targets file import in order to be
+  <!-- Import the common build targets during NuGet restore because before the packages are being installed, $(SHFBROOT) is not set yet -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="'$(MSBuildRestoreSessionId)' != ''" />
+  <!-- Import the SHFB build targets during build -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" Condition="'$(MSBuildRestoreSessionId)' == ''" />
+  <!-- The pre-build and post-build event properties must appear *after* the targets file import in order to be
 			 evaluated correctly. -->
-	<PropertyGroup>
-		<PreBuildEvent>
+  <PropertyGroup>
+    <PreBuildEvent>
     </PreBuildEvent>
-		<PostBuildEvent>
+    <PostBuildEvent>
     </PostBuildEvent>
-		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-	</PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
 </Project>
