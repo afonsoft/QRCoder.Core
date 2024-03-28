@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net6.0;net8.0;net6.0-windows;net8.0-windows;net48</TargetFrameworks>
-	<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
-	<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">true</UseWPF>
 	<DefineConstants Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">$(DefineConstants);WINDOWS</DefineConstants>
+	<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
+	<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWPF>
 	<EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</EnableWindowsTargeting>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <PackageId>QRCoder.Core</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
 	<Copyright>AFONSOFT © 2024</Copyright>
@@ -48,6 +48,7 @@
     <PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
     <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 7.0.0.</Description>
   </PropertyGroup>
 
@@ -83,8 +84,11 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 	</ItemGroup>
 
-	
-	
-
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+	</ItemGroup>
 
 </Project>

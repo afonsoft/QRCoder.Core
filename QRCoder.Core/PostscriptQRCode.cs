@@ -146,7 +146,7 @@ showpage
 ";
     }
 
-#if NET6_0_WINDOWS
+#if NET6_0_WINDOWS || NET8_0_WINDOWS || NETSTANDARD2_0_WINDOWS || NETSTANDARD2_1_WINDOWS
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
 

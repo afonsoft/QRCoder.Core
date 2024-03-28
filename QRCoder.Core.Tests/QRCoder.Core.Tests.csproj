@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net8.0;net6.0-windows;net8.0-windows;net48</TargetFrameworks>
-		<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
-		<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">true</UseWPF>
 		<DefineConstants Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">$(DefineConstants);WINDOWS</DefineConstants>
+		<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
+		<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWPF>
 		<EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</EnableWindowsTargeting>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
@@ -12,6 +12,7 @@
 		<WindowsSdkPackageVersion>10.0.19041.18</WindowsSdkPackageVersion>
 		<DisableWinExeOutputInference>true</DisableWinExeOutputInference>
 		<OutputType>Library</OutputType>
+		<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="assets\noun_Scientist_2909361.svg" />
@@ -47,6 +48,13 @@
 		</PackageReference>
 		<PackageReference Include="SshNet.Security.Cryptography" Version="1.3.0" />
 		<ProjectReference Include="..\QRCoder.Core\QRCoder.Core.csproj" />		
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
 	</ItemGroup>
 	
 </Project>
