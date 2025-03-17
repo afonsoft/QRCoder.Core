@@ -20,8 +20,6 @@ jobs:
        dotnet-version: | 
           6.0.x
           8.0.x
-    - name: Update to Nuget
-      run: nuget update -self
     - name: Clear NuGet cache
       run: dotnet nuget locals all --clear
     - name: Build Release 
