@@ -35,33 +35,31 @@ namespace QRCoder.Core
             );
         }
 
+        // SkiaSharp-only HTML color parser
         private static SKColor ParseHtmlColor(string htmlColor)
         {
-            // Remove leading '#' if present
-            if (htmlColor.StartsWith("#"))
-                htmlColor = htmlColor.Substring(1);
+            if (string.IsNullOrWhiteSpace(htmlColor))
+                throw new ArgumentException("Color string is null or empty.");
 
-            uint color = 0;
-            if (htmlColor.Length == 6)
+            string color = htmlColor.TrimStart('#');
+            if (color.Length == 6)
             {
                 // RRGGBB
-                color = Convert.ToUInt32(htmlColor, 16);
                 return new SKColor(
-                    (byte)((color & 0xFF0000) >> 16),
-                    (byte)((color & 0x00FF00) >> 8),
-                    (byte)(color & 0x0000FF),
+                    Convert.ToByte(color.Substring(0, 2), 16),
+                    Convert.ToByte(color.Substring(2, 2), 16),
+                    Convert.ToByte(color.Substring(4, 2), 16),
                     255
                 );
             }
-            else if (htmlColor.Length == 8)
+            else if (color.Length == 8)
             {
                 // AARRGGBB
-                color = Convert.ToUInt32(htmlColor, 16);
                 return new SKColor(
-                    (byte)((color & 0x00FF0000) >> 16),
-                    (byte)((color & 0x0000FF00) >> 8),
-                    (byte)(color & 0x000000FF),
-                    (byte)((color & 0xFF000000) >> 24)
+                    Convert.ToByte(color.Substring(2, 2), 16),
+                    Convert.ToByte(color.Substring(4, 2), 16),
+                    Convert.ToByte(color.Substring(6, 2), 16),
+                    Convert.ToByte(color.Substring(0, 2), 16)
                 );
             }
             else
@@ -178,20 +176,6 @@ namespace QRCoder.Core
         /// <summary>
         /// GetQRCode
         /// </summary>
-        /// <param name="plainText"></param>
-        /// <param name="pixelsPerModule"></param>
-        /// <param name="darkSKColor"></param>
-        /// <param name="lightSKColor"></param>
-        /// <param name="eccLevel"></param>
-        /// <param name="forceUtf8"></param>
-        /// <param name="utf8BOM"></param>
-        /// <param name="eciMode"></param>
-        /// <param name="requestedVersion"></param>
-        /// <param name="icon"></param>
-        /// <param name="iconSizePercent"></param>
-        /// <param name="iconBorderWidth"></param>
-        /// <param name="drawQuietZones"></param>
-        /// <returns></returns>
         public static SKBitmap GetQRCode(string plainText, int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, SKBitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())
