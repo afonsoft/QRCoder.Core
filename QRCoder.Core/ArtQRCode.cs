@@ -223,9 +223,9 @@ namespace QRCoder.Core
                 {
                     graphics.FillSKRectI(brush, new SKRectI(0, 0, newSize, newSize));
 
-                    graphics.InterpolationMode = InterpolationMode.High;
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    brush.FilterQuality = SKFilterQuality.High;
+                    
+                    brush.IsAntialias = true;
 
                     graphics.DrawImage(scaledImage, new SKRectI(offsetX, offsetY, scaledWidth, scaledHeight));
                 }

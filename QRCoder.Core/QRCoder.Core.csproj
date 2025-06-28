@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
@@ -20,7 +21,6 @@
 	<GenerateAssemblyCompanyAttribute>true</GenerateAssemblyCompanyAttribute>
 	<GenerateAssemblyProductAttribute>true</GenerateAssemblyProductAttribute>
 	<GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
-	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
 	<IsPackable>true</IsPackable>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<IncludeSymbols>true</IncludeSymbols>
@@ -49,30 +49,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
-    <None Remove="runtimeconfig.template.json" />
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
+
+
+
   </ItemGroup>
 
   <ItemGroup>
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
-    <Content Include="runtimeconfig.template.json">
+
+
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
   </ItemGroup>
 
   <ItemGroup>
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
     <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
     <None Include="Assets\nuget-readme.md" Pack="true" PackagePath="\" />
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
   </ItemGroup>
 
 
@@ -84,24 +83,17 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 	<ItemGroup>
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
 		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
+
+
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-<PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">
 <PackageReference Include="SkiaSharp" Version="*" />
-<PackageReference Include="SkiaSharp.QrCode" Version="*" />
-	</ItemGroup>
-
-</Project>

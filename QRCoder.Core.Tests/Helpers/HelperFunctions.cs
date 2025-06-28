@@ -53,12 +53,12 @@ namespace QRCoder.Core.Tests.Helpers
 #endif
         }
 
-        public static string BitmapToHash(Bitmap bmp)
+        public static string BitmapToHash(SKBitmap bmp)
         {
             byte[] imgBytes = null;
             using (var ms = new MemoryStream())
             {
-                bmp.Encode(ms, SKEncodedImageFormat.Png, 100);
+                bmp.Encode(SKEncodedImageFormat.Png, 100).SaveTo(ms);
                 imgBytes = ms.ToArray();
                 ms.Dispose();
             }

@@ -74,9 +74,9 @@ namespace QRCoder.Core
             using (var lightBrush = new SKPaint(lightSKColor))
             using (var darkBrush = new SKPaint(darkSKColor))
             {
-                gfx.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                gfx.CompositingQuality = CompositingQuality.HighQuality;
-                gfx.Clear(lightSKColor);
+                lightBrush.FilterQuality = SKFilterQuality.High;
+                
+                gfx.Clear(lightSKColor);lightBrush.IsAntialias = true;darkBrush.IsAntialias = true;
                 var drawIconFlag = icon != null && iconSizePercent > 0 && iconSizePercent <= 100;
 
                 for (var x = 0; x < size + offset; x = x + pixelsPerModule)

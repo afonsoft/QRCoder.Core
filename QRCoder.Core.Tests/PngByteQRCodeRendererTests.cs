@@ -28,7 +28,7 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("18b19e6037cff06ae995d8d487b0e46e");
             }
@@ -45,7 +45,7 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("37ae73e90b66beac317b790be3db24cc");
             }
@@ -62,7 +62,7 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
             }
@@ -80,8 +80,8 @@ namespace QRCoder.Core.Tests
             File.WriteAllBytes(@"C:\Temp\pngbyte_35.png", pngCodeGfx);
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
-                bmp.MakeTransparent(Color.Transparent);
+                var bmp = SKBitmap.Decode(mStream);
+                bmp.Erase(SKColors.Transparent);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("fbbc8255ebf3e4f4a1d21f0dd15f76f8");
             }
@@ -105,7 +105,7 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("1978fb11ce26acf9b6cb7490b4c44ef2");
             }
@@ -120,7 +120,7 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
                 result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
             }
