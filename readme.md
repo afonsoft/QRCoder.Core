@@ -1,4 +1,6 @@
-# QRCoder.Core: A .NET QR Code Generation Library
+# QRCoder.Core
+A simple .NET library for generating QR codes.
+
 
 |Code coverage|Build status|NuGet Package|
 |-------------|------------|-------------|
@@ -9,22 +11,21 @@
 |----------|-------------|----|---------------|
 |[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=bugs)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|
 
-## Info
+## About
 
-QRCoder.Core is a simple library, written in C#.NET, based on [QrCode](https://github.com/codebude/QRCoder) which enables you to create QR codes. It is available as .NET Core version on NuGet.
-written in C#.NET, which enables you to create QR codes. Use [System.Drawing.Common below 7.0.0](https://learn.microsoft.com/pt-br/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only).
+QRCoder.Core is a simple C#.NET library based on [QrCode](https://github.com/codebude/QRCoder) that enables you to create QR codes. It is available as a .NET Core version on NuGet.
 
 
-***
+## Usage
 
-## Documentation
+## Wiki Documentation
 
-👉 *Your first place to go should be our wiki. Here you can find a detailed documentation of the QRCoder and its functions.*
-* [**Original QRCoder Wiki**](https://github.com/codebude/QRCoder/wiki) or [**QRCoder.Core Wiki**](https://github.com/afonsoft/QRCoder.Core/wiki)
+👉 For detailed documentation of QRCoder and its functions, please visit our wiki.
+* [Original QRCoder Wiki](https://github.com/codebude/QRCoder/wiki) or [QRCoder.Core Wiki](https://github.com/afonsoft/QRCoder.Core/wiki)
 
-## Usage / Quick start
+## Quick Start
 
-You only need four lines of code, to generate and view your first QR code.
+You can generate and view your first QR code with just a few lines of C# code.
 
 ```csharp
 
@@ -36,20 +37,20 @@ using (QRCode qrCode = new QRCode(qrCodeData))
 }
 ```
 
-### Optional parameters and overloads
+## Optional parameters and overloads
 
-The GetGraphics-method has some more overloads. The first two enable you to set the color of the QR code graphic. One uses Color-class-types, the other HTML hex color notation.
+The GetGraphic method has several overloads. The first two allow you to set the color of the QR code graphic using either Color-class types or HTML hex color notation.
 
 ```csharp
-//Set color by using Color-class types
+//Set color using Color-class types
 Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.DarkRed, Color.PaleGreen, true);
 
-//Set color by using HTML hex color notation
+//Set color using HTML hex color notation
 Bitmap qrCodeImage = qrCode.GetGraphic(20, "#000ff0", "#0ff000");
 ```
 
-The other overload enables you to render a logo/image in the center of the QR code.
+This overload allows you to render a logo/image in the center of the QR code.
 
 ```csharp
-Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("C:\\myimage.png"));
+Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("path/to/your/image.png"));
 ```
