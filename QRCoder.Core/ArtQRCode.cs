@@ -28,9 +28,9 @@ namespace QRCoder.Core
         /// </summary>
         /// <param name="pixelsPerModule">Amount of px each dark/light module of the QR code shall take place in the final QR code image</param>
         /// <returns>QRCode graphic as bitmap</returns>
-        public SKSKBitmap GetGraphic(int pixelsPerModule)
+        public SKBitmap GetGraphic(int pixelsPerModule)
         {
-            return this.GetGraphic(pixelsPerModule, SKSKColors.Black, SKSKColors.White, SKSKColors.Transparent);
+            return this.GetGraphic(pixelsPerModule, SKColors.Black, SKColors.White, SKColors.Transparent);
         }
 
         /// <summary>
@@ -38,9 +38,9 @@ namespace QRCoder.Core
         /// </summary>
         /// <param name="backgroundImage">A bitmap object that will be used as background picture</param>
         /// <returns>QRCode graphic as bitmap</returns>
-        public SKSKBitmap GetGraphic(SKSKBitmap backgroundImage = null)
+        public SKBitmap GetGraphic(SKBitmap backgroundImage = null)
         {
-            return this.GetGraphic(10, SKSKColors.Black, SKSKColors.White, SKSKColors.Transparent, backgroundImage: backgroundImage);
+            return this.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, backgroundImage: backgroundImage);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace QRCoder.Core
         /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
-        public SKSKBitmap GetGraphic(int pixelsPerModule, SKSKColor darkSKColor, SKSKColor lightSKColor, SKSKColor backgroundSKColor, SKSKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
+        public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                  bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Dotted,
                                  BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
         {
@@ -69,26 +69,26 @@ namespace QRCoder.Core
             var offset = (drawQuietZones ? 0 : 4);
             var size = numModules * pixelsPerModule;
 
-            var bitmap = new SKSKBitmap(size, size);
+            var bitmap = new SKBitmap(size, size);
 
             using (var graphics = new SKCanvas(bitmap))
             {
-                using (var lightBrush = new SKPaint { SKColor = lightSKColor })
+                using (var lightBrush = new SKPaint { Color = lightSKColor })
                 {
-                    using (var darkBrush = new SKPaint { SKColor = darkSKColor })
+                    using (var darkBrush = new SKPaint { Color = darkSKColor })
                     {
                         // make background transparent
-                        using (var brush = new SKPaint { SKColor = backgroundSKColor })
-                            graphics.DrawRect(new SKRectI(0, 0, size, size), brush);
+                        using (var brush = new SKPaint { Color = backgroundSKColor })
+                            graphics.DrawRect(new SKRect(0, 0, size, size), brush);
                         //Render background if set
                         if (backgroundImage != null)
                         {
                             if (backgroundImageStyle == BackgroundImageStyle.Fill)
-                                graphics.DrawImage(Resize(backgroundImage, size), 0, 0);
+                                graphics.DrawBitmap(Resize(backgroundImage, size), 0, 0);
                             else if (backgroundImageStyle == BackgroundImageStyle.DataAreaOnly)
                             {
                                 var bgOffset = 4 - offset;
-                                graphics.DrawImage(Resize(backgroundImage, size - (2 * bgOffset * pixelsPerModule)), 0 + (bgOffset * pixelsPerModule), (bgOffset * pixelsPerModule));
+                                graphics.DrawBitmap(Resize(backgroundImage, size - (2 * bgOffset * pixelsPerModule)), 0 + (bgOffset * pixelsPerModule), (bgOffset * pixelsPerModule));
                             }
                         }
 
@@ -99,7 +99,7 @@ namespace QRCoder.Core
                         {
                             for (var y = 0; y < numModules; y += 1)
                             {
-                                var rectangleF = new SKRectI(x * pixelsPerModule, y * pixelsPerModule, pixelsPerModule, pixelsPerModule);
+                                var rectangleF = new SKRect(x * pixelsPerModule, y * pixelsPerModule, (x + 1) * pixelsPerModule, (y + 1) * pixelsPerModule);
 
                                 var pixelIsDark = this.QrCodeData.ModuleMatrix[offset + y][offset + x];
                                 var solidBrush = pixelIsDark ? darkBrush : lightBrush;
@@ -109,7 +109,7 @@ namespace QRCoder.Core
                                     if (drawQuietZones && quietZoneRenderingStyle == QuietZoneStyle.Flat && IsPartOfQuietZone(x, y, numModules))
                                         graphics.DrawRect(rectangleF, solidBrush);
                                     else
-                                        graphics.DrawSKBitmap(pixelImage, rectangleF);
+                                        graphics.DrawBitmap(pixelImage, rectangleF.Left, rectangleF.Top);
                                 else if (finderPatternImage == null)
                                     graphics.DrawRect(rectangleF, solidBrush);
                             }
@@ -117,11 +117,11 @@ namespace QRCoder.Core
                         if (finderPatternImage != null)
                         {
                             var finderPatternSize = 7 * pixelsPerModule;
-                            graphics.DrawImage(finderPatternImage, new SKRectI(0, 0, finderPatternSize, finderPatternSize));
-                            graphics.DrawImage(finderPatternImage, new SKRectI(size - finderPatternSize, 0, finderPatternSize, finderPatternSize));
-                            graphics.DrawImage(finderPatternImage, new SKRectI(0, size - finderPatternSize, finderPatternSize, finderPatternSize));
+                            graphics.DrawBitmap(finderPatternImage, new SKRect(0, 0, finderPatternSize, finderPatternSize));
+                            graphics.DrawBitmap(finderPatternImage, new SKRect(size - finderPatternSize, 0, size, finderPatternSize));
+                            graphics.DrawBitmap(finderPatternImage, new SKRect(0, size - finderPatternSize, finderPatternSize, size));
                         }
-                        graphics.Save();
+                        graphics.Flush();
                     }
                 }
             }
@@ -135,27 +135,26 @@ namespace QRCoder.Core
         /// <param name="pixelSize">Size of the dots</param>
         /// <param name="brush">SKColor of the pixels</param>
         /// <returns></returns>
-        private SKSKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
+        private SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
         {
             // draw a dot
-            var bitmap = new SKSKBitmap(pixelSize, pixelSize);
+            var bitmap = new SKBitmap(pixelSize, pixelSize);
             using (var graphics = new SKCanvas(bitmap))
             {
                 graphics.DrawCircle(pixelSize / 2, pixelSize / 2, pixelSize / 2, brush);
-                graphics.Save();
+                graphics.Flush();
             }
 
             var pixelWidth = Math.Min(pixelsPerModule, pixelSize);
             var margin = Math.Max((pixelsPerModule - pixelWidth) / 2, 0);
 
             // center the dot in the module and crop to stay the right size.
-            var cropped = new SKSKBitmap(pixelsPerModule, pixelsPerModule);
-            using (var graphics = SKCanvas.FromImage(cropped))
+            var cropped = new SKBitmap(pixelsPerModule, pixelsPerModule);
+            using (var graphics = new SKCanvas(cropped))
             {
-                graphics.DrawImage(bitmap, new SKRectI(margin, margin, pixelWidth, pixelWidth),
-                    new SKRectIF(((float)pixelSize - pixelWidth) / 2, ((float)pixelSize - pixelWidth) / 2, pixelWidth, pixelWidth),
-                    SKCanvasUnit.Pixel);
-                graphics.Save();
+                graphics.DrawBitmap(bitmap, new SKRect(margin, margin, margin + pixelWidth, margin + pixelWidth),
+                    new SKRect(((float)pixelSize - pixelWidth) / 2, ((float)pixelSize - pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2));
+                graphics.Flush();
             }
 
             return cropped;
@@ -203,7 +202,7 @@ namespace QRCoder.Core
         /// <param name="image"></param>
         /// <param name="newSize"></param>
         /// <returns>Resized image as bitmap</returns>
-        private SKSKBitmap Resize(SKSKBitmap image, int newSize)
+        private SKBitmap Resize(SKBitmap image, int newSize)
         {
             if (image == null) return null;
 
@@ -213,21 +212,21 @@ namespace QRCoder.Core
             var offsetX = (newSize - scaledWidth) / 2;
             var offsetY = (newSize - scaledHeight) / 2;
 
-            var scaledImage = new SKSKBitmap(scaledWidth, scaledHeight);
+            var scaledImage = new SKBitmap(scaledWidth, scaledHeight);
 
-            var bm = new SKSKBitmap(newSize, newSize);
+            var bm = new SKBitmap(newSize, newSize);
 
             using (var graphics = new SKCanvas(bm))
             {
-                using (var brush = new SKPaint(SKColor.Transparent))
+                using (var brush = new SKPaint { Color = SKColors.Transparent })
                 {
-                    graphics.FillSKRectI(brush, new SKRectI(0, 0, newSize, newSize));
+                    graphics.DrawRect(new SKRect(0, 0, newSize, newSize), brush);
 
                     brush.FilterQuality = SKFilterQuality.High;
-                    
+
                     brush.IsAntialias = true;
 
-                    graphics.DrawImage(scaledImage, new SKRectI(offsetX, offsetY, scaledWidth, scaledHeight));
+                    graphics.DrawBitmap(scaledImage, new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight));
                 }
             }
             return bm;
@@ -274,8 +273,8 @@ namespace QRCoder.Core
         /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
-        public static SKSKBitmap GetQRCode(string plainText, int pixelsPerModule, SKSKColor darkSKColor, SKSKColor lightSKColor, SKSKColor backgroundSKColor, ECCLevel eccLevel, bool forceUtf8 = false,
-                                       bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, SKSKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
+        public static SKBitmap GetQRCode(string plainText, int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, ECCLevel eccLevel, bool forceUtf8 = false,
+                                       bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                        bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Flat,
                                        BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
         {

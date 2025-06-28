@@ -22,12 +22,52 @@ namespace QRCoder.Core
 
         public SKBitmap GetGraphic(int pixelsPerModule)
         {
-            return this.GetGraphic(pixelsPerModule, SKColor.Black, SKColor.White, true);
+            return this.GetGraphic(pixelsPerModule, new SKColor(0, 0, 0), new SKColor(255, 255, 255), true);
         }
 
         public SKBitmap GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, bool drawQuietZones = true)
         {
-            return this.GetGraphic(pixelsPerModule, SKColorTranslator.FromHtml(darkSKColorHtmlHex), SKColorTranslator.FromHtml(lightSKColorHtmlHex), drawQuietZones);
+            return this.GetGraphic(
+                pixelsPerModule,
+                ParseHtmlColor(darkSKColorHtmlHex),
+                ParseHtmlColor(lightSKColorHtmlHex),
+                drawQuietZones
+            );
+        }
+
+        private static SKColor ParseHtmlColor(string htmlColor)
+        {
+            // Remove leading '#' if present
+            if (htmlColor.StartsWith("#"))
+                htmlColor = htmlColor.Substring(1);
+
+            uint color = 0;
+            if (htmlColor.Length == 6)
+            {
+                // RRGGBB
+                color = Convert.ToUInt32(htmlColor, 16);
+                return new SKColor(
+                    (byte)((color & 0xFF0000) >> 16),
+                    (byte)((color & 0x00FF00) >> 8),
+                    (byte)(color & 0x0000FF),
+                    255
+                );
+            }
+            else if (htmlColor.Length == 8)
+            {
+                // AARRGGBB
+                color = Convert.ToUInt32(htmlColor, 16);
+                return new SKColor(
+                    (byte)((color & 0x00FF0000) >> 16),
+                    (byte)((color & 0x0000FF00) >> 8),
+                    (byte)(color & 0x000000FF),
+                    (byte)((color & 0xFF000000) >> 24)
+                );
+            }
+            else
+            {
+                throw new ArgumentException("Invalid HTML color format. Use #RRGGBB or #AARRGGBB.");
+            }
         }
 
         public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true)
@@ -75,8 +115,8 @@ namespace QRCoder.Core
             using (var darkBrush = new SKPaint(darkSKColor))
             {
                 lightBrush.FilterQuality = SKFilterQuality.High;
-                
-                gfx.Clear(lightSKColor);lightBrush.IsAntialias = true;darkBrush.IsAntialias = true;
+
+                gfx.Clear(lightSKColor); lightBrush.IsAntialias = true; darkBrush.IsAntialias = true;
                 var drawIconFlag = icon != null && iconSizePercent > 0 && iconSizePercent <= 100;
 
                 for (var x = 0; x < size + offset; x = x + pixelsPerModule)
@@ -96,7 +136,7 @@ namespace QRCoder.Core
                     float iconY = (bmp.Height - iconDestHeight) / 2;
                     var centerDest = new SKRectIF(iconX - iconBorderWidth, iconY - iconBorderWidth, iconDestWidth + iconBorderWidth * 2, iconDestHeight + iconBorderWidth * 2);
                     var iconDestRect = new SKRectIF(iconX, iconY, iconDestWidth, iconDestHeight);
-                    var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint((SKColor)iconBackgroundSKColor) : lightBrush;
+                    var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : lightBrush;
                     //Only render icon/logo background, if iconBorderWith is set > 0
                     if (iconBorderWidth > 0)
                     {
