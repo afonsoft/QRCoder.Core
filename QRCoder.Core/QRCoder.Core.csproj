@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net6.0;net8.0;net48</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
@@ -47,34 +47,10 @@
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes.</Description>
   </PropertyGroup>
-
   <ItemGroup>
-
-
-
-
-
-  </ItemGroup>
-
-  <ItemGroup>
-
-
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-
-
-  </ItemGroup>
-
-  <ItemGroup>
-
-
     <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
     <None Include="Assets\nuget-readme.md" Pack="true" PackagePath="\" />
-
-
   </ItemGroup>
-
-
 	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
@@ -83,17 +59,19 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 	<ItemGroup>
-
-
 		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-
-
+		<PackageReference Include="SkiaSharp" Version="3.119.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">
-<PackageReference Include="SkiaSharp" Version="*" />
+		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+	</ItemGroup>
+
+</Project>
