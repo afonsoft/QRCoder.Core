@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -58,7 +58,7 @@ namespace QRCoder.Core.Tests.Helpers
             byte[] imgBytes = null;
             using (var ms = new MemoryStream())
             {
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                bmp.Encode(ms, SKEncodedImageFormat.Png, 100);
                 imgBytes = ms.ToArray();
                 ms.Dispose();
             }

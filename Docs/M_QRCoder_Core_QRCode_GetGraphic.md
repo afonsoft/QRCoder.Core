@@ -30,7 +30,7 @@ Bitmap^ GetGraphic(
 <dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.int32" target="_blank" rel="noopener noreferrer">Int32</a></dt><dd>\[Missing &lt;param name="pixelsPerModule"/&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32)"\]</dd></dl>
 
 #### Return Value
-<a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a>  
+SKBitmap  
 \[Missing &lt;returns&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32)"\]
 
 ## See Also

@@ -1,7 +1,7 @@
 # GetGraphic(Size, Boolean, Boolean) Method
 
 
-\[Missing &lt;summary&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(System.Drawing.Size,System.Boolean,System.Boolean)"\]
+\[Missing &lt;summary&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(SkiaSharp.SKSize,System.Boolean,System.Boolean)"\]
 
 
 
@@ -31,11 +31,11 @@ String^ GetGraphic(
 
 
 #### Parameters
-<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.drawing.size" target="_blank" rel="noopener noreferrer">Size</a></dt><dd>\[Missing &lt;param name="viewBox"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(System.Drawing.Size,System.Boolean,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>\[Missing &lt;param name="drawQuietZones"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(System.Drawing.Size,System.Boolean,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>\[Missing &lt;param name="epsFormat"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(System.Drawing.Size,System.Boolean,System.Boolean)"\]</dd></dl>
+<dl><dt>  <a href="https://developer.xamarin.com/api/struct/SkiaSharp.SKSize" target="_blank" rel="noopener noreferrer">Size</a></dt><dd>\[Missing &lt;param name="viewBox"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(SkiaSharp.SKSize,System.Boolean,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>\[Missing &lt;param name="drawQuietZones"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(SkiaSharp.SKSize,System.Boolean,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>\[Missing &lt;param name="epsFormat"/&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(SkiaSharp.SKSize,System.Boolean,System.Boolean)"\]</dd></dl>
 
 #### Return Value
 <a href="https://learn.microsoft.com/dotnet/api/system.string" target="_blank" rel="noopener noreferrer">String</a>  
-\[Missing &lt;returns&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(System.Drawing.Size,System.Boolean,System.Boolean)"\]
+\[Missing &lt;returns&gt; documentation for "M:QRCoder.Core.PostscriptQRCode.GetGraphic(SkiaSharp.SKSize,System.Boolean,System.Boolean)"\]
 
 ## See Also
 

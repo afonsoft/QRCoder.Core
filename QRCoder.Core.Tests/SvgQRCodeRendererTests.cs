@@ -2,7 +2,7 @@
 using QRCoder.Core.Tests.Helpers.XUnitExtenstions;
 using Shouldly;
 using System;
-using System.Drawing;
+
 using System.IO;
 using Xunit;
 
