@@ -74,24 +74,18 @@ namespace QRCoder.Core
             var offset = drawQuietZones ? 0 : 4 * pixelsPerModule;
 
             var bmp = new SKBitmap(size, size);
-            using (var gfx = SKCanvas.FromImage(bmp))
-            using (var lightBrush = new SKPaint(lightSKColor))
-            using (var darkBrush = new SKPaint(darkSKColor))
+            using (var gfx = new SKCanvas(bmp))
+            using (var lightBrush = new SKPaint { Color = lightSKColor })
+            using (var darkBrush = new SKPaint { Color = darkSKColor })
             {
                 for (var x = 0; x < size + offset; x = x + pixelsPerModule)
                 {
                     for (var y = 0; y < size + offset; y = y + pixelsPerModule)
                     {
                         var module = this.QrCodeData.ModuleMatrix[(y + pixelsPerModule) / pixelsPerModule - 1][(x + pixelsPerModule) / pixelsPerModule - 1];
+                        var moduleBrush = module ? darkBrush : lightBrush;
 
-                        if (module)
-                        {
-                            gfx.FillSKRectI(darkBrush, new SKRectI(x - offset, y - offset, pixelsPerModule, pixelsPerModule));
-                        }
-                        else
-                        {
-                            gfx.FillSKRectI(lightBrush, new SKRectI(x - offset, y - offset, pixelsPerModule, pixelsPerModule));
-                        }
+                        gfx.DrawRect(new SKRect(x - offset, y - offset, x - offset + pixelsPerModule, y - offset + pixelsPerModule), moduleBrush);
                     }
                 }
 
@@ -108,9 +102,9 @@ namespace QRCoder.Core
 
             var bmp = new SKBitmap(size, size, SKColorType.Rgba8888, SKAlphaType.Premul);
 
-            using (var gfx = SKCanvas.FromImage(bmp))
-            using (var lightBrush = new SKPaint(lightSKColor))
-            using (var darkBrush = new SKPaint(darkSKColor))
+            using (var gfx = new SKCanvas(bmp))
+            using (var lightBrush = new SKPaint { Color = lightSKColor })
+            using (var darkBrush = new SKPaint { Color = darkSKColor })
             {
                 lightBrush.FilterQuality = SKFilterQuality.High;
 
@@ -122,7 +116,7 @@ namespace QRCoder.Core
                     for (var y = 0; y < size + offset; y = y + pixelsPerModule)
                     {
                         var moduleBrush = this.QrCodeData.ModuleMatrix[(y + pixelsPerModule) / pixelsPerModule - 1][(x + pixelsPerModule) / pixelsPerModule - 1] ? darkBrush : lightBrush;
-                        gfx.FillSKRectI(moduleBrush, new SKRectI(x - offset, y - offset, pixelsPerModule, pixelsPerModule));
+                        gfx.DrawRect(new SKRect(x - offset, y - offset, x - offset + pixelsPerModule, y - offset + pixelsPerModule), moduleBrush);
                     }
                 }
 
@@ -132,18 +126,21 @@ namespace QRCoder.Core
                     float iconDestHeight = drawIconFlag ? iconDestWidth * icon.Height / icon.Width : 0;
                     float iconX = (bmp.Width - iconDestWidth) / 2;
                     float iconY = (bmp.Height - iconDestHeight) / 2;
-                    var centerDest = new SKRectIF(iconX - iconBorderWidth, iconY - iconBorderWidth, iconDestWidth + iconBorderWidth * 2, iconDestHeight + iconBorderWidth * 2);
-                    var iconDestRect = new SKRectIF(iconX, iconY, iconDestWidth, iconDestHeight);
+                    var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2);
+                    var iconDestRect = new SKRect(iconX, iconY, iconX + iconDestWidth, iconY + iconDestHeight);
                     var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : lightBrush;
                     //Only render icon/logo background, if iconBorderWith is set > 0
                     if (iconBorderWidth > 0)
                     {
-                        using (SKCanvasPath iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
+                        using (var iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
                         {
-                            gfx.FillPath(iconBgBrush, iconPath);
+                            gfx.DrawPath(iconPath, iconBgBrush);
                         }
                     }
-                    gfx.DrawImage(icon, iconDestRect, new SKRectIF(0, 0, icon.Width, icon.Height), SKCanvasUnit.Pixel);
+                    using (var iconImage = SKImage.FromBitmap(icon))
+                    {
+                        gfx.DrawImage(iconImage, iconDestRect, new SKRect(0, 0, icon.Width, icon.Height));
+                    }
                 }
 
                 gfx.Save();
@@ -152,18 +149,18 @@ namespace QRCoder.Core
             return bmp;
         }
 
-        internal SKCanvasPath CreateRoundedSKRectIPath(SKRectIF rect, int cornerRadius)
+        internal SKPath CreateRoundedSKRectIPath(SKRect rect, int cornerRadius)
         {
-            var roundedRect = new SKCanvasPath();
-            roundedRect.AddArc(rect.X, rect.Y, cornerRadius * 2, cornerRadius * 2, 180, 90);
-            roundedRect.AddLine(rect.X + cornerRadius, rect.Y, rect.Right - cornerRadius * 2, rect.Y);
-            roundedRect.AddArc(rect.X + rect.Width - cornerRadius * 2, rect.Y, cornerRadius * 2, cornerRadius * 2, 270, 90);
-            roundedRect.AddLine(rect.Right, rect.Y + cornerRadius * 2, rect.Right, rect.Y + rect.Height - cornerRadius * 2);
-            roundedRect.AddArc(rect.X + rect.Width - cornerRadius * 2, rect.Y + rect.Height - cornerRadius * 2, cornerRadius * 2, cornerRadius * 2, 0, 90);
-            roundedRect.AddLine(rect.Right - cornerRadius * 2, rect.Bottom, rect.X + cornerRadius * 2, rect.Bottom);
-            roundedRect.AddArc(rect.X, rect.Bottom - cornerRadius * 2, cornerRadius * 2, cornerRadius * 2, 90, 90);
-            roundedRect.AddLine(rect.X, rect.Bottom - cornerRadius * 2, rect.X, rect.Y + cornerRadius * 2);
-            roundedRect.CloseFigure();
+            var roundedRect = new SKPath();
+            roundedRect.AddArc(new SKRect(rect.Left, rect.Top, rect.Left + cornerRadius * 2, rect.Top + cornerRadius * 2), 180, 90);
+            roundedRect.LineTo(rect.Right - cornerRadius, rect.Top);
+            roundedRect.AddArc(new SKRect(rect.Right - cornerRadius * 2, rect.Top, rect.Right, rect.Top + cornerRadius * 2), 270, 90);
+            roundedRect.LineTo(rect.Right, rect.Bottom - cornerRadius);
+            roundedRect.AddArc(new SKRect(rect.Right - cornerRadius * 2, rect.Bottom - cornerRadius * 2, rect.Right, rect.Bottom), 0, 90);
+            roundedRect.LineTo(rect.Left + cornerRadius, rect.Bottom);
+            roundedRect.AddArc(new SKRect(rect.Left, rect.Bottom - cornerRadius * 2, rect.Left + cornerRadius * 2, rect.Bottom), 90, 90);
+            roundedRect.LineTo(rect.Left, rect.Top + cornerRadius);
+            roundedRect.Close();
             return roundedRect;
         }
     }

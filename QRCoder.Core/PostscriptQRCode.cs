@@ -22,7 +22,7 @@ namespace QRCoder.Core
         public string GetGraphic(int pointsPerModule, bool epsFormat = false)
         {
             var viewBox = new Size(pointsPerModule * this.QrCodeData.ModuleMatrix.Count, pointsPerModule * this.QrCodeData.ModuleMatrix.Count);
-            return this.GetGraphic(viewBox, SKColor.Black, SKColor.White, true, epsFormat);
+            return this.GetGraphic(viewBox, new SKColor(0, 0, 0), new SKColor(255, 255, 255), true, epsFormat);
         }
 
         public string GetGraphic(int pointsPerModule, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true, bool epsFormat = false)
@@ -39,7 +39,7 @@ namespace QRCoder.Core
 
         public string GetGraphic(Size viewBox, bool drawQuietZones = true, bool epsFormat = false)
         {
-            return this.GetGraphic(viewBox, SKColor.Black, SKColor.White, drawQuietZones, epsFormat);
+            return this.GetGraphic(viewBox, new SKColor(0, 0, 0), new SKColor(255, 255, 255), drawQuietZones, epsFormat);
         }
 
         public string GetGraphic(Size viewBox, string darkSKColorHex, string lightSKColorHex, bool drawQuietZones = true, bool epsFormat = false)
@@ -58,8 +58,8 @@ namespace QRCoder.Core
                 epsFormat ? "EPSF-3.0" : string.Empty
             });
             psFile += string.Format(psFunctions, new object[] {
-                CleanSvgVal(darkSKColor.R /255.0), CleanSvgVal(darkSKColor.G /255.0), CleanSvgVal(darkSKColor.B /255.0),
-                CleanSvgVal(lightSKColor.R /255.0), CleanSvgVal(lightSKColor.G /255.0), CleanSvgVal(lightSKColor.B /255.0),
+                CleanSvgVal(darkSKColor.Red /255.0), CleanSvgVal(darkSKColor.Green /255.0), CleanSvgVal(darkSKColor.Blue /255.0),
+                CleanSvgVal(lightSKColor.Red /255.0), CleanSvgVal(lightSKColor.Green /255.0), CleanSvgVal(lightSKColor.Blue /255.0),
                 drawableModulesCount
             });
 
