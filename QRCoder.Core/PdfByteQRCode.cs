@@ -83,13 +83,7 @@ namespace QRCoder.Core
                 {
                     using (var msJpeg = new MemoryStream())
                     {
-                        // Create JPEG with specified quality
-                        var jpgImageCodecInfo = ImageCodecInfo.GetImageEncoders().First(x => x.MimeType == "image/jpeg");
-                        var jpgEncoderParameters = new EncoderParameters(1)
-                        {
-                            Param = new EncoderParameter[] { new EncoderParameter(Encoder.Quality, jpgQuality) }
-                        };
-                        img.Save(msJpeg, jpgImageCodecInfo, jpgEncoderParameters);
+                        img.Encode(msJpeg, SKEncodedImageFormat.Jpeg, (int)jpgQuality);
                         jpgArray = msJpeg.ToArray();
                     }
                 }

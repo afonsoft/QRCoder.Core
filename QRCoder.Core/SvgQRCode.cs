@@ -95,7 +95,7 @@ namespace QRCoder.Core
         /// <returns>SVG as string</returns>
         public string GetGraphic(Size viewBox, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true, SizingMode sizingMode = SizingMode.WidthHeightAttribute, SvgLogo logo = null)
         {
-            return this.GetGraphic(viewBox, SKColorTranslator.ToHtml(SKColor.FromArgb(darkSKColor.ToArgb())), SKColorTranslator.ToHtml(SKColor.FromArgb(lightSKColor.ToArgb())), drawQuietZones, sizingMode, logo);
+            return this.GetGraphic(viewBox, darkSKColor.ToHex(), lightSKColor.ToHex(), drawQuietZones, sizingMode, logo);
         }
 
         /// <summary>
