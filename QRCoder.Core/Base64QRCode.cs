@@ -34,7 +34,7 @@ namespace QRCoder.Core
 
         public string GetGraphic(int pixelsPerModule)
         {
-            return this.GetGraphic(pixelsPerModule, SKColor.Black, SKColor.White, true);
+            return this.GetGraphic(pixelsPerModule, SKColors.Black, SKColors.White, true);
         }
 
         public string GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
@@ -65,16 +65,16 @@ namespace QRCoder.Core
         private string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
         {
             var base64 = string.Empty;
-            ImageFormat iFormat = imgType switch
+            SKEncodedImageFormat encodedFormat = imgType switch
             {
-                ImageType.Png => ImageFormat.Png,
-                ImageType.Jpeg => ImageFormat.Jpeg,
-                ImageType.Gif => ImageFormat.Gif,
-                _ => ImageFormat.Png,
+                ImageType.Png => SKEncodedImageFormat.Png,
+                ImageType.Jpeg => SKEncodedImageFormat.Jpeg,
+                ImageType.Gif => SKEncodedImageFormat.Gif,
+                _ => SKEncodedImageFormat.Png,
             };
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                bmp.Save(memoryStream, iFormat);
+                bmp.Encode(memoryStream, encodedFormat, 100);
                 base64 = Convert.ToBase64String(memoryStream.ToArray(), Base64FormattingOptions.None);
             }
             return base64;

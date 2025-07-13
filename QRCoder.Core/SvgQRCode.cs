@@ -31,7 +31,7 @@ namespace QRCoder.Core
         public string GetGraphic(int pixelsPerModule)
         {
             var viewBox = new Size(pixelsPerModule * this.QrCodeData.ModuleMatrix.Count, pixelsPerModule * this.QrCodeData.ModuleMatrix.Count);
-            return this.GetGraphic(viewBox, SKColor.Black, SKColor.White);
+            return this.GetGraphic(viewBox, SKColors.Black, SKColors.White);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace QRCoder.Core
         /// <returns>SVG as string</returns>
         public string GetGraphic(Size viewBox, bool drawQuietZones = true, SizingMode sizingMode = SizingMode.WidthHeightAttribute, SvgLogo logo = null)
         {
-            return this.GetGraphic(viewBox, SKColor.Black, SKColor.White, drawQuietZones, sizingMode, logo);
+            return this.GetGraphic(viewBox, SKColors.Black, SKColors.White, drawQuietZones, sizingMode, logo);
         }
 
         /// <summary>
