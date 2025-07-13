@@ -44,7 +44,7 @@ namespace QRCoder.Core
 
         public string GetGraphic(Size viewBox, string darkSKColorHex, string lightSKColorHex, bool drawQuietZones = true, bool epsFormat = false)
         {
-            return this.GetGraphic(viewBox, SKColorTranslator.FromHtml(darkSKColorHex), SKColorTranslator.FromHtml(lightSKColorHex), drawQuietZones, epsFormat);
+            return this.GetGraphic(viewBox, SKColor.Parse(darkSKColorHex), SKColor.Parse(lightSKColorHex), drawQuietZones, epsFormat);
         }
 
         public string GetGraphic(Size viewBox, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true, bool epsFormat = false)
