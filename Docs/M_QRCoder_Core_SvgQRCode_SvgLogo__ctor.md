@@ -31,7 +31,7 @@ SvgLogo(
 
 
 #### Parameters
-<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a></dt><dd>Logo to be rendered as Bitmap/rasterized graphic</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.int32" target="_blank" rel="noopener noreferrer">Int32</a>  (Optional)</dt><dd>Degree of percentage coverage of the QR code by the logo</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>If true, the background behind the logo will be cleaned</dd></dl>
+<dl><dt>  SKBitmap</dt><dd>Logo to be rendered as Bitmap/rasterized graphic</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.int32" target="_blank" rel="noopener noreferrer">Int32</a>  (Optional)</dt><dd>Degree of percentage coverage of the QR code by the logo</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>If true, the background behind the logo will be cleaned</dd></dl>
 
 ## See Also
 

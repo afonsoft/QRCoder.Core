@@ -1,7 +1,7 @@
 ﻿using QRCoder.Core.Tests.Helpers;
 using QRCoder.Core.Tests.Helpers.XUnitExtenstions;
 using Shouldly;
-using System.Drawing;
+
 using Xunit;
 
 namespace QRCoder.Core.Tests
@@ -27,7 +27,7 @@ namespace QRCoder.Core.Tests
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
             var finder = new Bitmap(15, 15);
-            var bmp = new ArtQRCode(data).GetGraphic(10, Color.Black, Color.White, Color.Transparent, finderPatternImage: finder);
+            var bmp = new ArtQRCode(data).GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), finderPatternImage: finder);
 
             var result = HelperFunctions.BitmapToHash(bmp);
             result.ShouldBe("1102c0c6f235eaf4c3ac639f82f17bfa");
@@ -39,7 +39,7 @@ namespace QRCoder.Core.Tests
         {
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var bmp = new ArtQRCode(data).GetGraphic(10, Color.Black, Color.White, Color.Transparent, drawQuietZones: false);
+            var bmp = new ArtQRCode(data).GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), drawQuietZones: false);
 
             var result = HelperFunctions.BitmapToHash(bmp);
             result.ShouldBe("632315c8695416fc82fe06a202688433");
@@ -51,7 +51,7 @@ namespace QRCoder.Core.Tests
         {
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var bmp = new ArtQRCode(data).GetGraphic((Bitmap)Image.FromFile(System.IO.Path.Combine(HelperFunctions.GetAssemblyPath(), "assets", "noun_software-engineer_2909346.png")));
+            var bmp = new ArtQRCode(data).GetGraphic(SKBitmap.Decode(System.IO.Path.Combine(HelperFunctions.GetAssemblyPath(), "assets", "noun_software-engineer_2909346.png")));
             //Used logo is licensed under public domain. Ref.: https://thenounproject.com/Iconathon1/collection/redefining-women/?i=2909346
 
             var result = HelperFunctions.BitmapToHash(bmp);
@@ -67,7 +67,7 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
             var aCode = new ArtQRCode(data);
 
-            var exception = Record.Exception(() => aCode.GetGraphic(10, Color.Black, Color.White, Color.Transparent, pixelSizeFactor: 2));
+            var exception = Record.Exception(() => aCode.GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), pixelSizeFactor: 2));
             Assert.NotNull(exception);
             Assert.IsType<System.Exception>(exception);
             exception.Message.ShouldBe("The parameter pixelSize must be between 0 and 1. (0-100%)");
@@ -87,7 +87,7 @@ namespace QRCoder.Core.Tests
         public void can_render_artqrcode_from_helper()
         {
             //Create QR code
-            var bmp = ArtQRCodeHelper.GetQRCode("A", 10, Color.Black, Color.White, Color.Transparent, QRCodeGenerator.ECCLevel.L);
+            var bmp = ArtQRCodeHelper.GetQRCode("A", 10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), QRCodeGenerator.ECCLevel.L);
 
             var result = HelperFunctions.BitmapToHash(bmp);
             result.ShouldBe("57ecaa9bdeadcdcbeac8a19d734907ff");

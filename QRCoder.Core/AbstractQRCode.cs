@@ -17,8 +17,7 @@ namespace QRCoder.Core
         /// </summary>
         protected AbstractQRCode()
         {
-            //https://learn.microsoft.com/pt-br/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only
-            AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
+           
 
             //Role: csharpsquid:S6444
             //https://sonarcloud.io/organizations/afonsoft/rules?open=csharpsquid%3AS6444&rule_key=csharpsquid%3AS6444&tab=how_to_fix

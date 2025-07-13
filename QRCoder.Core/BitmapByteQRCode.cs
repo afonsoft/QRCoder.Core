@@ -6,18 +6,18 @@ using static QRCoder.Core.QRCodeGenerator;
 namespace QRCoder.Core
 {
     /// <summary>
-    /// BitmapByteQRCode
+    /// SKBitmapByteQRCode
     /// </summary>
     // ReSharper disable once InconsistentNaming
-    public class BitmapByteQRCode : AbstractQRCode
+    public class SKBitmapByteQRCode : AbstractQRCode
     {
         /// <summary>
         /// Constructor without params to be used in COM Objects connections
         /// </summary>
-        public BitmapByteQRCode()
+        public SKBitmapByteQRCode()
         { }
 
-        public BitmapByteQRCode(QRCodeData data) : base(data)
+        public SKBitmapByteQRCode(QRCodeData data) : base(data)
         {
         }
 
@@ -26,17 +26,17 @@ namespace QRCoder.Core
             return GetGraphic(pixelsPerModule, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF });
         }
 
-        public byte[] GetGraphic(int pixelsPerModule, string darkColorHtmlHex, string lightColorHtmlHex)
+        public byte[] GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex)
         {
-            return GetGraphic(pixelsPerModule, HexColorToByteArray(darkColorHtmlHex), HexColorToByteArray(lightColorHtmlHex));
+            return GetGraphic(pixelsPerModule, HexSKColorToByteArray(darkSKColorHtmlHex), HexSKColorToByteArray(lightSKColorHtmlHex));
         }
 
-        public byte[] GetGraphic(int pixelsPerModule, byte[] darkColorRgb, byte[] lightColorRgb)
+        public byte[] GetGraphic(int pixelsPerModule, byte[] darkSKColorRgb, byte[] lightSKColorRgb)
         {
             var sideLength = this.QrCodeData.ModuleMatrix.Count * pixelsPerModule;
 
-            var moduleDark = darkColorRgb.Reverse();
-            var moduleLight = lightColorRgb.Reverse();
+            var moduleDark = darkSKColorRgb.Reverse();
+            var moduleLight = lightSKColorRgb.Reverse();
 
             List<byte> bmp = new List<byte>();
 
@@ -81,14 +81,14 @@ namespace QRCoder.Core
             return bmp.ToArray();
         }
 
-        private byte[] HexColorToByteArray(string colorString)
+        private byte[] HexSKColorToByteArray(string colorString)
         {
             if (colorString.StartsWith("#"))
                 colorString = colorString.Substring(1);
-            byte[] byteColor = new byte[colorString.Length / 2];
-            for (int i = 0; i < byteColor.Length; i++)
-                byteColor[i] = byte.Parse(colorString.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture);
-            return byteColor;
+            byte[] byteSKColor = new byte[colorString.Length / 2];
+            for (int i = 0; i < byteSKColor.Length; i++)
+                byteSKColor[i] = byte.Parse(colorString.Substring(i * 2, 2), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture);
+            return byteSKColor;
         }
 
         private byte[] IntTo4Byte(int inp)
@@ -103,25 +103,25 @@ namespace QRCoder.Core
         }
     }
 
-    public static class BitmapByteQRCodeHelper
+    public static class SKBitmapByteQRCodeHelper
     {
-        public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkColorHtmlHex,
-            string lightColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
+        public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex,
+            string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
             EciMode eciMode = EciMode.Default, int requestedVersion = -1)
         {
             using (var qrGenerator = new QRCodeGenerator())
             using (
                 var qrCodeData = qrGenerator.CreateQrCode(plainText, eccLevel, forceUtf8, utf8BOM, eciMode,
                     requestedVersion))
-            using (var qrCode = new BitmapByteQRCode(qrCodeData))
-                return qrCode.GetGraphic(pixelsPerModule, darkColorHtmlHex, lightColorHtmlHex);
+            using (var qrCode = new SKBitmapByteQRCode(qrCodeData))
+                return qrCode.GetGraphic(pixelsPerModule, darkSKColorHtmlHex, lightSKColorHtmlHex);
         }
 
         public static byte[] GetQRCode(string txt, QRCodeGenerator.ECCLevel eccLevel, int size)
         {
             using (var qrGen = new QRCodeGenerator())
             using (var qrCode = qrGen.CreateQrCode(txt, eccLevel))
-            using (var qrBmp = new BitmapByteQRCode(qrCode))
+            using (var qrBmp = new SKBitmapByteQRCode(qrCode))
                 return qrBmp.GetGraphic(size);
         }
     }

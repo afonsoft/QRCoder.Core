@@ -39,8 +39,7 @@ namespace QRCoder.Core
         /// </summary>
         public QRCodeGenerator()
         {
-            //https://learn.microsoft.com/pt-br/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only
-            AppContext.SetSwitch("System.Drawing.EnableUnixSupport", true);
+           
         }
 
         /// <summary>
@@ -259,7 +258,7 @@ namespace QRCoder.Core
 
             //Place interleaved data on module matrix
             var qr = new QRCodeData(version);
-            var blockedModules = new List<Rectangle>();
+            var blockedModules = new List<SKRectI>();
             ModulePlacer.PlaceFinderPatterns(ref qr, ref blockedModules);
             ModulePlacer.ReserveSeperatorAreas(qr.ModuleMatrix.Count, ref blockedModules);
             ModulePlacer.PlaceAlignmentPatterns(ref qr, alignmentPatternTable.Where(x => x.Version == version).Select(x => x.PatternPositions).First(), ref blockedModules);
@@ -403,7 +402,7 @@ namespace QRCoder.Core
                 }
             }
 
-            public static int MaskCode(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules, ECCLevel eccLevel)
+            public static int MaskCode(ref QRCodeData qrCode, int version, ref List<SKRectI> blockedModules, ECCLevel eccLevel)
             {
                 int? selectedPattern = null;
                 var patternScore = 0;
@@ -438,14 +437,14 @@ namespace QRCoder.Core
                     {
                         for (var y = 0; y < x; y++)
                         {
-                            if (!IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            if (!IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
                             {
                                 qrTemp.ModuleMatrix[y][x] ^= pattern.Value(x, y);
                                 qrTemp.ModuleMatrix[x][y] ^= pattern.Value(y, x);
                             }
                         }
 
-                        if (!IsBlocked(new Rectangle(x, x, 1, 1), blockedModules))
+                        if (!IsBlocked(new SKRectI(x, x, 1, 1), blockedModules))
                         {
                             qrTemp.ModuleMatrix[x][x] ^= pattern.Value(x, x);
                         }
@@ -465,14 +464,14 @@ namespace QRCoder.Core
                     {
                         for (var y = 0; y < x; y++)
                         {
-                            if (!IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            if (!IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
                             {
                                 qrCode.ModuleMatrix[y][x] ^= methods[selectedPattern.Value](x, y);
                                 qrCode.ModuleMatrix[x][y] ^= methods[selectedPattern.Value](y, x);
                             }
                         }
 
-                        if (!IsBlocked(new Rectangle(x, x, 1, 1), blockedModules))
+                        if (!IsBlocked(new SKRectI(x, x, 1, 1), blockedModules))
                         {
                             qrCode.ModuleMatrix[x][x] ^= methods[selectedPattern.Value](x, x);
                         }
@@ -483,7 +482,7 @@ namespace QRCoder.Core
                 return 0;
             }
 
-            public static void PlaceDataWords(ref QRCodeData qrCode, string data, ref List<Rectangle> blockedModules)
+            public static void PlaceDataWords(ref QRCodeData qrCode, string data, ref List<SKRectI> blockedModules)
             {
                 var size = qrCode.ModuleMatrix.Count;
                 var up = true;
@@ -502,17 +501,17 @@ namespace QRCoder.Core
                         if (up)
                         {
                             y = size - yMod;
-                            if (datawords.Count > 0 && !IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
                                 qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new Rectangle(x - 1, y, 1, 1), blockedModules))
+                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
                                 qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
                         }
                         else
                         {
                             y = yMod - 1;
-                            if (datawords.Count > 0 && !IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
                                 qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new Rectangle(x - 1, y, 1, 1), blockedModules))
+                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
                                 qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
                         }
                     }
@@ -520,45 +519,45 @@ namespace QRCoder.Core
                 }
             }
 
-            public static void ReserveSeperatorAreas(int size, ref List<Rectangle> blockedModules)
+            public static void ReserveSeperatorAreas(int size, ref List<SKRectI> blockedModules)
             {
                 blockedModules.AddRange(new[]{
-                    new Rectangle(7, 0, 1, 8),
-                    new Rectangle(0, 7, 7, 1),
-                    new Rectangle(0, size-8, 8, 1),
-                    new Rectangle(7, size-7, 1, 7),
-                    new Rectangle(size-8, 0, 1, 8),
-                    new Rectangle(size-7, 7, 7, 1)
+                    new SKRectI(7, 0, 1, 8),
+                    new SKRectI(0, 7, 7, 1),
+                    new SKRectI(0, size-8, 8, 1),
+                    new SKRectI(7, size-7, 1, 7),
+                    new SKRectI(size-8, 0, 1, 8),
+                    new SKRectI(size-7, 7, 7, 1)
                 });
             }
 
-            public static void ReserveVersionAreas(int size, int version, ref List<Rectangle> blockedModules)
+            public static void ReserveVersionAreas(int size, int version, ref List<SKRectI> blockedModules)
             {
                 blockedModules.AddRange(new[]{
-                    new Rectangle(8, 0, 1, 6),
-                    new Rectangle(8, 7, 1, 1),
-                    new Rectangle(0, 8, 6, 1),
-                    new Rectangle(7, 8, 2, 1),
-                    new Rectangle(size-8, 8, 8, 1),
-                    new Rectangle(8, size-7, 1, 7)
+                    new SKRectI(8, 0, 1, 6),
+                    new SKRectI(8, 7, 1, 1),
+                    new SKRectI(0, 8, 6, 1),
+                    new SKRectI(7, 8, 2, 1),
+                    new SKRectI(size-8, 8, 8, 1),
+                    new SKRectI(8, size-7, 1, 7)
                 });
 
                 if (version >= 7)
                 {
                     blockedModules.AddRange(new[]{
-                    new Rectangle(size-11, 0, 3, 6),
-                    new Rectangle(0, size-11, 6, 3)
+                    new SKRectI(size-11, 0, 3, 6),
+                    new SKRectI(0, size-11, 6, 3)
                 });
                 }
             }
 
-            public static void PlaceDarkModule(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules)
+            public static void PlaceDarkModule(ref QRCodeData qrCode, int version, ref List<SKRectI> blockedModules)
             {
                 qrCode.ModuleMatrix[4 * version + 9][8] = true;
-                blockedModules.Add(new Rectangle(8, 4 * version + 9, 1, 1));
+                blockedModules.Add(new SKRectI(8, 4 * version + 9, 1, 1));
             }
 
-            public static void PlaceFinderPatterns(ref QRCodeData qrCode, ref List<Rectangle> blockedModules)
+            public static void PlaceFinderPatterns(ref QRCodeData qrCode, ref List<SKRectI> blockedModules)
             {
                 var size = qrCode.ModuleMatrix.Count;
                 int[] locations = { 0, 0, size - 7, 0, 0, size - 7 };
@@ -575,15 +574,15 @@ namespace QRCoder.Core
                             }
                         }
                     }
-                    blockedModules.Add(new Rectangle(locations[i], locations[i + 1], 7, 7));
+                    blockedModules.Add(new SKRectI(locations[i], locations[i + 1], 7, 7));
                 }
             }
 
-            public static void PlaceAlignmentPatterns(ref QRCodeData qrCode, List<Point> alignmentPatternLocations, ref List<Rectangle> blockedModules)
+            public static void PlaceAlignmentPatterns(ref QRCodeData qrCode, List<Point> alignmentPatternLocations, ref List<SKRectI> blockedModules)
             {
                 foreach (var loc in alignmentPatternLocations)
                 {
-                    var alignmentPatternRect = new Rectangle(loc.X, loc.Y, 5, 5);
+                    var alignmentPatternRect = new SKRectI(loc.X, loc.Y, 5, 5);
                     var blocked = false;
                     foreach (var blockedRect in blockedModules)
                     {
@@ -606,11 +605,11 @@ namespace QRCoder.Core
                             }
                         }
                     }
-                    blockedModules.Add(new Rectangle(loc.X, loc.Y, 5, 5));
+                    blockedModules.Add(new SKRectI(loc.X, loc.Y, 5, 5));
                 }
             }
 
-            public static void PlaceTimingPatterns(ref QRCodeData qrCode, ref List<Rectangle> blockedModules)
+            public static void PlaceTimingPatterns(ref QRCodeData qrCode, ref List<SKRectI> blockedModules)
             {
                 var size = qrCode.ModuleMatrix.Count;
                 for (var i = 8; i < size - 8; i++)
@@ -622,17 +621,17 @@ namespace QRCoder.Core
                     }
                 }
                 blockedModules.AddRange(new[]{
-                    new Rectangle(6, 8, 1, size-16),
-                    new Rectangle(8, 6, size-16, 1)
+                    new SKRectI(6, 8, 1, size-16),
+                    new SKRectI(8, 6, size-16, 1)
                 });
             }
 
-            private static bool Intersects(Rectangle r1, Rectangle r2)
+            private static bool Intersects(SKRectI r1, SKRectI r2)
             {
                 return r2.X < r1.X + r1.Width && r1.X < r2.X + r2.Width && r2.Y < r1.Y + r1.Height && r1.Y < r2.Y + r2.Height;
             }
 
-            private static bool IsBlocked(Rectangle r1, List<Rectangle> blockedModules)
+            private static bool IsBlocked(SKRectI r1, List<SKRectI> blockedModules)
             {
                 foreach (var blockedMod in blockedModules)
                 {
@@ -1554,14 +1553,14 @@ namespace QRCoder.Core
             }
         }
 
-        private class Rectangle
+        private class SKRectI
         {
             public int X { get; }
             public int Y { get; }
             public int Width { get; }
             public int Height { get; }
 
-            public Rectangle(int x, int y, int w, int h)
+            public SKRectI(int x, int y, int w, int h)
             {
                 this.X = x;
                 this.Y = y;

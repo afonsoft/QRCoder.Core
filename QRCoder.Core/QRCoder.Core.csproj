@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net6.0;net8.0;net6.0-windows;net8.0-windows;net48</TargetFrameworks>
-	<DefineConstants Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">$(DefineConstants);WINDOWS</DefineConstants>
-	<UseWindowsForms Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWindowsForms>
-	<UseWPF Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</UseWPF>
-	<EnableWindowsTargeting Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows' or '$(TargetFramework)' == 'net48'">true</EnableWindowsTargeting>
+    <!--<TargetFrameworks>netstandard2.1;net6.0;net8.0;net48</TargetFrameworks>-->
+	  <TargetFrameworks>netstandard2.1;net6.0;net8.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
@@ -24,7 +22,6 @@
 	<GenerateAssemblyCompanyAttribute>true</GenerateAssemblyCompanyAttribute>
 	<GenerateAssemblyProductAttribute>true</GenerateAssemblyProductAttribute>
 	<GenerateAssemblyCopyrightAttribute>true</GenerateAssemblyCopyrightAttribute>
-	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
 	<IsPackable>true</IsPackable>
 	<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	<IncludeSymbols>true</IncludeSymbols>
@@ -49,25 +46,12 @@
     <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
-    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes Use System.Drawing.Common below 7.0.0.</Description>
+    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes.</Description>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="runtimeconfig.template.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="runtimeconfig.template.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
   <ItemGroup>
     <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
     <None Include="Assets\nuget-readme.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-
-
 	<PropertyGroup Condition="'$(Configuration)' == 'Release' ">
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
@@ -76,12 +60,13 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="[6.0.0,7.0.0)" />
 		<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.3" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="System.Text.Encoding" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="SkiaSharp" Version="3.119.0" />
+		<PackageReference Include="SkiaSharp.Views" Version="3.119.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
