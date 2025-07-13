@@ -1,5 +1,5 @@
 
-# QRCoder.Core
+# QRCoder.Core - QR Code Generator Library
 
 |Code coverage|Build status|NuGet Package|
 |-------------|------------|-------------|
@@ -9,147 +9,147 @@
 |----------|-------------|----|---------------|
 |[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=bugs)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|
 
-## Descrição do Projeto
-QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para geração de códigos QR em ambientes .NET.
+## Project Description
+QRCoder.Core is a simple C# .NET library, based on [QrCode](https://github.com/codebude/QRCoder), that allows the creation of QR codes. This version is optimized for .NET Core and is available as a NuGet package. The project is developed and maintained by AFONSOFT, focusing on providing a robust and easy-to-use solution for QR code generation in .NET environments.
 
-## Status do Projeto
-Concluída
+## Project Status
+Completed
 
-## Estrutura do Repositório
+## Repository Structure
 ```
 .
-├── Docs/                                   # Documentação gerada automaticamente para a biblioteca.
-│   └── media/                              # Imagens e mídias utilizadas na documentação.
-├── LICENSE.txt                             # Arquivo de licença do projeto.
-├── QRCoder.Core/                           # Código-fonte principal da biblioteca QRCoder.Core.
-│   ├── ASCIIQRCode.cs                      # Implementação para geração de QR Codes em formato ASCII.
-│   ├── AbstractQRCode.cs                   # Classe base abstrata para todos os tipos de QR Codes.
-│   ├── ArtQRCode.cs                        # Implementação para geração de QR Codes artísticos.
-│   ├── Assets/                             # Ativos do projeto, incluindo ícones e arquivos de README para NuGet.
-│   │   ├── nuget-icon.png                  # Ícone do pacote NuGet.
-│   │   └── nuget-readme.md                 # Conteúdo do README para o pacote NuGet.
-│   ├── Base64QRCode.cs                     # Implementação para geração de QR Codes em formato Base64.
-│   ├── BitmapByteQRCode.cs                 # Implementação para geração de QR Codes como bitmaps de bytes.
-│   ├── Exceptions/                         # Classes de exceção personalizadas para a biblioteca.
-│   │   └── DataTooLongException.cs         # Exceção lançada quando os dados excedem o limite do QR Code.
-│   ├── Extensions/                         # Métodos de extensão para funcionalidades adicionais.
-│   │   └── StringValueAttribute.cs         # Atributo para valores de string personalizados.
-│   ├── PayloadGenerator.cs                 # Gerador de payloads para diferentes tipos de QR Codes (ex: URL, SMS, Wi-Fi).
-│   ├── PdfByteQRCode.cs                    # Implementação para geração de QR Codes em formato PDF.
-│   ├── PngByteQRCode.cs                    # Implementação para geração de QR Codes em formato PNG.
-│   ├── PostscriptQRCode.cs                 # Implementação para geração de QR Codes em formato Postscript.
-│   ├── QRCode.cs                           # Classe principal para manipulação e renderização de QR Codes.
-│   ├── QRCodeData.cs                       # Estrutura de dados para armazenar os dados do QR Code.
-│   ├── QRCodeGenerator.cs                  # Gerador de dados de QR Code.
-│   ├── QRCoder.Core.csproj                 # Arquivo de projeto C# para a biblioteca QRCoder.Core.
-│   └── SvgQRCode.cs                        # Implementação para geração de QR Codes em formato SVG.
-├── QRCoder.Core.Docs.shfbproj              # Projeto de documentação Sandcastle Help File Builder.
-├── QRCoder.Core.Docs.sln                   # Solução para o projeto de documentação.
-├── QRCoder.Core.Tests/                     # Projeto de testes unitários para a biblioteca.
-│   ├── ArtQRCodeRendererTests.cs           # Testes para o renderizador de QR Codes artísticos.
-│   ├── AsciiQRCodeRendererTests.cs         # Testes para o renderizador de QR Codes ASCII.
-│   ├── Helpers/                            # Classes auxiliares para os testes.
-│   │   ├── CategoryDiscoverer.cs           # Auxiliar para descoberta de categorias de testes.
-│   │   └── HelperFunctions.cs              # Funções auxiliares gerais para testes.
-│   ├── PayloadGeneratorTests.cs            # Testes para o gerador de payloads.
-│   ├── PngByteQRCodeRendererTests.cs       # Testes para o renderizador de QR Codes PNG.
-│   ├── QRCodeRendererTests.cs              # Testes para o renderizador geral de QR Codes.
-│   ├── QRCoder.Core.Tests.csproj           # Arquivo de projeto C# para os testes.
-│   ├── QRGeneratorTests.cs                 # Testes para o gerador de QR Codes.
-│   ├── SvgQRCodeRendererTests.cs           # Testes para o renderizador de QR Codes SVG.
-│   └── assets/                             # Ativos utilizados nos testes (imagens, etc.).
-├── QRCoder.Core.sln                        # Solução principal do projeto QRCoder.Core.
-└── readme.md                               # README original do repositório.
+├── [Docs/](Docs/)                                   # Automatically generated documentation for the library.
+│   └── media/                              # Images and media used in the documentation.
+├── [LICENSE.txt](LICENSE.txt)                             # Project license file.
+├── [QRCoder.Core/](QRCoder.Core/)                           # Main source code for the QRCoder.Core library.
+│   ├── [ASCIIQRCode.cs](QRCoder.Core/ASCIIQRCode.cs)                      # Implementation for generating QR Codes in ASCII format.
+│   ├── [AbstractQRCode.cs](QRCoder.Core/AbstractQRCode.cs)                   # Abstract base class for all QR Code types.
+│   ├── [ArtQRCode.cs](QRCoder.Core/ArtQRCode.cs)                        # Implementation for generating artistic QR Codes.
+│   ├── [Assets/](QRCoder.Core/Assets/)                             # Project assets, including icons and README files for NuGet.
+│   │   ├── nuget-icon.png                  # NuGet package icon.
+│   │   └── nuget-readme.md                 # README content for the NuGet package.
+│   ├── [Base64QRCode.cs](QRCoder.Core/Base64QRCode.cs)                     # Implementation for generating QR Codes in Base64 format.
+│   ├── [BitmapByteQRCode.cs](QRCoder.Core/BitmapByteQRCode.cs)                 # Implementation for generating QR Codes as byte bitmaps.
+│   ├── [Exceptions/](QRCoder.Core/Exceptions/)                         # Custom exception classes for the library.
+│   │   └── [DataTooLongException.cs](QRCoder.Core/Exceptions/DataTooLongException.cs)         # Exception thrown when data exceeds QR Code limit.
+│   ├── [Extensions/](QRCoder.Core/Extensions/)                         # Extension methods for additional functionalities.
+│   │   └── [StringValueAttribute.cs](QRCoder.Core/Extensions/StringValueAttribute.cs)         # Attribute for custom string values.
+│   ├── [PayloadGenerator.cs](QRCoder.Core/PayloadGenerator.cs)                 # Payload generator for different QR Code types (e.g., URL, SMS, Wi-Fi).
+│   ├── [PdfByteQRCode.cs](QRCoder.Core/PdfByteQRCode.cs)                    # Implementation for generating QR Codes in PDF format.
+│   ├── [PngByteQRCode.cs](QRCoder.Core/PngByteQRCode.cs)                    # Implementation for generating QR Codes in PNG format.
+│   ├── [PostscriptQRCode.cs](QRCoder.Core/PostscriptQRCode.cs)                 # Implementation for generating QR Codes in Postscript format.
+│   ├── [QRCode.cs](QRCoder.Core/QRCode.cs)                           # Main class for QR Code manipulation and rendering.
+│   ├── [QRCodeData.cs](QRCoder.Core/QRCodeData.cs)                       # Data structure for storing QR Code data.
+│   ├── [QRCodeGenerator.cs](QRCoder.Core/QRCodeGenerator.cs)                  # QR Code data generator.
+│   ├── [QRCoder.Core.csproj](QRCoder.Core/QRCoder.Core.csproj)                 # C# project file for the QRCoder.Core library.
+│   └── [SvgQRCode.cs](QRCoder.Core/SvgQRCode.cs)                        # Implementation for generating QR Codes in SVG format.
+├── [QRCoder.Core.Docs.shfbproj](QRCoder.Core.Docs.shfbproj)              # Sandcastle Help File Builder documentation project.
+├── [QRCoder.Core.Docs.sln](QRCoder.Core.Docs.sln)                   # Solution for the documentation project.
+├── [QRCoder.Core.Tests/](QRCoder.Core.Tests/)                     # Unit test project for the library.
+│   ├── [ArtQRCodeRendererTests.cs](QRCoder.Core.Tests/ArtQRCodeRendererTests.cs)           # Tests for the artistic QR Code renderer.
+│   ├── [AsciiQRCodeRendererTests.cs](QRCoder.Core.Tests/AsciiQRCodeRendererTests.cs)         # Tests for the ASCII QR Code renderer.
+│   ├── [Helpers/](QRCoder.Core.Tests/Helpers/)                            # Helper classes for tests.
+│   │   ├── [CategoryDiscoverer.cs](QRCoder.Core.Tests/Helpers/CategoryDiscoverer.cs)           # Helper for test category discovery.
+│   │   └── [HelperFunctions.cs](QRCoder.Core.Tests/Helpers/HelperFunctions.cs)              # General helper functions for tests.
+│   ├── [PayloadGeneratorTests.cs](QRCoder.Core.Tests/PayloadGeneratorTests.cs)            # Tests for the payload generator.
+│   ├── [PngByteQRCodeRendererTests.cs](QRCoder.Core.Tests/PngByteQRCodeRendererTests.cs)       # Tests for the PNG QR Code renderer.
+│   ├── [QRCodeRendererTests.cs](QRCoder.Core.Tests/QRCodeRendererTests.cs)              # Tests for the general QR Code renderer.
+│   ├── [QRCoder.Core.Tests.csproj](QRCoder.Core.Tests/QRCoder.Core.Tests.csproj)           # C# project file for the tests.
+│   ├── [QRGeneratorTests.cs](QRCoder.Core.Tests/QRGeneratorTests.cs)                 # Tests for the QR Code generator.
+│   ├── [SvgQRCodeRendererTests.cs](QRCoder.Core.Tests/SvgQRCodeRendererTests.cs)           # Tests for the SVG QR Code renderer.
+│   └── [assets/](QRCoder.Core.Tests/assets/)                             # Assets used in tests (images, etc.).
+├── [QRCoder.Core.sln](QRCoder.Core.sln)                        # Main solution for the QRCoder.Core project.
+└── [readme.md](readme.md)                               # Original repository README.
 ```
 
-## Tecnologias Utilizadas
-*   **C#**: Linguagem de programação principal.
-*   **.NET Standard 2.1, .NET 6.0, .NET 8.0**: Frameworks de destino para a biblioteca.
-*   **SkiaSharp**: Biblioteca gráfica para renderização de QR Codes em diferentes formatos.
-*   **SkiaSharp.Views**: Componentes de UI para SkiaSharp.
-*   **System.Text.Encoding**: Para manipulação de codificação de texto.
-*   **System.Text.Encoding.Extensions**: Extensões para codificação de texto.
-*   **System.Text.Encoding.CodePages**: Suporte a páginas de código adicionais.
-*   **SourceLink.Create.CommandLine**: Para depuração de código-fonte.
-*   **Microsoft.SourceLink.GitHub**: Para integração com o GitHub SourceLink.
+## Technologies Used
+*   **C#**: Main programming language.
+*   **.NET Standard 2.1, .NET 6.0, .NET 8.0**: Target frameworks for the library.
+*   **SkiaSharp**: Graphics library for rendering QR Codes in different formats.
+*   **SkiaSharp.Views**: UI components for SkiaSharp.
+*   **System.Text.Encoding**: For text encoding manipulation.
+*   **System.Text.Encoding.Extensions**: Extensions for text encoding.
+*   **System.Text.Encoding.CodePages**: Support for additional code pages.
+*   **SourceLink.Create.CommandLine**: For source code debugging.
+*   **Microsoft.SourceLink.GitHub**: For integration with GitHub SourceLink.
 
-## Pré-requisitos
-Para utilizar ou contribuir com este projeto, você precisará ter o .NET SDK instalado em sua máquina, compatível com as versões .NET Standard 2.1, .NET 6.0 ou .NET 8.0.
+## Prerequisites
+To use or contribute to this project, you will need to have the .NET SDK installed on your machine, compatible with .NET Standard 2.1, .NET 6.0, or .NET 8.0 versions.
 
-## Como Rodar a Aplicação
-Você pode gerar e visualizar seu primeiro código QR com apenas algumas linhas de código C#.
+## Getting Started
+You can generate and view your first QR code with just a few lines of C# code.
 
 ```csharp
 using QRCoder;
-using System.Drawing; // Necessário para Bitmap, pode variar dependendo do ambiente .NET
+using System.Drawing; // Required for Bitmap, may vary depending on the .NET environment
 
-// Instancie o gerador de QR Code
+// Instantiate the QR Code generator
 using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
 {
-    // Crie os dados do QR Code a partir de uma string e nível de correção de erro
-    using (QRCodeData qrCodeData = qrGenerator.CreateQrCode("O texto que deve ser codificado.", QRCodeGenerator.ECCLevel.Q))
+    // Create QR Code data from a string and error correction level
+    using (QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text to be encoded.", QRCodeGenerator.ECCLevel.Q))
     {
-        // Crie uma instância de QRCode com os dados
+        // Create a QRCode instance with the data
         using (QRCode qrCode = new QRCode(qrCodeData))
         {
-            // Obtenha a representação gráfica do QR Code como um Bitmap
-            // O parâmetro '20' define o tamanho do módulo (pixel) do QR Code
+            // Get the graphical representation of the QR Code as a Bitmap
+            // The '20' parameter defines the module size (pixel) of the QR Code
             Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-            // Exemplo de como salvar a imagem (requer System.Drawing.Common para .NET Core/5+)
+            // Example of how to save the image (requires System.Drawing.Common for .NET Core/5+)
             // qrCodeImage.Save("qrcode.png", System.Drawing.Imaging.ImageFormat.Png);
         }
     }
 }
 ```
 
-### Parâmetros Opcionais e Sobrecargas
-O método `GetGraphic` possui várias sobrecargas. As duas primeiras permitem definir a cor do gráfico do QR code usando tipos `Color` ou notação de cor hexadecimal HTML.
+### Optional Parameters and Overloads
+The `GetGraphic` method has several overloads. The first two allow you to define the QR code graphic color using `Color` types or HTML hexadecimal color notation.
 
 ```csharp
-// Definir cor usando tipos Color
+// Define color using Color types
 Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.DarkRed, Color.PaleGreen, true);
 
-// Definir cor usando notação de cor hexadecimal HTML
+// Define color using HTML hexadecimal color notation
 Bitmap qrCodeImage = qrCode.GetGraphic(20, "#000ff0", "#0ff000");
 ```
 
-Esta sobrecarga permite renderizar um logotipo/imagem no centro do QR code.
+This overload allows rendering a logo/image in the center of the QR code.
 
 ```csharp
-Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("caminho/para/sua/imagem.png"));
+Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("path/to/your/image.png"));
 ```
 
-## Fluxo do Projeto
-O projeto `QRCoder.Core` é uma biblioteca que facilita a geração de códigos QR em aplicações .NET. O fluxo principal envolve:
-1.  **Geração de Dados**: A classe `QRCodeGenerator` é responsável por pegar uma string de entrada e convertê-la em `QRCodeData`, que é uma representação binária do QR Code, considerando o nível de correção de erro (ECCLevel).
-2.  **Renderização**: As classes que herdam de `AbstractQRCode` (como `QRCode`, `PngByteQRCode`, `SvgQRCode`, `ASCIIQRCode`, etc.) utilizam o `QRCodeData` para renderizar o QR Code em diferentes formatos gráficos (Bitmap, PNG, SVG, ASCII, etc.).
-3.  **Geração de Payloads**: A classe `PayloadGenerator` oferece métodos para criar payloads formatados para tipos específicos de QR Codes, como URLs, SMS, contatos, Wi-Fi, entre outros, simplificando a criação de QR Codes para casos de uso comuns.
-4.  **Tratamento de Exceções**: O projeto inclui exceções personalizadas, como `DataTooLongException`, para lidar com cenários onde os dados fornecidos excedem a capacidade máxima de um QR Code.
+## Project Flow
+The `QRCoder.Core` project is a library that facilitates QR code generation in .NET applications. The main flow involves:
+1.  **Data Generation**: The `QRCodeGenerator` class is responsible for taking an input string and converting it into `QRCodeData`, which is a binary representation of the QR Code, considering the error correction level (ECCLevel).
+2.  **Rendering**: Classes inheriting from `AbstractQRCode` (such as `QRCode`, `PngByteQRCode`, `SvgQRCode`, `ASCIIQRCode`, etc.) use `QRCodeData` to render the QR Code in different graphic formats (Bitmap, PNG, SVG, ASCII, etc.).
+3.  **Payload Generation**: The `PayloadGenerator` class offers methods to create formatted payloads for specific QR Code types, such as URLs, SMS, contacts, Wi-Fi, among others, simplifying the creation of QR Codes for common use cases.
+4.  **Exception Handling**: The project includes custom exceptions, such as `DataTooLongException`, to handle scenarios where the provided data exceeds the maximum capacity of a QR Code.
 
-## Cobertura de Código
-A cobertura de código é monitorada e os resultados podem ser visualizados através do badge:
+## Code Coverage
+Code coverage is monitored and results can be viewed through the badge:
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
 
-## Desenvolvedores/Contribuintes
-*   **Afonso Dutra Nogueira Filho** (AFONSOFT) - Desenvolvedor principal.
+## Developers/Contributors
+*   **Afonso Dutra Nogueira Filho** (AFONSOFT) - Main developer.
 
-## Licença
-Este projeto está licenciado sob a Licença MIT. Para mais detalhes, consulte o arquivo [LICENSE.txt](LICENSE.txt).
+## License
+This project is licensed under the MIT License. For more details, see the [LICENSE.txt](LICENSE.txt) file.
 
 ## Changelog
 
 ### [1.0.4] - 2025-07-13
 #### Changed
-- Ajustes gerais no projeto e na documentação.
-- Melhorias na formatação do README.md.
-- Correção de erros de digitação no README.md.
-- Atualização de links da wiki no README.md.
-- Ajustes relacionados ao SkiaSharp.
+- General adjustments in the project and documentation.
+- Improvements in README.md formatting.
+- Typo corrections in README.md.
+- Wiki link updates in README.md.
+- Adjustments related to SkiaSharp.
 
 ### [1.0.3] - 2024-04-01
 #### Fixed
-- Correção de ações (fix actions).
+- Action corrections (fix actions).
 #### Changed
-- Atualização de dependências (codecov/codecov-action de 4 para 5, NuGet/setup-nuget de 2.0.0 para 2.0.1).
-- Ajustes de condição.
+- Dependency updates (codecov/codecov-action from 4 to 5, NuGet/setup-nuget from 2.0.0 to 2.0.1).
+- Condition adjustments.
