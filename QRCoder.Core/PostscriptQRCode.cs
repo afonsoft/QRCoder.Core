@@ -1,4 +1,5 @@
 ﻿using System;
+using QRCoder.Core.Extensions;
 using SkiaSharp;
 using static QRCoder.Core.QRCodeGenerator;
 
@@ -44,7 +45,7 @@ namespace QRCoder.Core
 
         public string GetGraphic(Size viewBox, string darkSKColorHex, string lightSKColorHex, bool drawQuietZones = true, bool epsFormat = false)
         {
-            return this.GetGraphic(viewBox, SKColor.Parse(darkSKColorHex), SKColor.Parse(lightSKColorHex), drawQuietZones, epsFormat);
+            return this.GetGraphic(viewBox, SKColorExtensions.FromHex(darkSKColorHex), SKColorExtensions.FromHex(lightSKColorHex), drawQuietZones, epsFormat);
         }
 
         public string GetGraphic(Size viewBox, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true, bool epsFormat = false)

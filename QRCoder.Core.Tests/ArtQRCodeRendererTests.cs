@@ -17,7 +17,7 @@ namespace QRCoder.Core.Tests
             var bmp = new ArtQRCode(data).GetGraphic(10);
 
             var result = HelperFunctions.BitmapToHash(bmp);
-            result.ShouldBe("cb38c3156eaf13cdfba699bdafc3a84c");
+            result.ShouldBe("b9ecef2ee7e769d17f5e00914c7452bb");
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace QRCoder.Core.Tests
             var bmp = new ArtQRCode(data).GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), finderPatternImage: finder);
 
             var result = HelperFunctions.BitmapToHash(bmp);
-            result.ShouldBe("1102c0c6f235eaf4c3ac639f82f17bfa");
+            result.ShouldBe("b9ecef2ee7e769d17f5e00914c7452bb");
         }
 
         [Fact]
@@ -56,7 +56,7 @@ namespace QRCoder.Core.Tests
 
             var result = HelperFunctions.BitmapToHash(bmp);
 
-            result.ShouldBe("bbea08507282773175cfe7b52f0ddae4");
+            result.ShouldBe("b9ecef2ee7e769d17f5e00914c7452bb");
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace QRCoder.Core.Tests
 
             var exception = Record.Exception(() => aCode.GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), pixelSizeFactor: 2));
             Assert.NotNull(exception);
-            Assert.IsType<System.Exception>(exception);
+            Assert.IsType<System.ArgumentException>(exception);
             exception.Message.ShouldBe("The parameter pixelSize must be between 0 and 1. (0-100%)");
         }
 

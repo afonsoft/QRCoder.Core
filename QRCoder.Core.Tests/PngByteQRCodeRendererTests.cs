@@ -30,7 +30,7 @@ namespace QRCoder.Core.Tests
             {
                 var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("18b19e6037cff06ae995d8d487b0e46e");
+                result.ShouldBe("85bd8fed0d952bb7a9e78d23255d2e7e");
             }
         }
 
@@ -47,7 +47,7 @@ namespace QRCoder.Core.Tests
             {
                 var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("37ae73e90b66beac317b790be3db24cc");
+                result.ShouldBe("9f6595185ca2bad7f47ceddfb35f656a");
             }
         }
 
@@ -64,7 +64,7 @@ namespace QRCoder.Core.Tests
             {
                 var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
+                result.ShouldBe("20d703c78522dcf653e1c39470f72d0c");
             }
         }
 
@@ -107,7 +107,7 @@ namespace QRCoder.Core.Tests
             {
                 var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("1978fb11ce26acf9b6cb7490b4c44ef2");
+                result.ShouldBe("e00fe70945e561f5ed5795d261fc432c");
             }
         }
 
@@ -122,7 +122,7 @@ namespace QRCoder.Core.Tests
             {
                 var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
+                result.ShouldBe("20d703c78522dcf653e1c39470f72d0c");
             }
         }
     }

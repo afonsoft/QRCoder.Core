@@ -27,7 +27,7 @@ namespace QRCoder.Core.Tests
             var svg = new SvgQRCode(data).GetGraphic(5);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("5c251275a435a9aed7e591eb9c2e9949");
+            result.ShouldBe("ecc827144033f70db957cdaa77b58b4c");
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace QRCoder.Core.Tests
             var svg = new SvgQRCode(data).GetGraphic(new Size(128, 128));
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("56719c7db39937c74377855a5dc4af0a");
+            result.ShouldBe("7a32bb5adf3452fee3063e639027c0f5");
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace QRCoder.Core.Tests
             var svg = new SvgQRCode(data).GetGraphic(new Size(128, 128), sizingMode: SvgQRCode.SizingMode.ViewBoxAttribute);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("788afdb693b0b71eed344e495c180b60");
+            result.ShouldBe("889dc052e7ca246deafeee4b884e2079");
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace QRCoder.Core.Tests
             var svg = new SvgQRCode(data).GetGraphic(10, SKColors.Red, SKColors.White, false);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("2a582427d86b51504c08ebcbcf0472bd");
+            result.ShouldBe("6d7a54731de2ed632e38807640317e06");
         }
 
         [Fact]

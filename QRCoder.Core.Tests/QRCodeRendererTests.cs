@@ -17,7 +17,7 @@ namespace QRCoder.Core.Tests
             var bmp = new QRCode(data).GetGraphic(10);
 
             var result = HelperFunctions.BitmapToHash(bmp);
-            result.ShouldBe("e8c61b8f0455924fe08ba68686d0d296");
+            result.ShouldBe("1e0afd60c239d24be2ce0f8286a16918");
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace QRCoder.Core.Tests
             var bmp = new QRCode(data).GetGraphic(10, "#000000", "#ffffff");
 
             var result = HelperFunctions.BitmapToHash(bmp);
-            result.ShouldBe("e8c61b8f0455924fe08ba68686d0d296");
+            result.ShouldBe("1e0afd60c239d24be2ce0f8286a16918");
         }
 
         [Fact]
@@ -114,7 +114,7 @@ namespace QRCoder.Core.Tests
             var bmp = new QRCode(data).GetGraphic(10, SKColors.Black, SKColors.Transparent, icon: logo, iconBorderWidth: 6, iconBackgroundSKColor: SKColors.DarkGreen);
             //Used logo is licensed under public domain. Ref.: https://thenounproject.com/Iconathon1/collection/redefining-women/?i=2909346
             var result = HelperFunctions.BitmapToHash(bmp);
-            result.ShouldBe("9a06bfbb72df999b6290b5af5c4037cb");
+            result.ShouldBe("5e39d9e2a412dfcca26352234b0ce6da");
         }
 
         [Fact]

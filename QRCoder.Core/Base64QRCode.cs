@@ -4,6 +4,7 @@ using SkiaSharp;
 using System.IO;
 using static QRCoder.Core.Base64QRCode;
 using static QRCoder.Core.QRCodeGenerator;
+using QRCoder.Core.Extensions;
 
 namespace QRCoder.Core
 {
@@ -39,7 +40,7 @@ namespace QRCoder.Core
 
         public string GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
         {
-            return this.GetGraphic(pixelsPerModule, SKColor.Parse(darkSKColorHtmlHex), SKColor.Parse(lightSKColorHtmlHex), drawQuietZones, imgType);
+            return this.GetGraphic(pixelsPerModule, SKColorExtensions.FromHex(darkSKColorHtmlHex), SKColorExtensions.FromHex(lightSKColorHtmlHex), drawQuietZones, imgType);
         }
 
         public string GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
