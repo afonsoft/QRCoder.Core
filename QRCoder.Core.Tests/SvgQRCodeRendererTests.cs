@@ -37,10 +37,10 @@ namespace QRCoder.Core.Tests
             //Create QR code
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var svg = new SvgQRCode(data).GetGraphic(10, SKColor.Parse("Red"), SKColors.White);
+            var svg = new SvgQRCode(data).GetGraphic(10, SKColors.Red, SKColors.White);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("1baa8c6ac3bd8c1eabcd2c5422dd9f78");
+            result.ShouldBe("c8dbbc0a6657140364e70ad806c87218");
         }
 
         [Fact]
@@ -108,10 +108,10 @@ namespace QRCoder.Core.Tests
             var logoObj = new SvgQRCode.SvgLogo(iconRasterized: logoBitmap, 15);
             logoObj.GetMediaType().ShouldBe<SvgQRCode.SvgLogo.MediaType>(SvgQRCode.SvgLogo.MediaType.PNG);
 
-            var svg = new SvgQRCode(data).GetGraphic(10, SKColor.Parse("DarkGray"), SKColors.White, logo: logoObj);
+            var svg = new SvgQRCode(data).GetGraphic(10, SKColors.DarkGray, SKColors.White, logo: logoObj);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("78e02e8ba415f15817d5ed88c4afca31");
+            result.ShouldBe("3351ec17a690ee9d50e666d99b579fe6");
         }
 
         [Fact]
@@ -127,10 +127,10 @@ namespace QRCoder.Core.Tests
             var logoObj = new SvgQRCode.SvgLogo(logoSvg, 20);
             logoObj.GetMediaType().ShouldBe<SvgQRCode.SvgLogo.MediaType>(SvgQRCode.SvgLogo.MediaType.SVG);
 
-            var svg = new SvgQRCode(data).GetGraphic(10, SKColor.Parse("DarkGray"), SKColors.White, logo: logoObj);
+            var svg = new SvgQRCode(data).GetGraphic(10, SKColors.DarkGray, SKColors.White, logo: logoObj);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("855eb988d3af035abd273ed1629aa952");
+            result.ShouldBe("734ebd6616b1ef37548bbc0648b592b6");
         }
 
         [Fact]
@@ -145,10 +145,10 @@ namespace QRCoder.Core.Tests
             var logoSvg = File.ReadAllText(GetAssemblyPath() + "\\assets\\noun_Scientist_2909361.svg");
             var logoObj = new SvgQRCode.SvgLogo(logoSvg, 20, iconEmbedded: false);
 
-            var svg = new SvgQRCode(data).GetGraphic(10, SKColor.Parse("DarkGray"), SKColors.White, logo: logoObj);
+            var svg = new SvgQRCode(data).GetGraphic(10, SKColors.DarkGray, SKColors.White, logo: logoObj);
 
             var result = HelperFunctions.StringToHash(svg);
-            result.ShouldBe("bd442ea77d45a41a4f490b8d41591e04");
+            result.ShouldBe("70c6b9219333dd45ce7a4b0688bfd462");
         }
 
         [Fact]

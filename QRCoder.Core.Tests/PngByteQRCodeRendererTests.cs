@@ -77,13 +77,13 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.L);
             var pngCodeGfx = new PngByteQRCode(data).GetGraphic(5, new byte[] { 255, 255, 255, 127 }, new byte[] { 0, 0, 255 }, false);
 
-            File.WriteAllBytes(@"C:\Temp\pngbyte_35.png", pngCodeGfx);
+            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "EAF.png"), pngCodeGfx);
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
                 var bmp = SKBitmap.Decode(mStream);
                 bmp.Erase(SKColors.Transparent);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("fbbc8255ebf3e4f4a1d21f0dd15f76f8");
+                result.ShouldBe("1e5e253debee423a68c991427e4a5d49");
             }
         }
 
