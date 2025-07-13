@@ -26,7 +26,7 @@ namespace QRCoder.Core.Tests
         {
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var finder = new Bitmap(15, 15);
+            var finder = new SKBitmap(15, 15);
             var bmp = new ArtQRCode(data).GetGraphic(10, SKColor.Parse("Black"), SKColor.Parse("White"), SKColor.Parse("Transparent"), finderPatternImage: finder);
 
             var result = HelperFunctions.BitmapToHash(bmp);

@@ -76,7 +76,7 @@ namespace QRCoder.Core.Tests
             //Create QR code
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var svg = new SvgQRCode(data).GetGraphic(10, Color.Red, Color.White, false);
+            var svg = new SvgQRCode(data).GetGraphic(10, SKColors.Red, SKColors.White, false);
 
             var result = HelperFunctions.StringToHash(svg);
             result.ShouldBe("2a582427d86b51504c08ebcbcf0472bd");
