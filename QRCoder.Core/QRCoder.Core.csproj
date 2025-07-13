@@ -11,7 +11,7 @@
     <Version>1.0.4</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
-	<Copyright>AFONSOFT © 2024</Copyright>
+	<Copyright>AFONSOFT © 2025</Copyright>
 	<Company>AFONSOFT</Company>
 	<LangVersion>10.0</LangVersion>
 	<OutputType>Library</OutputType>
@@ -66,7 +66,6 @@
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 		<PackageReference Include="SkiaSharp" Version="3.119.0" />
-		<PackageReference Include="SkiaSharp.Views" Version="3.119.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
