@@ -3,6 +3,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using SkiaSharp;
 
 #if WINDOWS
 using SW = System.Windows;

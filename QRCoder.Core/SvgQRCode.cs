@@ -282,7 +282,7 @@ namespace QRCoder.Core
                 _iconSizePercent = iconSizePercent;
                 using (var ms = new System.IO.MemoryStream())
                 {
-                    using (var bitmap = new SKBitmap(iconRasterized))
+                    using (var bitmap = iconRasterized.Copy())
                     {
                         bitmap.Encode(ms, SKEncodedImageFormat.Png, 100);
                         _logoData = Convert.ToBase64String(ms.GetBuffer(), Base64FormattingOptions.None);

@@ -1,7 +1,7 @@
 ﻿using QRCoder.Core.Tests.Helpers;
 using QRCoder.Core.Tests.Helpers.XUnitExtenstions;
 using Shouldly;
-
+using SkiaSharp;
 using System.IO;
 using Xunit;
 
