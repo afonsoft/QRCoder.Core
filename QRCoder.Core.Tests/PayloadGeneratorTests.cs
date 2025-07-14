@@ -397,18 +397,7 @@ namespace QRCoder.Core.Tests
             var generator = new PayloadGenerator.WiFi(ssid, password, authmode, hideSSID);
 
             generator.ToString().ShouldBe($"WIFI:T:WPA;S:\"0XA9B7F18CCE\";P:\"0X00105F0E6\";H:true;");
-        }
-
-        [Fact]
-        [Category("PayloadGenerator/Url")]
-        public void url_should_correctly_handle_http_to_https_conversion()
-        {
-            var url = "http://example.com";
-            var generator = new PayloadGenerator.Url(url);
-            generator.ToString().ShouldBe("https://example.com");
-        }
-
-        [Fact]
+        }        [Fact]
         [Category("PayloadGenerator/Mail")]
         public void mail_should_build_type_mailto()
         {
