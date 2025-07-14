@@ -111,7 +111,7 @@ namespace QRCoder.Core
             using (var lightBrush = new SKPaint { Color = lightSKColor })
             using (var darkBrush = new SKPaint { Color = darkSKColor })
             {
-                lightBrush.SamplingOptions = new SKSamplingOptions();
+                lightBrush.FilterQuality = SKFilterQuality.High;
 
                 gfx.Clear(lightSKColor); lightBrush.IsAntialias = true; darkBrush.IsAntialias = true;
                 var drawIconFlag = icon != null && iconSizePercent > 0 && iconSizePercent <= 100;

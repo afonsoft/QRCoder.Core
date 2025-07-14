@@ -218,11 +218,11 @@ namespace QRCoder.Core
 
             using (var graphics = new SKCanvas(bm))
             {
-                using (var brush = new SKPaint { Color = SKColors.Transparent })
+                using (var brush = new SKPaint { Color = SKColors.Transparent, })
                 {
                     graphics.DrawRect(new SKRect(0, 0, newSize, newSize), brush);
 
-                    brush.SamplingOptions = new SKSamplingOptions();
+                    brush.FilterQuality = SKFilterQuality.High;
 
                     brush.IsAntialias = true;
 
