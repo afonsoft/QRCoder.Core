@@ -6,7 +6,7 @@ using static QRCoder.Core.QRCodeGenerator;
 namespace QRCoder.Core
 {
     /// <summary>
-    /// QRCode
+    /// Represents a QR code, providing methods for generating graphical representations.
     /// </summary>
     public class QRCode : AbstractQRCode
     {
@@ -20,6 +20,11 @@ namespace QRCoder.Core
         {
         }
 
+        /// <summary>
+        /// Generates a graphical representation of the QR code with the specified pixel size per module.
+        /// </summary>
+        /// <param name="pixelsPerModule">The size of each module in pixels.</param>
+        /// <returns>A SkiaSharp bitmap representing the QR code.</returns>
         public SKBitmap GetGraphic(int pixelsPerModule)
         {
             return this.GetGraphic(pixelsPerModule, new SKColor(0, 0, 0), new SKColor(255, 255, 255), true);
