@@ -808,6 +808,7 @@ namespace QRCoder.Core
             /// <param name="currency">Currency (either EUR or CHF)</param>
             /// <param name="creditor">Creditor (payee) information</param>
             /// <param name="reference">Reference information</param>
+            /// <param name="additionalInformation"></param>
             /// <param name="debitor">Debitor (payer) information</param>
             /// <param name="amount">Amount</param>
             /// <param name="requestedDateOfPayment">Requested date of debitor's payment</param>
