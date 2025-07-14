@@ -375,8 +375,16 @@ namespace QRCoder.Core
 
             public override string ToString()
             {
-                var urlFix = this.url.Replace("http:", "https:");
-                return (!urlFix.StartsWith("https") ? "https://" + this.url : this.url);
+                var urlFix = this.url;
+                if (urlFix.StartsWith("http://"))
+                {
+                    urlFix = urlFix.Replace("http://", "https://");
+                }
+                else if (!urlFix.StartsWith("https://"))
+                {
+                    urlFix = "https://" + urlFix;
+                }
+                return urlFix;
             }
         }
 

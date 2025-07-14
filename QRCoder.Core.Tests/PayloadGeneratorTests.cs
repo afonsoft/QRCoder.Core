@@ -400,6 +400,15 @@ namespace QRCoder.Core.Tests
         }
 
         [Fact]
+        [Category("PayloadGenerator/Url")]
+        public void url_should_correctly_handle_http_to_https_conversion()
+        {
+            var url = "http://example.com";
+            var generator = new PayloadGenerator.Url(url);
+            generator.ToString().ShouldBe("https://example.com");
+        }
+
+        [Fact]
         [Category("PayloadGenerator/Mail")]
         public void mail_should_build_type_mailto()
         {
