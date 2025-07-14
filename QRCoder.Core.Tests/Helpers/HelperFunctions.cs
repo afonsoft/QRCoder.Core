@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Drawing;
+
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using SkiaSharp;
 
 #if WINDOWS
 using SW = System.Windows;
@@ -53,12 +54,12 @@ namespace QRCoder.Core.Tests.Helpers
 #endif
         }
 
-        public static string BitmapToHash(Bitmap bmp)
+        public static string BitmapToHash(SKBitmap bmp)
         {
             byte[] imgBytes = null;
             using (var ms = new MemoryStream())
             {
-                bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                bmp.Encode(SKEncodedImageFormat.Png, 100).SaveTo(ms);
                 imgBytes = ms.ToArray();
                 ms.Dispose();
             }

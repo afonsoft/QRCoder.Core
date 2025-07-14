@@ -28,7 +28,7 @@ namespace QRCoder.Core
             using (var png = new PngBuilder())
             {
                 var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
-                png.WriteHeader(size, size, 1, PngBuilder.ColorType.Greyscale);
+                png.WriteHeader(size, size, 1, PngBuilder.SKColorType.Greyscale);
                 png.WriteScanlines(this.DrawScanlines(pixelsPerModule, drawQuietZones));
                 png.WriteEnd();
                 return png.GetBytes();
@@ -38,13 +38,13 @@ namespace QRCoder.Core
         /// <summary>
         /// Creates 2-color PNG of the QR code, using 1-bit indexed color. Accepts 3-byte RGB colors for normal images and 4-byte RGBA-colors for transparent images.
         /// </summary>
-        public byte[] GetGraphic(int pixelsPerModule, byte[] darkColorRgba, byte[] lightColorRgba, bool drawQuietZones = true)
+        public byte[] GetGraphic(int pixelsPerModule, byte[] darkSKColorRgba, byte[] lightSKColorRgba, bool drawQuietZones = true)
         {
             using (var png = new PngBuilder())
             {
                 var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
-                png.WriteHeader(size, size, 1, PngBuilder.ColorType.Indexed);
-                png.WritePalette(darkColorRgba, lightColorRgba);
+                png.WriteHeader(size, size, 1, PngBuilder.SKColorType.Indexed);
+                png.WritePalette(darkSKColorRgba, lightSKColorRgba);
                 png.WriteScanlines(this.DrawScanlines(pixelsPerModule, drawQuietZones));
                 png.WriteEnd();
                 return png.GetBytes();
@@ -123,7 +123,7 @@ namespace QRCoder.Core
             private static readonly byte[] tRNS = { 116, 82, 78, 83 };
             // ReSharper enable InconsistentNaming
 
-            public enum ColorType : byte
+            public enum SKColorType : byte
             {
                 Greyscale = 0,
                 Indexed = 3
@@ -168,7 +168,7 @@ namespace QRCoder.Core
             /// <summary>
             /// Writes the IHDR chunk. This must be the first chunk in the file.
             /// </summary>
-            public void WriteHeader(int width, int height, byte bitDepth, ColorType colorType)
+            public void WriteHeader(int width, int height, byte bitDepth, SKColorType colorType)
             {
                 this.stream.Write(PngSignature, 0, PngSignature.Length);
                 this.WriteChunkStart(IHDR, 13);
@@ -177,7 +177,7 @@ namespace QRCoder.Core
                 this.WriteIntBigEndian((uint)width);
                 this.WriteIntBigEndian((uint)height);
 
-                // Color.
+                // SKColor.
                 this.stream.WriteByte(bitDepth);
                 this.stream.WriteByte((byte)colorType);
 
@@ -192,14 +192,14 @@ namespace QRCoder.Core
             /// <summary>
             /// Writes the PLTE chunk, and also the tRNS chunk if necessary. Must come before the IDAT chunk.
             /// </summary>
-            public void WritePalette(params byte[][] rgbaColors)
+            public void WritePalette(params byte[][] rgbaSKColors)
             {
                 const int Red = 0, Green = 1, Blue = 2, Alpha = 3;
                 const byte Opaque = 255;
                 var hasAlpha = false;
 
-                this.WriteChunkStart(PLTE, 3 * rgbaColors.Length);
-                foreach (var color in rgbaColors)
+                this.WriteChunkStart(PLTE, 3 * rgbaSKColors.Length);
+                foreach (var color in rgbaSKColors)
                 {
                     hasAlpha |= color.Length > Alpha && color[Alpha] < Opaque;
                     this.stream.WriteByte(color[Red]);
@@ -213,8 +213,8 @@ namespace QRCoder.Core
                     return;
                 }
 
-                this.WriteChunkStart(tRNS, rgbaColors.Length);
-                foreach (var color in rgbaColors)
+                this.WriteChunkStart(tRNS, rgbaSKColors.Length);
+                foreach (var color in rgbaSKColors)
                 {
                     this.stream.WriteByte(color.Length > Alpha ? color[Alpha] : Opaque);
                 }
@@ -319,12 +319,12 @@ namespace QRCoder.Core
 
     public static class PngByteQRCodeHelper
     {
-        public static byte[] GetQRCode(string plainText, int pixelsPerModule, byte[] darkColorRgba, byte[] lightColorRgba, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true)
+        public static byte[] GetQRCode(string plainText, int pixelsPerModule, byte[] darkSKColorRgba, byte[] lightSKColorRgba, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())
             using (var qrCodeData = qrGenerator.CreateQrCode(plainText, eccLevel, forceUtf8, utf8BOM, eciMode, requestedVersion))
             using (var qrCode = new PngByteQRCode(qrCodeData))
-                return qrCode.GetGraphic(pixelsPerModule, darkColorRgba, lightColorRgba, drawQuietZones);
+                return qrCode.GetGraphic(pixelsPerModule, darkSKColorRgba, lightSKColorRgba, drawQuietZones);
         }
 
         public static byte[] GetQRCode(string txt, QRCodeGenerator.ECCLevel eccLevel, int size, bool drawQuietZones = true)

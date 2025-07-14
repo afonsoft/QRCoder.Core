@@ -36,7 +36,7 @@ Bitmap^ GetGraphic(
 <dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.int32" target="_blank" rel="noopener noreferrer">Int32</a></dt><dd>\[Missing &lt;param name="pixelsPerModule"/&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32,System.String,System.String,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.string" target="_blank" rel="noopener noreferrer">String</a></dt><dd>\[Missing &lt;param name="darkColorHtmlHex"/&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32,System.String,System.String,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.string" target="_blank" rel="noopener noreferrer">String</a></dt><dd>\[Missing &lt;param name="lightColorHtmlHex"/&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32,System.String,System.String,System.Boolean)"\]</dd><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.boolean" target="_blank" rel="noopener noreferrer">Boolean</a>  (Optional)</dt><dd>\[Missing &lt;param name="drawQuietZones"/&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32,System.String,System.String,System.Boolean)"\]</dd></dl>
 
 #### Return Value
-<a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a>  
+SKBitmap  
 \[Missing &lt;returns&gt; documentation for "M:QRCoder.Core.QRCode.GetGraphic(System.Int32,System.String,System.String,System.Boolean)"\]
 
 ## See Also

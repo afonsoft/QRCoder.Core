@@ -397,9 +397,7 @@ namespace QRCoder.Core.Tests
             var generator = new PayloadGenerator.WiFi(ssid, password, authmode, hideSSID);
 
             generator.ToString().ShouldBe($"WIFI:T:WPA;S:\"0XA9B7F18CCE\";P:\"0X00105F0E6\";H:true;");
-        }
-
-        [Fact]
+        }        [Fact]
         [Category("PayloadGenerator/Mail")]
         public void mail_should_build_type_mailto()
         {

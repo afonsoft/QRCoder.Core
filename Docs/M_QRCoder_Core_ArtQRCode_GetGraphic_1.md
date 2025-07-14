@@ -30,7 +30,7 @@ Bitmap^ GetGraphic(
 <dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.int32" target="_blank" rel="noopener noreferrer">Int32</a></dt><dd>Amount of px each dark/light module of the QR code shall take place in the final QR code image</dd></dl>
 
 #### Return Value
-<a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a>  
+SKBitmap  
 QRCode graphic as bitmap
 
 ## See Also

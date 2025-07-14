@@ -27,10 +27,10 @@ Bitmap^ GetGraphic(
 
 
 #### Parameters
-<dl><dt>  <a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a>  (Optional)</dt><dd>A bitmap object that will be used as background picture</dd></dl>
+<dl><dt>  SKBitmap  (Optional)</dt><dd>A bitmap object that will be used as background picture</dd></dl>
 
 #### Return Value
-<a href="https://learn.microsoft.com/dotnet/api/system.drawing.bitmap" target="_blank" rel="noopener noreferrer">Bitmap</a>  
+SKBitmap  
 QRCode graphic as bitmap
 
 ## See Also

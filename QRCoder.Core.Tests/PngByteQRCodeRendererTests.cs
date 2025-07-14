@@ -1,7 +1,7 @@
 ﻿using QRCoder.Core.Tests.Helpers;
 using QRCoder.Core.Tests.Helpers.XUnitExtenstions;
 using Shouldly;
-using System.Drawing;
+using SkiaSharp;
 using System.IO;
 using Xunit;
 
@@ -28,9 +28,9 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("18b19e6037cff06ae995d8d487b0e46e");
+                result.ShouldBe("85bd8fed0d952bb7a9e78d23255d2e7e");
             }
         }
 
@@ -45,9 +45,9 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("37ae73e90b66beac317b790be3db24cc");
+                result.ShouldBe("9f6595185ca2bad7f47ceddfb35f656a");
             }
         }
 
@@ -62,9 +62,9 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
+                result.ShouldBe("20d703c78522dcf653e1c39470f72d0c");
             }
         }
 
@@ -77,13 +77,13 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.L);
             var pngCodeGfx = new PngByteQRCode(data).GetGraphic(5, new byte[] { 255, 255, 255, 127 }, new byte[] { 0, 0, 255 }, false);
 
-            File.WriteAllBytes(@"C:\Temp\pngbyte_35.png", pngCodeGfx);
+            File.WriteAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "EAF.png"), pngCodeGfx);
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
-                bmp.MakeTransparent(Color.Transparent);
+                var bmp = SKBitmap.Decode(mStream);
+                bmp.Erase(SKColors.Transparent);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("fbbc8255ebf3e4f4a1d21f0dd15f76f8");
+                result.ShouldBe("1e5e253debee423a68c991427e4a5d49");
             }
         }
 
@@ -105,9 +105,9 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("1978fb11ce26acf9b6cb7490b4c44ef2");
+                result.ShouldBe("e00fe70945e561f5ed5795d261fc432c");
             }
         }
 
@@ -120,9 +120,9 @@ namespace QRCoder.Core.Tests
 
             using (var mStream = new MemoryStream(pngCodeGfx))
             {
-                var bmp = (Bitmap)Image.FromStream(mStream);
+                var bmp = SKBitmap.Decode(mStream);
                 var result = HelperFunctions.BitmapToHash(bmp);
-                result.ShouldBe("c56c2a9535fd8e9a92a6ac9709d21e67");
+                result.ShouldBe("20d703c78522dcf653e1c39470f72d0c");
             }
         }
     }
