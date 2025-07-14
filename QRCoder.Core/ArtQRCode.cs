@@ -222,7 +222,7 @@ namespace QRCoder.Core
                 {
                     graphics.DrawRect(new SKRect(0, 0, newSize, newSize), brush);
 
-                    brush.FilterQuality = SKFilterQuality.High;
+                    brush.SamplingOptions = new SKSamplingOptions();
 
                     brush.IsAntialias = true;
 
