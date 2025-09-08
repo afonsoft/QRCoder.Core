@@ -44,7 +44,7 @@ jobs:
       uses: NuGet/setup-nuget@v2.0.1
     # Initializes the CodeQL tools for scanning.
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: | 
           6.0.x
