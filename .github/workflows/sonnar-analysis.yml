@@ -1,49 +1,81 @@
-name: Sonarqube
+name: 📊 SonarCloud Analysis
+
 on:
-  workflow_dispatch:
-  page_build:
-  release:
-    types:
-      - created
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  BUILD_CONFIG: "Release"
 
 jobs:
-  sonarqube-analysis:
+  sonarcloud:
+    name: 📊 SonarCloud Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+      security-events: write
 
-    env:
-      BUILD_CONFIG: 'Debug'
-    runs-on: windows-2019
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v6
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v2.0.1
-      - name: Install Java 17
-        uses: actions/setup-java@v5
         with:
-            distribution: 'microsoft' 
-            java-version: '17'
-      - name: Setup .NET
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-           dotnet-version: | 
-              6.0.x
-              8.0.x
-      - name: Clear NuGet cache
-        run: dotnet nuget locals all --clear
-      - name: Install SonarQube Tools
-        run: dotnet tool install --global --ignore-failed-sources dotnet-sonarscanner
-      - name: Install Coverlet Tools
-        run: dotnet tool install --global --ignore-failed-sources coverlet.console
-      - name: Prepare analysis on SonarQube
-        run: dotnet sonarscanner begin /o:"afonsoft" /k:"QrCode.Core" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=${{secrets.SONNAR_TOKEN}} /d:sonar.scm.provider=git /d:sonar.coverage.exclusions="**Test*.cs" /d:sonar.cs.vstest.reportsPaths=resultTest/*.trx /d:sonar.cs.opencover.reportsPaths=/coverage.opencover.xml
-      - name: Build
-        run: dotnet build QRCoder.Core.sln --configuration Debug
-      - name: Run QrCodeCore.Tests
-        run: dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --collect:"Code Coverage" --logger "trx;LogFileName=QRCoder.Core.Tests.trx" --results-directory resultTest/ --no-build --no-restore --configuration debug -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura
-      - name: Run Code Analysis
-        run: dotnet sonarscanner end /d:sonar.login=${{secrets.SONNAR_TOKEN}}
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        env:
-            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔧 Install SonarCloud scanners
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore QRCoder.Core.sln
+
+      - name: 📊 Start SonarCloud analysis
+        run: |
+          dotnet sonarscanner begin /k:"afonsoft_QRCoder.Core" \
+            /o:"afonsoft" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+
+      - name: 🏗️ Build Solution
+        run: |
+          dotnet build QRCoder.Core.sln \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --no-restore
+
+      - name: 🧪 Run Tests with Coverage
+        run: |
+          dotnet test QRCoder.Core.Tests/ \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults
+
+      - name: 📊 Convert Coverage to XML
+        run: |
+          dotnet tool run reportgenerator \
+            -reports:TestResults/**/coverage.cobertura.xml \
+            -targetdir:TestResults/CoverageReport \
+            -reporttypes:XmlSummary
+
+      - name: 📊 End SonarCloud analysis
+        run: |
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+      - name: 📤 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sonar-test-results
+          path: TestResults/
+          retention-days: 7

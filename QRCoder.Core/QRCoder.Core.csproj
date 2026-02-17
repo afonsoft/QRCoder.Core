@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;net8.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net8.0;net10.0;net48</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <PackageId>QRCoder.Core</PackageId>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
 	<Copyright>AFONSOFT © 2025</Copyright>
@@ -65,6 +65,10 @@
 		<PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.7" />
 		<PackageReference Include="SkiaSharp" Version="3.119.0" />
+		<!-- Performance optimization packages -->
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.7" />
+		<PackageReference Include="System.Buffers" Version="4.5.1" />
+		<PackageReference Include="System.Memory" Version="4.5.5" />
 	</ItemGroup>
 
 	<ItemGroup Condition=" 'Linux' == '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
