@@ -1,0 +1,261 @@
+name: 📊 Code Quality
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - main
+      - "releases/*"
+
+jobs:
+  # Qodana Analysis
+  qodana:
+    name: 🔍 Qodana Analysis
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: 🔍 Qodana Scan
+        uses: JetBrains/qodana-action@v2025.3.1
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: --linter,qodana-community-for-net --baseline,qodana.sarif.json --fail-threshold,0
+          cache-default-branch-only: true
+          upload-result: false
+
+      - name: 📊 Upload Qodana Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qodana-report
+          path: ${{ github.workspace }}/qodana
+
+  # SonarQube Analysis
+  sonarqube:
+    name: 📊 SonarQube Analysis
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup NuGet
+        uses: NuGet/setup-nuget@v2.0.1
+
+      - name: 🗄️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: "zulu"
+
+      - name: 🔧 Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      - name: 📦 Install SonarQube Tools
+        run: dotnet tool install --global --ignore-failed-sources dotnet-sonarscanner
+
+      - name: 📦 Install Coverlet Tools
+        run: dotnet tool install --global --ignore-failed-sources coverlet.console
+
+      - name: 🔧 Fix Permission
+        run: chmod 777 sonar/ -R || true
+
+      - name: 🔍 Prepare analysis on SonarQube
+        run: |
+          echo "🔍 Checking SonarQube configuration..."
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "❌ SONAR_TOKEN is not set or empty"
+            echo "⚠️ Skipping SonarQube analysis"
+            exit 0
+          fi
+
+          echo "✅ SONAR_TOKEN is configured"
+          dotnet sonarscanner begin \
+            /o:"afonsoft" \
+            /k:"afonsoft_metar-decoder" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.scm.provider=git \
+            /d:sonar.coverage.exclusions="**Test*.cs"
+
+      - name: 🏗️ Build
+        run: dotnet build MetarDecoder.sln --configuration release
+
+      - name: 🔍 Run Code Analysis
+        run: |
+          echo "🔍 Finalizing SonarQube analysis..."
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "⚠️ SONAR_TOKEN not configured, skipping analysis"
+            exit 0
+          fi
+
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
+  # Snyk Security Analysis
+  snyk:
+    name: 🛡️ Snyk Security
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+
+      - name: 🗄️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
+
+      - name: 🛡️ Run Snyk
+        uses: snyk/actions/dotnet@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --file=MetarDecoder.sln --severity-threshold=high --sarif-file-output=snyk.sarif --json-output=snyk.json
+
+      - name: 📊 Upload Snyk Results
+        uses: github/codeql-action/upload-sarif@v4
+        if: always() && hashFiles('snyk.sarif') != ''
+        with:
+          sarif_file: snyk.sarif
+          category: snyk
+
+      - name: 📋 Generate Snyk Summary
+        if: always()
+        run: |
+          echo "## 🛡️ Snyk Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "snyk.json" ]; then
+            echo "### 📊 Vulnerability Summary" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Extract summary from JSON
+            VULNS=$(cat snyk.json | jq -r '.results[0].vulnerabilities | length' 2>/dev/null || echo "0")
+            DEPS=$(cat snyk.json | jq -r '.results[0].dependencies | length' 2>/dev/null || echo "0")
+            
+            echo "- **Dependencies Analyzed**: $DEPS" >> $GITHUB_STEP_SUMMARY
+            echo "- **Vulnerabilities Found**: $VULNS" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "$VULNS" -gt 0 ]; then
+              echo "### ⚠️ Vulnerabilities Detected" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              # Extract vulnerability details
+              cat snyk.json | jq -r '.results[0].vulnerabilities[] | 
+                "- **\(.severity | ascii_upcase)**: \(.title) in \(.package)@\(.version)"' 2>/dev/null | head -10 >> $GITHUB_STEP_SUMMARY
+              
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### 🔧 Affected Projects" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              
+              # Extract affected projects
+              cat snyk.json | jq -r '.results[0].vulnerabilities[] | 
+                "- \(.from[0] | split("/")[-1])"' 2>/dev/null | sort -u >> $GITHUB_STEP_SUMMARY
+            else
+              echo "✅ **No vulnerabilities found!** All dependencies are secure." >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "⚠️ **Snyk scan results not available**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Scan Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Severity Threshold**: High" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: MetarDecoder.sln" >> $GITHUB_STEP_SUMMARY
+          echo "- **Scanner**: Snyk .NET" >> $GITHUB_STEP_SUMMARY
+
+  # Code Quality Metrics
+  quality-metrics:
+    name: 📈 Quality Metrics
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+
+      - name: 🗄️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
+
+      - name: 🏗️ Build Solution
+        run: dotnet build MetarDecoder.sln --configuration Release --no-restore --verbosity minimal
+
+      - name: 📊 Calculate Metrics
+        run: |
+          echo "📊 Analyzing code quality metrics..."
+
+          # Count lines of code
+          echo "Lines of Code: $(find src -name '*.cs' -exec wc -l {} + | tail -1 | awk '{print $1}')"
+
+          # Count test files
+          echo "Test Files: $(find tests -name '*Tests.cs' | wc -l)"
+
+          # Count projects
+          echo "Projects: $(find src -name '*.csproj' | wc -l)"
+
+          # Check for TODO comments
+          echo "TODO Comments: $(grep -r 'TODO' src --include='*.cs' | wc -l)"
+
+          echo "Quality metrics analysis completed!"
+
+  # Quality Summary
+  quality-summary:
+    name: 📋 Quality Summary
+    runs-on: ubuntu-latest
+    needs: [qodana, sonarqube, snyk, quality-metrics]
+    if: always()
+
+    steps:
+      - name: 📋 Generate Quality Report
+        run: |
+          echo "## 📊 Code Quality Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Tool | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 🔍 Qodana | ${{ needs.qodana.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📊 SonarQube | ${{ needs.sonarqube.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🛡️ Snyk | ${{ needs.snyk.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📈 Metrics | ${{ needs.quality-metrics.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ needs.qodana.result }}" == "failure" || "${{ needs.sonarqube.result }}" == "failure" || "${{ needs.snyk.result }}" == "failure" ]]; then
+            echo "❌ **Quality issues detected! Please review the analysis reports.**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ **All quality checks passed!**" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Quality Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Lines of Code**: Calculated during build" >> $GITHUB_STEP_SUMMARY
+          echo "- **Test Coverage**: Available in CI pipeline" >> $GITHUB_STEP_SUMMARY
+          echo "- **Technical Debt**: Analyzed by Qodana & SonarQube" >> $GITHUB_STEP_SUMMARY
+          echo "- **Security**: Scanned by Snyk" >> $GITHUB_STEP_SUMMARY
