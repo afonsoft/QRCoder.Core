@@ -1,35 +1,133 @@
-name: Publish Nuget
+name: 📦 Publish NuGet
+
 on:
-  workflow_dispatch:
-  page_build:
   release:
-    types:
-      - created
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 1.0.5)"
+        required: true
+        default: "1.0.5"
+      prerelease:
+        description: "Is this a prerelease?"
+        required: true
+        default: false
+        type: boolean
+
+env:
+  DOTNET_VERSION: "8.0.x"
+  BUILD_CONFIG: "Release"
 
 jobs:
-  build-and-publish:
-
-    env:
-      BUILD_CONFIG: 'Release'
-      NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS: '30'
-      NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS: '30'
+  # Validate and Build
+  build:
+    name: 🏗️ Build & Validate
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v6
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v2.0.1
-      - name: Setup .NET
+        with:
+          fetch-depth: 0
+
+      - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-           dotnet-version: | 
-              6.0.x
-              8.0.x
-      - name: Clear NuGet cache
-        run: dotnet nuget locals all --clear
-      - name: Build
-        run: dotnet build QRCoder.Core.sln --configuration $BUILD_CONFIG --verbosity normal
-      - name: Pack
-        run: dotnet pack QRCoder.Core.sln --configuration $BUILD_CONFIG /p:ContinuousIntegrationBuild=true
-      - name: Publish Nuget
-        run: dotnet nuget push **\*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{secrets.NUGET_TOKEN}} --skip-duplicate
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore QRCoder.Core.sln
+
+      - name: 🏗️ Build Solution
+        run: |
+          dotnet build QRCoder.Core.sln \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --no-restore \
+            /p:ContinuousIntegrationBuild=true
+
+      - name: 🧪 Run Tests
+        run: |
+          dotnet test QRCoder.Core.Tests/ \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --no-build \
+            --logger "trx;LogFileName=test-results.trx" \
+            --results-directory TestResults
+
+      - name: 📤 Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-publish
+          path: TestResults/**/*.trx
+          retention-days: 7
+
+  # Publish to NuGet
+  publish:
+    name: 📦 Publish to NuGet
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v6
+
+      - name: 🗄️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore QRCoder.Core.sln
+
+      - name: 📦 Pack NuGet Packages
+        run: |
+          VERSION="${{ github.event.inputs.version || github.ref_name }}"
+          if [[ "$VERSION" == v* ]]; then
+            VERSION="${VERSION:1}"
+          fi
+
+          PRERELEASE_FLAG=""
+          if [[ "${{ github.event.inputs.prerelease }}" == "true" ]] || [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            PRERELEASE="-beta"
+          fi
+
+          dotnet pack QRCoder.Core.sln \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --output ./packages \
+            --no-build \
+            /p:ContinuousIntegrationBuild=true \
+            /p:PackageVersion=${VERSION}${PRERELEASE}
+
+      - name: 📦 Publish to NuGet.org
+        run: |
+          dotnet nuget push ./packages/*.nupkg \
+            --source 'https://api.nuget.org/v3/index.json' \
+            --api-key ${{ secrets.NUGET_TOKEN }} \
+            --skip-duplicate
+
+      - name: 📦 Publish to GitHub Packages
+        run: |
+          dotnet nuget push ./packages/*.nupkg \
+            --source 'https://nuget.pkg.github.com/afonsoft/index.json' \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+
+      - name: 📤 Upload Package Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./packages/*.nupkg
+          retention-days: 30
+
+      - name: ✅ Publish Summary
+        run: |
+          echo "## 📦 NuGet Publish Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Published Packages" >> $GITHUB_STEP_SUMMARY
+          echo "- **QRCoder.Core**: Published to NuGet.org" >> $GITHUB_STEP_SUMMARY
+          echo "- **QRCoder.Core**: Published to GitHub Packages" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+          echo "- **NuGet.org**: [View Package](https://www.nuget.org/packages/QRCoder.Core)" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub Packages**: [View Packages](https://github.com/afonsoft/QRCoder.Core/packages)" >> $GITHUB_STEP_SUMMARY

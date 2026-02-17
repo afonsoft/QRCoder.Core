@@ -1,13 +1,11 @@
 
 # QRCoder.Core - QR Code Generator Library
 
-|Code coverage|Build status|NuGet Package|
-|-------------|------------|-------------|
-[![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)|[![Build, test, pack, push (Release)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml)|[![NuGet Badge](https://buildstats.info/nuget/QRCoder.Core?rnd=0892982314)](https://www.nuget.org/packages/QRCoder.Core/)|
-
-|Code Smell|Lines of Code|Bugs|Vulnerabilities|
-|----------|-------------|----|---------------|
-|[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=bugs)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)|
+[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml)
+[![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
+[![NuGet Badge](https://buildstats.info/nuget/QRCoder.Core?rnd=0892982314)](https://www.nuget.org/packages/QRCoder.Core/)
+[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
 
 ## Descrição do Projeto
 QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para a geração de códigos QR em ambientes .NET.
@@ -64,7 +62,7 @@ Concluída
 
 ## Tecnologias Utilizadas
 *   **C#**: Linguagem de programação principal.
-*   **.NET Standard 2.1, .NET 6.0, .NET 8.0**: Frameworks alvo para a biblioteca.
+*   **.NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8**: Frameworks alvo para a biblioteca.
 *   **SkiaSharp**: Biblioteca gráfica para renderização de códigos QR em diferentes formatos.
 *   **SkiaSharp.Views**: Componentes de UI para SkiaSharp.
 *   **System.Text.Encoding**: Para manipulação de codificação de texto.
@@ -74,7 +72,24 @@ Concluída
 *   **Microsoft.SourceLink.GitHub**: Para integração com SourceLink do GitHub.
 
 ## Pré-requisitos
-Para usar ou contribuir com este projeto, você precisará ter o SDK do .NET instalado em sua máquina, compatível com as versões .NET Standard 2.1, .NET 6.0 ou .NET 8.0.
+Para usar ou contribuir com este projeto, você precisará ter o SDK do .NET instalado em sua máquina, compatível com as versões .NET Standard 2.1, .NET 8.0, .NET 10.0 ou .NET Framework 4.8.
+
+## Instalação
+
+### NuGet Package Manager
+```bash
+Install-Package QRCoder.Core
+```
+
+### .NET CLI
+```bash
+dotnet add package QRCoder.Core
+```
+
+### PackageReference
+```xml
+<PackageReference Include="QRCoder.Core" Version="1.0.5" />
+```
 
 ## Como Começar
 Você pode gerar e visualizar seu primeiro código QR com apenas algumas linhas de código C#.
@@ -127,6 +142,16 @@ O projeto `QRCoder.Core` é uma biblioteca que facilita a geração de códigos 
 3.  **Geração de Payload**: A classe `PayloadGenerator` oferece métodos para criar payloads formatados para tipos específicos de Código QR, como URLs, SMS, contatos, Wi-Fi, entre outros, simplificando a criação de Códigos QR para casos de uso comuns.
 4.  **Tratamento de Exceções**: O projeto inclui exceções personalizadas, como `DataTooLongException`, para lidar com cenários onde os dados fornecidos excedem a capacidade máxima de um Código QR.
 
+## CI/CD e Build
+O projeto utiliza um pipeline completo de CI/CD com GitHub Actions para garantir qualidade e automação:
+
+### Workflows Disponíveis:
+- **🚀 Build & Pack**: Build principal com testes, coverage e criação de pacotes
+- **📊 Code Quality**: Análise de código com Qodana e SonarCloud
+- **🔒 Security Scans**: Análises de segurança com CodeQL, Snyk e SonarCloud
+- **📦 Publish NuGet**: Publicação automática para NuGet.org e GitHub Packages
+- **🧪 CI Build & Test**: Build contínuo e testes automatizados
+
 ## Cobertura de Código
 A cobertura de código é monitorada e os resultados podem ser visualizados através do badge:
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
@@ -138,6 +163,25 @@ A cobertura de código é monitorada e os resultados podem ser visualizados atra
 Este projeto está licenciado sob a Licença MIT. Para mais detalhes, consulte o arquivo [LICENSE.txt](LICENSE.txt).
 
 ## Changelog
+
+### [1.0.5] - 2025-02-17
+#### Added
+- Support for .NET 10.0 target framework
+- Complete CI/CD pipeline with GitHub Actions
+- Multiple security scans (CodeQL, Snyk, SonarCloud)
+- Automated NuGet publishing workflow
+- Code quality analysis with Qodana
+- Enhanced test coverage reporting
+- Multi-framework build matrix
+#### Changed
+- Updated target frameworks: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
+- Improved GitHub Actions workflows
+- Enhanced documentation with CI/CD badges
+- Updated project dependencies
+#### Fixed
+- GitHub Actions syntax issues
+- Environment variable references
+- Code analysis integration
 
 ### [1.0.4] - 2025-07-13
 #### Changed
