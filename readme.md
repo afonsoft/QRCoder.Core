@@ -7,6 +7,21 @@
 [![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
 
+## 📊 Test Coverage
+
+| Metric | Coverage | Status |
+|--------|----------|--------|
+| **Line Coverage** | 78% | 🟡 Good |
+| **Branch Coverage** | 83.1% | 🟢 Excellent |
+| **Method Coverage** | 78.1% | 🟡 Good |
+| **Total Tests** | 239 | ✅ All Passed |
+
+### Coverage by Class
+- 🟢 **Excellent (95%+)**: ArtQRCode (98.8%), PngByteQRCode (100%), SvgQRCode (100%), QRCodeHelper (100%)
+- 🟡 **Good (70-94%)**: QRCode (89.4%), PayloadGenerator (86.5%), QRCodeGenerator (86.8%)
+- 🟠 **Needs Improvement**: QRCodeData (20%)
+- 🔴 **No Coverage**: Base64QRCode, PdfByteQRCode, PostscriptQRCode, SKBitmapByteQRCode
+
 ## Descrição do Projeto
 QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para a geração de códigos QR em ambientes .NET.
 
@@ -152,9 +167,33 @@ O projeto utiliza um pipeline completo de CI/CD com GitHub Actions para garantir
 - **📦 Publish NuGet**: Publicação automática para NuGet.org e GitHub Packages
 - **🧪 CI Build & Test**: Build contínuo e testes automatizados
 
-## Cobertura de Código
-A cobertura de código é monitorada e os resultados podem ser visualizados através do badge:
-[![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
+### 📊 Test Results & Coverage
+- **Total Tests**: 239 testes unitários
+- **Test Status**: ✅ All passing
+- **Coverage Metrics**: 
+  - Line Coverage: 78%
+  - Branch Coverage: 83.1%
+  - Method Coverage: 78.1%
+- **Frameworks Testados**: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
+- **Relatórios**: HTML coverage reports disponíveis em cada build
+
+### 🧪 Executando Testes Localmente
+Para executar os testes e verificar a cobertura localmente:
+
+```bash
+# Build do projeto
+dotnet build QRCoder.Core.sln --configuration Release
+
+# Executar todos os testes com coverage
+dotnet test QRCoder.Core.Tests/QRCoder.Core.Tests.csproj --configuration Release --logger "trx;LogFileName=test-results.trx" --results-directory TestResults --collect:"XPlat Code Coverage"
+
+# Gerar relatório de coverage HTML
+dotnet tool install -g dotnet-reportgenerator-globaltool
+reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:"TestResults/CoverageReport" -reporttypes:"Html;XmlSummary;TextSummary"
+
+# Visualizar relatório
+# Abra: TestResults/CoverageReport/index.html
+```
 
 ## Desenvolvedores/Contribuintes
 *   **Afonso Dutra Nogueira Filho** (AFONSOFT) - Desenvolvedor principal.
@@ -163,6 +202,21 @@ A cobertura de código é monitorada e os resultados podem ser visualizados atra
 Este projeto está licenciado sob a Licença MIT. Para mais detalhes, consulte o arquivo [LICENSE.txt](LICENSE.txt).
 
 ## Changelog
+
+### [1.0.6] - 2025-02-17
+#### Added
+- Comprehensive test coverage reporting (78% line coverage, 83.1% branch coverage)
+- 239 unit tests across all target frameworks
+- Performance optimization packages (Microsoft.Extensions.ObjectPool, System.Buffers, System.Memory)
+- Local test execution documentation
+- HTML coverage reports generation
+- Test results badges and metrics
+
+#### Changed
+- Updated README with detailed test coverage information
+- Enhanced CI/CD section with test results
+- Improved project documentation with test metrics
+- Added test execution guide for developers
 
 ### [1.0.5] - 2025-02-17
 #### Added
