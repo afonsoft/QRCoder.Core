@@ -11,20 +11,19 @@
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| **Line Coverage** | 85% | � Excellent |
-| **Branch Coverage** | 87.5% | 🟢 Excellent |
-| **Method Coverage** | 84.2% | � Excellent |
-| **Total Tests** | 309 | ✅ All Passed |
+| **Line Coverage** | 78% | 🟡 Good |
+| **Branch Coverage** | 83.1% | 🟢 Excellent |
+| **Method Coverage** | 78.1% | 🟡 Good |
+| **Total Tests** | 239 | ✅ All Passed |
 
 ### Coverage by Class
-- 🟢 **Excellent (95%+)**: ArtQRCode (98.8%), PngByteQRCode (100%), SvgQRCode (100%), QRCodeHelper (100%), AsciiQRCode (100%), Size (100%), CustomExtensions (100%), StringValueAttribute (100%), Base64QRCode (100%), PdfByteQRCode (100%), PostscriptQRCode (100%), SKBitmapByteQRCode (100%), DataTooLongException (100%), SKColorExtensions (100%)
+- 🟢 **Excellent (95%+)**: ArtQRCode (98.8%), PngByteQRCode (100%), SvgQRCode (100%), QRCodeHelper (100%), AsciiQRCode (100%), Size (100%), CustomExtensions (100%), StringValueAttribute (100%)
 - 🟡 **Good (70-94%)**: QRCode (89.4%), PayloadGenerator (86.5%), QRCodeGenerator (86.8%), AbstractQRCode (88.2%)
 - 🟠 **Needs Improvement**: QRCodeData (20%)
+- 🔴 **No Coverage**: Base64QRCode, PdfByteQRCode, PostscriptQRCode, SKBitmapByteQRCode, DataTooLongException, SKColorExtensions (11.1%)
 
 ## Descrição do Projeto
 QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para a geração de códigos QR em ambientes .NET.
-
-**📋 [Changelog](CHANGELOG.md)** - Veja todas as mudanças e versões anteriores.
 
 ## Status do Projeto
 Concluída
@@ -169,15 +168,15 @@ O projeto utiliza um pipeline completo de CI/CD com GitHub Actions para garantir
 - **🧪 CI Build & Test**: Build contínuo e testes automatizados
 
 ### 📊 Test Results & Coverage
-- **Total Tests**: 309 testes unitários
+- **Total Tests**: 239 testes unitários
 - **Test Status**: ✅ All passing
 - **Coverage Metrics**: 
-  - Line Coverage: 85%
-  - Branch Coverage: 87.5%
-  - Method Coverage: 84.2%
+  - Line Coverage: 78%
+  - Branch Coverage: 83.1%
+  - Method Coverage: 78.1%
 - **Frameworks Testados**: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
-- **Classes com 100% cobertura**: 13 classes principais
-- **Classes sem cobertura**: Apenas QRCodeData precisa de melhoria
+- **Classes com 100% cobertura**: 10 classes principais
+- **Classes sem cobertura**: 8 renderizadores alternativos (Base64QRCode, PdfByteQRCode, PostscriptQRCode, SKBitmapByteQRCode, etc.)
 - **Relatórios**: HTML coverage reports disponíveis em cada build
 
 ### 🧪 Executando Testes Localmente
