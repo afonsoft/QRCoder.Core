@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 
 namespace QRCoder.Core
 {
-    using System;
-    using System.IO;
-    using System.IO.Compression;
-
     /// <summary>
     /// QRCodeData
     /// </summary>

@@ -14,7 +14,7 @@
 | **Line Coverage** | 78% | 🟡 Good |
 | **Branch Coverage** | 83.1% | 🟢 Excellent |
 | **Method Coverage** | 78.1% | 🟡 Good |
-| **Total Tests** | 239 | ✅ All Passed |
+| **Total Tests** | 252 | ✅ All Passed |
 
 ### Coverage by Class
 - 🟢 **Excellent (95%+)**: ArtQRCode (98.8%), PngByteQRCode (100%), SvgQRCode (100%), QRCodeHelper (100%), AsciiQRCode (100%), Size (100%), CustomExtensions (100%), StringValueAttribute (100%)
@@ -24,6 +24,8 @@
 
 ## Descrição do Projeto
 QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para a geração de códigos QR em ambientes .NET.
+
+**📋 [Changelog](CHANGELOG.md)** - Veja todas as mudanças e versões anteriores.
 
 ## Status do Projeto
 Concluída
