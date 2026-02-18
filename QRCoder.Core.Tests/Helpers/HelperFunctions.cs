@@ -77,5 +77,25 @@ namespace QRCoder.Core.Tests.Helpers
         {
             return ByteArrayToHash(Encoding.UTF8.GetBytes(data));
         }
+
+        public static bool IsSkiaSharpAvailable()
+        {
+            try
+            {
+                // Tenta criar um bitmap simples para testar se SkiaSharp funciona
+                using (var bmp = new SKBitmap(1, 1))
+                {
+                    return true;
+                }
+            }
+            catch (DllNotFoundException)
+            {
+                return false;
+            }
+            catch (TypeInitializationException)
+            {
+                return false;
+            }
+        }
     }
 }
