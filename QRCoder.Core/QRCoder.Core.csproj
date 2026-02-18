@@ -7,7 +7,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <PackageId>QRCoder.Core</PackageId>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
 	<Copyright>AFONSOFT 2026</Copyright>
