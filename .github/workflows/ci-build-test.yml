@@ -57,13 +57,46 @@ jobs:
 
       - name: Restore Dependencies
         run: |
-          echo "Restoring NuGet packages for QRCoder.Core.sln"
-          dotnet restore QRCoder.Core.sln --no-cache --force --verbosity normal
+          dotnet restore QRCoder.Core.sln
 
-      - name: Build Solution
+      - name: Build Project
         run: |
-          echo "Building QRCoder.Core.sln"
-          dotnet build QRCoder.Core.sln --no-restore --configuration Release --verbosity minimal
+          dotnet build QRCoder.Core.sln --configuration Release --no-restore
+
+      - name: Copy SkiaSharp Native Libraries
+        run: |
+          echo "Copying SkiaSharp native libraries to output directories"
+          # Find and copy libSkiaSharp.so to all test output directories
+          find ~/.nuget/packages -name "libSkiaSharp.so" -type f | while read file; do
+            echo "Found SkiaSharp library: $file"
+            # Copy to all framework output directories
+            for framework in netstandard2.1 net8.0 net10.0; do
+              target_dir="QRCoder.Core.Tests/bin/Release/$framework"
+              if [ -d "$target_dir" ]; then
+                cp "$file" "$target_dir/"
+                echo "Copied to $target_dir/"
+              fi
+            done
+          done
+          # Also try to copy from runtimes directory if available
+          find ~/.nuget/packages -path "*/runtimes/linux-x64/native/*" -name "*.so" -type f | while read file; do
+            echo "Found native library: $file"
+            for framework in netstandard2.1 net8.0 net10.0; do
+              target_dir="QRCoder.Core.Tests/bin/Release/$framework"
+              if [ -d "$target_dir" ]; then
+                cp "$file" "$target_dir/"
+                echo "Copied native library to $target_dir/"
+              fi
+            done
+          done
+          # List what we have in output directories
+          for framework in netstandard2.1 net8.0 net10.0; do
+            target_dir="QRCoder.Core.Tests/bin/Release/$framework"
+            if [ -d "$target_dir" ]; then
+              echo "=== Libraries in $target_dir ==="
+              ls -la "$target_dir/"*.so 2>/dev/null || echo "No .so files found"
+            fi
+          done
 
       - name: Run Tests
         env:
