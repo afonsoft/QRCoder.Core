@@ -40,7 +40,7 @@ jobs:
           git checkout -b $BRANCH_NAME
 
           # List outdated packages
-          dotnet list MetarDecoder.sln package --outdated 
+          dotnet list QRCoder.Core.sln package --outdated 
 
           # Update packages (this is a simplified approach)
           echo "📦 Updating NuGet packages..."
@@ -56,8 +56,8 @@ jobs:
           echo "🔄 Dependency updates found, creating PR..."
 
           # Build and test to ensure updates work
-          dotnet build MetarDecoder.sln --configuration Release
-          dotnet test MetarDecoder.sln --configuration Release --no-build
+          dotnet build QRCoder.Core.sln --configuration Release
+          dotnet test QRCoder.Core.sln --configuration Release --no-build
 
           # Commit changes
           git add .
@@ -154,10 +154,10 @@ jobs:
           echo "🔒 Checking for security-related package updates..."
 
           # Check for vulnerable packages
-          dotnet list MetarDecoder.sln package --vulnerable
+          dotnet list QRCoder.Core.sln package --vulnerable
 
           # Create update branch if vulnerabilities found
-          if dotnet list MetarDecoder.sln package --vulnerable | grep -q "vulnerable"; then
+          if dotnet list QRCoder.Core.sln package --vulnerable | grep -q "vulnerable"; then
             echo "🚨 Security vulnerabilities detected, creating update PR..."
             
             BRANCH_NAME="security-update-$(date +%Y%m%d-%H%M%S)"
@@ -168,8 +168,8 @@ jobs:
             # This would need more sophisticated logic for specific vulnerable packages
             
             # Build and test
-            dotnet build MetarDecoder.sln --configuration Release
-            dotnet test MetarDecoder.sln --configuration Release --no-build
+            dotnet build QRCoder.Core.sln --configuration Release
+            dotnet test QRCoder.Core.sln --configuration Release --no-build
             
             # Commit changes
             git add .

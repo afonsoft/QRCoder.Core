@@ -100,7 +100,7 @@ jobs:
             /d:sonar.coverage.exclusions="**Test*.cs"
 
       - name: 🏗️ Build
-        run: dotnet build MetarDecoder.sln --configuration release
+        run: dotnet build QRCoder.Core.sln --configuration release
 
       - name: 🔍 Run Code Analysis
         run: |
@@ -127,7 +127,7 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: 🔧 Restore Dependencies
-        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
 
       - name: 🛡️ Run Snyk
         uses: snyk/actions/dotnet@master
@@ -136,7 +136,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
-          args: --file=MetarDecoder.sln --severity-threshold=high --sarif-file-output=snyk.sarif --json-output=snyk.json
+          args: --file=QRCoder.Core.sln --severity-threshold=high --sarif-file-output=snyk.sarif --json-output=snyk.json
 
       - name: 📊 Upload Snyk Results
         uses: github/codeql-action/upload-sarif@v4
@@ -188,7 +188,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📋 Scan Configuration" >> $GITHUB_STEP_SUMMARY
           echo "- **Severity Threshold**: High" >> $GITHUB_STEP_SUMMARY
-          echo "- **Target**: MetarDecoder.sln" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target**: QRCoder.Core.sln" >> $GITHUB_STEP_SUMMARY
           echo "- **Scanner**: Snyk .NET" >> $GITHUB_STEP_SUMMARY
 
   # Code Quality Metrics
@@ -206,10 +206,10 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: 🔧 Restore Dependencies
-        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
 
       - name: 🏗️ Build Solution
-        run: dotnet build MetarDecoder.sln --configuration Release --no-restore --verbosity minimal
+        run: dotnet build QRCoder.Core.sln --configuration Release --no-restore --verbosity minimal
 
       - name: 📊 Calculate Metrics
         run: |

@@ -57,7 +57,7 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: 🔧 Restore Dependencies
-        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
 
       - name: 🛡️ Install Snyk CLI
         run: |
@@ -128,7 +128,7 @@ jobs:
             /d:sonar.coverage.exclusions="**Test*.cs"
 
       - name: 🏗️ Build
-        run: dotnet build MetarDecoder.sln --configuration release
+        run: dotnet build QRCoder.Core.sln --configuration release
 
       - name: 🔍 Run Code Analysis
         run: |
