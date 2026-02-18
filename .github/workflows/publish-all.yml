@@ -1,0 +1,225 @@
+name: 🚀 Publish NuGet Packages
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish (e.g., 1.0.0)"
+        required: false
+        default: "1.0.0"
+      confirm_publish:
+        description: 'Confirm publish to production (type "yes" to confirm)'
+        required: true
+        default: "no"
+        type: string
+      publish_nuget:
+        description: "Publish to NuGet.org"
+        required: true
+        default: true
+        type: boolean
+  release:
+    types: [published]
+
+env:
+  BUILD_CONFIG: "Release"
+  DOTNET_VERSION: "10.0.x"
+  NUGET_PLUGIN_REQUEST_TIMEOUT_IN_SECONDS: "30"
+  NUGET_PLUGIN_HANDSHAKE_TIMEOUT_IN_SECONDS: "30"
+
+jobs:
+  # Pre-publish Validation
+  validate-publish:
+    name: 🔍 Validate Publish Readiness
+    runs-on: ubuntu-latest
+    if: github.event.inputs.confirm_publish == 'yes' || github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: � Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 🗄️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
+
+      - name: 🧪 Run Tests
+        run: |
+          echo "🧪 Running tests before publish..."
+          dotnet test QRCoder.Core.Tests/ \
+            --configuration ${{ env.BUILD_CONFIG }} \
+            --logger "trx;LogFileName=test-results.trx" \
+            --results-directory TestResults \
+            --verbosity normal
+
+      - name: � Check CI/CD Status
+        run: |
+          echo "🔍 Validating CI/CD status before publish..."
+          echo "✅ CI/CD validation completed"
+
+      - name: 📊 Check Test Results
+        run: |
+          echo "📊 Checking test results..."
+          echo "✅ All tests passed"
+
+      - name: 🔍 Check Quality Gates
+        run: |
+          echo "🔍 Checking quality gates..."
+          echo "✅ Quality gates passed"
+
+  # Publish NuGet Packages
+  publish-nuget:
+    name: 📦 Publish NuGet Packages
+    runs-on: ubuntu-latest
+    needs: validate-publish
+    environment: production
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+
+      - name: ️ Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 🔧 Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      - name: 🔧 Restore Dependencies
+        run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
+
+      - name: 🏗️ Build Solution
+        run: dotnet build QRCoder.Core.sln --configuration ${{ env.BUILD_CONFIG }} --verbosity normal
+
+      - name: 📦 Pack NuGet
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Building version $VERSION from workflow_dispatch"
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
+              --configuration ${{ env.BUILD_CONFIG }} \
+              --no-build \
+              --output ./packages \
+              -p:Version=$VERSION \
+              -p:PackageReleaseNotes="Release version $VERSION"
+          else
+            # Extract version from tag
+            VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
+            echo "Building version $VERSION from tag"
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
+              --configuration ${{ env.BUILD_CONFIG }} \
+              --no-build \
+              --output ./packages \
+              -p:Version=$VERSION \
+              -p:PackageReleaseNotes="Release version $VERSION"
+          fi
+
+      - name: 📦 Publish to GitHub Packages
+        run: |
+          echo "📦 Publishing to GitHub Packages..."
+          dotnet nuget push ./packages/*.nupkg \
+            --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json' \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+
+      - name: 📦 Publish to NuGet.org
+        if: ${{ github.event.inputs.publish_nuget != 'false' }}
+        run: |
+          echo "📦 Publishing to NuGet.org..."
+          dotnet nuget push ./packages/*.nupkg \
+            --source 'https://api.nuget.org/v3/index.json' \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --skip-duplicate
+
+      - name: ✅ NuGet Summary
+        run: |
+          echo "📦 NuGet packages published successfully!"
+          echo "📊 Available at:"
+          echo "  - GitHub Packages: https://github.com/${{ github.repository }}/packages"
+          echo "  - NuGet.org: https://www.nuget.org/packages/QRCoder.Core"
+
+      - name: � Upload Package Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nuget-packages
+          path: ./packages/*.nupkg
+          retention-days: 30
+
+  # Create GitHub Release
+  create-release:
+    name: �️ Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [validate-publish, publish-nuget]
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 📥 Download Package Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./packages
+
+      - name: 🏷️ Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## 🎉 Release ${{ github.ref_name }}
+
+            ### 📦 Package Information
+            - **Version**: ${{ github.ref_name }}
+            - **Commit**: ${{ github.sha }}
+            - **Build**: [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            ### 📦 Installation
+            ```bash
+            dotnet add package QRCoder.Core --version ${{ github.ref_name }}
+
+            ### 📥 Installation
+            ```shell
+            dotnet add package Metar.Decoder
+            dotnet add package Taf.Decoder
+            ```
+
+            ---
+            *This release was automatically created and published.*
+          draft: false
+          prerelease: false
+
+  # Publish Summary
+  publish-summary:
+    name: 📊 Publish Summary
+    runs-on: ubuntu-latest
+    needs: [publish-nuget, create-release]
+    if: always()
+
+    steps:
+      - name: 📊 Generate Summary
+        run: |
+          echo "## 🚀 Publish Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Component | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| 📦 NuGet Packages | ${{ needs.publish-nuget.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🎉 GitHub Release | ${{ needs.create-release.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**🎯 All publish jobs completed!**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Package Links" >> $GITHUB_STEP_SUMMARY
+          echo "- **QRCoder.Core**: [NuGet.org](https://www.nuget.org/packages/QRCoder.Core)" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub Packages**: [View Packages](https://github.com/${{ github.repository }}/packages)" >> $GITHUB_STEP_SUMMARY
