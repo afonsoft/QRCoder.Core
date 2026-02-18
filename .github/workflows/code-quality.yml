@@ -33,6 +33,8 @@ jobs:
           args: --linter,qodana-community-for-net --baseline,qodana.sarif.json --fail-threshold,0
           cache-default-branch-only: true
           upload-result: false
+          primary-cache-key: qodana-2025.3-refs/heads/main-${{ github.sha }}
+          additional-cache-key: qodana-2025.3-refs/heads/main
 
       - name: 📊 Upload Qodana Results
         uses: actions/upload-artifact@v4

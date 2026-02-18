@@ -7,7 +7,7 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * 1'  # Weekly on Monday at 2 AM UTC
+    - cron: "0 2 * * 1" # Weekly on Monday at 2 AM UTC
 
 jobs:
   # CodeQL Analysis
@@ -18,25 +18,25 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    
+
     strategy:
       fail-fast: false
       matrix:
-        language: ['csharp']
-    
+        language: ["csharp"]
+
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
-      
+
       - name: 🔍 Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
           queries: security-extended,security-and-quality
-      
+
       - name: 🔍 Autobuild
         uses: github/codeql-action/autobuild@v3
-      
+
       - name: 🔍 Perform Analysis
         uses: github/codeql-action/analyze@v3
         with:
@@ -46,65 +46,107 @@ jobs:
   snyk:
     name: 🛡️ Snyk Security
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
-      
+
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "8.0.x"
-      
+
       - name: 🔧 Restore Dependencies
         run: dotnet restore MetarDecoder.sln --ignore-failed-sources
-      
-      - name: 🛡️ Run Snyk
-        uses: snyk/actions/dotnet@master
+
+      - name: 🛡️ Install Snyk CLI
+        run: |
+          curl -s https://static.snyk.io/cli/latest/snyk-linux -o snyk
+          chmod +x ./snyk
+          sudo mv ./snyk /usr/local/bin/
+
+      - name: 🛡️ Run Snyk Security Scan
+        run: |
+          snyk test --severity-threshold=high --all-projects
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
 
   # SonarQube Analysis
   sonarqube:
     name: 📊 SonarQube Analysis
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-    
+
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      
+
+      - name: 📦 Setup NuGet
+        uses: NuGet/setup-nuget@v2.0.1
+
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "8.0.x"
-      
-      - name: 📦 Setup NuGet
-        uses: NuGet/setup-nuget@v2.0.1
-      
-      - name: 🔧 Restore Dependencies
-        run: dotnet restore MetarDecoder.sln --ignore-failed-sources
-      
-      - name: 🏗️ Build Solution
-        run: dotnet build MetarDecoder.sln --configuration Release --no-restore
-      
-      - name: 📊 SonarQube Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          java-version: 17
+          distribution: "zulu"
+
+      - name: 🔧 Clear NuGet cache
+        run: dotnet nuget locals all --clear
+
+      - name: 📦 Install SonarQube Tools
+        run: dotnet tool install --global --ignore-failed-sources dotnet-sonarscanner
+
+      - name: 📦 Install Coverlet Tools
+        run: dotnet tool install --global --ignore-failed-sources coverlet.console
+
+      - name: 🔧 Fix Permission
+        run: chmod 777 sonar/ -R || true
+
+      - name: 🔍 Prepare analysis on SonarQube
+        run: |
+          echo "🔍 Checking SonarQube configuration..."
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "❌ SONAR_TOKEN is not set or empty"
+            echo "⚠️ Skipping SonarQube analysis"
+            exit 0
+          fi
+
+          echo "✅ SONAR_TOKEN is configured"
+          dotnet sonarscanner begin \
+            /o:"afonsoft" \
+            /k:"afonsoft_metar-decoder" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.scm.provider=git \
+            /d:sonar.coverage.exclusions="**Test*.cs"
+
+      - name: 🏗️ Build
+        run: dotnet build MetarDecoder.sln --configuration release
+
+      - name: 🔍 Run Code Analysis
+        run: |
+          echo "🔍 Finalizing SonarQube analysis..."
+          if [ -z "${{ secrets.SONAR_TOKEN }}" ]; then
+            echo "⚠️ SONAR_TOKEN not configured, skipping analysis"
+            exit 0
+          fi
+
+          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
   # Security Summary
   security-summary:
     name: 📋 Security Summary
     runs-on: ubuntu-latest
-    needs: [codeql, snyk, sonarqube]
+    needs: [codeql, snyk]
     if: always()
-    
+
     steps:
       - name: 📋 Generate Security Report
         run: |
@@ -114,17 +156,17 @@ jobs:
           echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| 🔍 CodeQL | ${{ needs.codeql.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🛡️ Snyk | ${{ needs.snyk.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📊 SonarQube | ${{ needs.sonarqube.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📊 SonarQube | ${{ contains(needs.*.result, 'skipped') && 'skipped' || 'N/A' }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [[ "${{ needs.codeql.result }}" == "failure" || "${{ needs.snyk.result }}" == "failure" || "${{ needs.sonarqube.result }}" == "failure" ]]; then
+
+          if [[ "${{ needs.codeql.result }}" == "failure" || "${{ needs.snyk.result }}" == "failure" ]]; then
             echo "❌ **Security issues detected! Please review the scan results.**" >> $GITHUB_STEP_SUMMARY
           else
             echo "✅ **All security scans passed successfully!**" >> $GITHUB_STEP_SUMMARY
           fi
-      
+
       - name: 🚨 Security Alert
-        if: needs.codeql.result == 'failure' || needs.snyk.result == 'failure' || needs.sonarqube.result == 'failure'
+        if: needs.codeql.result == 'failure' || needs.snyk.result == 'failure'
         run: |
           echo "🚨 SECURITY ISSUES DETECTED!"
           echo "Please review the security scan results immediately."

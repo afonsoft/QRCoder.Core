@@ -1,28 +1,28 @@
 name: 📦 Publish NuGet
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to publish (e.g., 1.0.5)"
+        description: "Version to publish (e.g., 1.0.0)"
         required: true
-        default: "1.0.5"
-      prerelease:
-        description: "Is this a prerelease?"
+        default: "1.0.0"
+      publish_nuget:
+        description: "Publish to NuGet.org"
         required: true
-        default: false
+        default: true
         type: boolean
 
 env:
   DOTNET_VERSION: "8.0.x"
-  BUILD_CONFIG: "Release"
 
 jobs:
-  # Validate and Build
-  build:
-    name: 🏗️ Build & Validate
+  # Build and Test
+  build-and-test:
+    name: 🔨 Build & Test
     runs-on: ubuntu-latest
 
     steps:
@@ -39,38 +39,26 @@ jobs:
       - name: 🔧 Restore Dependencies
         run: dotnet restore QRCoder.Core.sln
 
-      - name: 🏗️ Build Solution
-        run: |
-          dotnet build QRCoder.Core.sln \
-            --configuration ${{ env.BUILD_CONFIG }} \
-            --no-restore \
-            /p:ContinuousIntegrationBuild=true
+      - name: 🔨 Build Solution
+        run: dotnet build QRCoder.Core.sln --configuration Release --no-restore
 
       - name: 🧪 Run Tests
-        run: |
-          dotnet test QRCoder.Core.Tests/ \
-            --configuration ${{ env.BUILD_CONFIG }} \
-            --no-build \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory TestResults
-
-      - name: 📤 Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-results-publish
-          path: TestResults/**/*.trx
-          retention-days: 7
+        run: dotnet test QRCoder.Core.Tests/ --configuration Release --no-build --verbosity normal
 
   # Publish to NuGet
   publish:
     name: 📦 Publish to NuGet
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-and-test
+    if: |
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.publish_nuget == 'true')
 
     steps:
       - name: 📥 Checkout Code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
@@ -80,54 +68,129 @@ jobs:
       - name: 🔧 Restore Dependencies
         run: dotnet restore QRCoder.Core.sln
 
-      - name: 📦 Pack NuGet Packages
+      - name: 🔨 Build Solution
+        run: dotnet build QRCoder.Core.sln --configuration Release --no-restore
+
+      - name: 📦 Pack NuGet Package
         run: |
-          VERSION="${{ github.event.inputs.version || github.ref_name }}"
-          if [[ "$VERSION" == v* ]]; then
-            VERSION="${VERSION:1}"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Building version $VERSION from workflow_dispatch"
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
+              --configuration Release \
+              --no-build \
+              --output ./nupkg \
+              -p:Version=$VERSION \
+              -p:PackageReleaseNotes="Release version $VERSION"
+          else
+            # Extract version from tag
+            VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
+            echo "Building version $VERSION from tag"
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
+              --configuration Release \
+              --no-build \
+              --output ./nupkg \
+              -p:Version=$VERSION \
+              -p:PackageReleaseNotes="Release version $VERSION"
           fi
-
-          PRERELEASE_FLAG=""
-          if [[ "${{ github.event.inputs.prerelease }}" == "true" ]] || [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
-            PRERELEASE="-beta"
-          fi
-
-          dotnet pack QRCoder.Core.sln \
-            --configuration ${{ env.BUILD_CONFIG }} \
-            --output ./packages \
-            --no-build \
-            /p:ContinuousIntegrationBuild=true \
-            /p:PackageVersion=${VERSION}${PRERELEASE}
-
-      - name: 📦 Publish to NuGet.org
-        run: |
-          dotnet nuget push ./packages/*.nupkg \
-            --source 'https://api.nuget.org/v3/index.json' \
-            --api-key ${{ secrets.NUGET_TOKEN }} \
-            --skip-duplicate
-
-      - name: 📦 Publish to GitHub Packages
-        run: |
-          dotnet nuget push ./packages/*.nupkg \
-            --source 'https://nuget.pkg.github.com/afonsoft/index.json' \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate
 
       - name: 📤 Upload Package Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: nuget-packages
-          path: ./packages/*.nupkg
+          path: ./nupkg/*.nupkg
           retention-days: 30
 
-      - name: ✅ Publish Summary
+      - name: 📦 Publish to NuGet.org
         run: |
-          echo "## 📦 NuGet Publish Summary" >> $GITHUB_STEP_SUMMARY
+          echo "📦 Publishing to NuGet.org"
+          dotnet nuget push ./nupkg/*.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate \
+            --no-symbols
+
+      - name: 📦 Publish to GitHub Packages
+        run: |
+          echo "📦 Publishing to GitHub Packages"
+          dotnet nuget push ./nupkg/*.nupkg \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --skip-duplicate \
+            --no-symbols
+
+      - name: 📊 Generate Release Summary
+        run: |
+          echo "## 📦 NuGet Publishing Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🎯 Published Packages" >> $GITHUB_STEP_SUMMARY
-          echo "- **QRCoder.Core**: Published to NuGet.org" >> $GITHUB_STEP_SUMMARY
-          echo "- **QRCoder.Core**: Published to GitHub Packages" >> $GITHUB_STEP_SUMMARY
+          echo "### 🎯 Published Version" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "- **Version**: ${{ github.event.inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Version**: $(echo ${{ github.ref_name }} | sed 's/^v//')" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "- **Source**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
-          echo "- **NuGet.org**: [View Package](https://www.nuget.org/packages/QRCoder.Core)" >> $GITHUB_STEP_SUMMARY
-          echo "- **GitHub Packages**: [View Packages](https://github.com/afonsoft/QRCoder.Core/packages)" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Package Locations" >> $GITHUB_STEP_SUMMARY
+          echo "- **NuGet.org**: [QRCoder.Core](https://www.nuget.org/packages/QRCoder.Core)" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub Packages**: [QRCoder.Core](https://github.com/${{ github.repository }}/pkgs/container/qrcoder-core)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- **NuGet Packages**: Available in artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Logs**: Available in workflow run" >> $GITHUB_STEP_SUMMARY
+
+  # Create GitHub Release
+  create-release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    needs: publish
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: 📥 Download Package Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+          path: ./nupkg
+
+      - name: 🏷️ Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## 🎉 Release ${{ github.ref_name }}
+
+            ### 📦 Package Information
+            - **Version**: ${{ github.ref_name }}
+            - **Commit**: ${{ github.sha }}
+            - **Build**: [View Workflow Run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            ### 📦 Installation
+            ```bash
+            dotnet add package QRCoder.Core --version ${{ github.ref_name }}
+            ```
+
+            ### 📋 Changes
+            <!-- Add your release notes here -->
+            - Updated CI/CD pipeline
+            - Improved test coverage
+            - Enhanced documentation
+
+            ### 🔗 Links
+            - **NuGet Package**: [QRCoder.Core on NuGet](https://www.nuget.org/packages/QRCoder.Core)
+            - **GitHub Packages**: [QRCoder.Core on GitHub](https://github.com/${{ github.repository }}/pkgs/container/qrcoder-core)
+            - **Documentation**: [README](https://github.com/${{ github.repository }}/blob/main/README.md)
+
+          files: ./nupkg/*.nupkg
+          draft: false
+          prerelease: contains(github.ref, 'beta') || contains(github.ref, 'rc') || contains(github.ref, 'alpha')
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
