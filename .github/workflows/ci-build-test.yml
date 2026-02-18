@@ -98,6 +98,37 @@ jobs:
             fi
           done
 
+      - name: Run Tests
+        env:
+          LD_LIBRARY_PATH: /usr/lib/x86_64-linux-gnu:/usr/local/lib
+        run: |
+          echo "Running tests for QRCoder.Core.sln"
+          dotnet test QRCoder.Core.Tests/ \
+            --configuration Release \
+            --logger "trx;LogFileName=test-results.trx" \
+            --results-directory TestResults \
+            --collect:"XPlat Code Coverage" \
+            --verbosity normal \
+            --framework net10.0
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-qrcoder
+          path: |
+            TestResults/**/*.trx
+            TestResults/**/*.coverage
+          retention-days: 7
+
+      - name: Upload Coverage Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-qrcoder
+          path: TestResults/**/coverage.*
+          retention-days: 7
+
   # Build and Test on Windows (.NET Framework)
   build-windows:
     name: Build QRCoder.Core (Windows)
