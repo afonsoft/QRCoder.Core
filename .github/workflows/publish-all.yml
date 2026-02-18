@@ -53,11 +53,7 @@ jobs:
       - name: 🧪 Run Tests
         run: |
           echo "🧪 Running tests before publish..."
-          dotnet test QRCoder.Core.Tests/ \
-            --configuration ${{ env.BUILD_CONFIG }} \
-            --logger "trx;LogFileName=test-results.trx" \
-            --results-directory TestResults \
-            --verbosity normal
+          dotnet test QRCoder.Core.Tests/ --configuration ${{ env.BUILD_CONFIG }} --logger "trx;LogFileName=test-results.trx" --results-directory TestResults --verbosity normal
 
       - name: � Check CI/CD Status
         run: |
@@ -101,43 +97,27 @@ jobs:
 
       - name: 📦 Pack NuGet
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $VERSION="${{ github.event.inputs.version }}"
             echo "Building version $VERSION from workflow_dispatch"
-            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
-              --configuration ${{ env.BUILD_CONFIG }} \
-              --no-build \
-              --output ./packages \
-              -p:Version=$VERSION \
-              -p:PackageReleaseNotes="Release version $VERSION"
-          else
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj --configuration ${{ env.BUILD_CONFIG }} --no-build --output ./packages -p:Version=$VERSION -p:PackageReleaseNotes="Release version $VERSION"
+          } else {
             # Extract version from tag
-            VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
+            $VERSION="${{ github.ref_name }}" -replace "^v", ""
             echo "Building version $VERSION from tag"
-            dotnet pack QRCoder.Core/QRCoder.Core.csproj \
-              --configuration ${{ env.BUILD_CONFIG }} \
-              --no-build \
-              --output ./packages \
-              -p:Version=$VERSION \
-              -p:PackageReleaseNotes="Release version $VERSION"
-          fi
+            dotnet pack QRCoder.Core/QRCoder.Core.csproj --configuration ${{ env.BUILD_CONFIG }} --no-build --output ./packages -p:Version=$VERSION -p:PackageReleaseNotes="Release version $VERSION"
+          }
 
       - name: 📦 Publish to GitHub Packages
         run: |
           echo "📦 Publishing to GitHub Packages..."
-          dotnet nuget push ./packages/*.nupkg \
-            --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json' \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate
+          dotnet nuget push ./packages/*.nupkg --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json' --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
       - name: 📦 Publish to NuGet.org
         if: ${{ github.event.inputs.publish_nuget != 'false' }}
         run: |
           echo "📦 Publishing to NuGet.org..."
-          dotnet nuget push ./packages/*.nupkg \
-            --source 'https://api.nuget.org/v3/index.json' \
-            --api-key ${{ secrets.NUGET_API_KEY }} \
-            --skip-duplicate
+          dotnet nuget push ./packages/*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
 
       - name: ✅ NuGet Summary
         run: |
