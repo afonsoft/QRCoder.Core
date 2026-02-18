@@ -29,7 +29,7 @@ jobs:
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
 
       - name: � Check for NuGet Updates
         run: |
@@ -147,7 +147,7 @@ jobs:
       - name: �️ Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "10.0.x"
 
       - name: 🔒 Check for Security Updates
         run: |

@@ -12,12 +12,12 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 env:
-  DOTNET_VERSION: "8.0.x"
+  DOTNET_VERSION: "10.0.x"
 
 jobs:
   # Build QRCoder.Core
   build-qrcoder:
-    name: Build QRCoder.Core (.NET 8)
+    name: Build QRCoder.Core (.NET 10)
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,7 @@ jobs:
             --results-directory TestResults \
             --collect:"XPlat Code Coverage" \
             --verbosity normal \
-            --framework net8.0
+            --framework net10.0
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
