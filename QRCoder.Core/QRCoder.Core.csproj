@@ -10,7 +10,7 @@
     <Version>1.0.7</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
-	<Copyright>AFONSOFT © 2026</Copyright>
+	<Copyright>AFONSOFT 2026</Copyright>
 	<Company>AFONSOFT</Company>
 	<LangVersion>10.0</LangVersion>
 	<OutputType>Library</OutputType>
@@ -30,8 +30,6 @@
 	<Deterministic>true</Deterministic>
 	<DeterministicSourcePaths>false</DeterministicSourcePaths>
 	<OpenApiGenerateDocumentsOnBuild>false</OpenApiGenerateDocumentsOnBuild>
-	<!-- Set the CheckEolTargetFramework property to false to fix the warning -->
-	<CheckEolTargetFramework>false</CheckEolTargetFramework>
 	<ServerGarbageCollection>true</ServerGarbageCollection>
 	<GarbageCollectionAdaptationMode>1</GarbageCollectionAdaptationMode>
 	<UseWindowsThreadPool>true</UseWindowsThreadPool>
@@ -39,13 +37,13 @@
 	<NoWarn>$(NoWarn);CS1591;SYSLIB0001;SYSLIB0002;SYSLIB0003;MSB3277</NoWarn>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageProjectUrl>https://github.com/Afonsoft/QRCoder.Core/</PackageProjectUrl>
-    <PackageIcon>nuget-icon.png</PackageIcon>
-    <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
-    <PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
-    <RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+	<PackageIcon>nuget-icon.png</PackageIcon>
+	<PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
+	<PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
+	<RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
-    <Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes.</Description>
+	<Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes.</Description>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Assets\nuget-icon.png" Pack="true" PackagePath="\" />
