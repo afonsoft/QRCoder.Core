@@ -38,6 +38,14 @@ jobs:
           # Additional dependencies for .NET 10.0 SkiaSharp
           sudo apt-get install -y libglib2.0-0 libgtk-3-0 libxss1 libasound2-dev
           sudo apt install mesa-utils ttf-mscorefonts-installer dbus libfontconfig1 libxrandr2 libxi-dev
+          # Install SkiaSharp native dependencies manually
+          sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libdrm-dev libx11-xcb-dev libxcb1-dev libxkbcommon-dev libwayland-dev
+
+      - name: Setup SkiaSharp Environment
+        run: |
+          echo "Setting up SkiaSharp environment variables"
+          echo "LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:/usr/local/lib:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "LIBGL_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri" >> $GITHUB_ENV
 
       - name: Cache NuGet Packages
         uses: actions/cache@v5
