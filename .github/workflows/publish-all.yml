@@ -111,13 +111,17 @@ jobs:
       - name: 📦 Publish to GitHub Packages
         run: |
           echo "📦 Publishing to GitHub Packages..."
-          dotnet nuget push ./packages/*.nupkg --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json' --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+          Get-ChildItem -Path "./packages" -Filter "*.nupkg" | ForEach-Object {
+            dotnet nuget push $_.FullName --source 'https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json' --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+          }
 
       - name: 📦 Publish to NuGet.org
         if: ${{ github.event.inputs.publish_nuget != 'false' }}
         run: |
           echo "📦 Publishing to NuGet.org..."
-          dotnet nuget push ./packages/*.nupkg --source 'https://api.nuget.org/v3/index.json' --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+          Get-ChildItem -Path "./packages" -Filter "*.nupkg" | ForEach-Object {
+            dotnet nuget push $_.FullName --source 'https://api.nuget.org/v3/index.json' --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+          }
 
       - name: ✅ NuGet Summary
         run: |
