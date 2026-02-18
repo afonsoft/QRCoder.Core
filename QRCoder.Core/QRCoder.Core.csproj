@@ -7,10 +7,10 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <PackageId>QRCoder.Core</PackageId>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <AssemblyName>QRCoder.Core</AssemblyName>
 	<Authors>Afonso Dutra Nogueira Filho</Authors>
-	<Copyright>AFONSOFT © 2025</Copyright>
+	<Copyright>AFONSOFT © 2026</Copyright>
 	<Company>AFONSOFT</Company>
 	<LangVersion>10.0</LangVersion>
 	<OutputType>Library</OutputType>
@@ -86,5 +86,29 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows' or '$(TargetFramework)' == 'net8.0-windows'">
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App" />
 	</ItemGroup>
+
+	<!-- Copy native SkiaSharp libraries to output directory for all platforms -->
+	<ItemGroup>
+		<Content Include="$(NuGetPackageRoot)skiaSharp.nativeassets.linux\3.119.0\runtimes\linux-x64\native\*.so">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>false</Pack>
+			<Condition>"$(TargetFramework)" == "netstandard2.1" or "$(TargetFramework)" == "net8.0" or "$(TargetFramework)" == "net10.0"</Condition>
+		</Content>
+		<Content Include="$(NuGetPackageRoot)skiaSharp.nativeassets.macos\3.119.0\runtimes\osx-x64\native\*.dylib">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>false</Pack>
+			<Condition>"$(TargetFramework)" == "netstandard2.1" or "$(TargetFramework)" == "net8.0" or "$(TargetFramework)" == "net10.0"</Condition>
+		</Content>
+		<Content Include="$(NuGetPackageRoot)skiaSharp.nativeassets.win32\3.119.0\runtimes\win-x64\native\*.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>false</Pack>
+			<Condition>"$(TargetFramework)" == "netstandard2.1" or "$(TargetFramework)" == "net8.0" or "$(TargetFramework)" == "net10.0"</Condition>
+		</Content>
+	</ItemGroup>
+
+	<!-- Ensure SkiaSharp native libraries are available in CI -->
+	<PropertyGroup>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
 
 </Project>
