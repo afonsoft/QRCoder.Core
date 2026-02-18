@@ -37,6 +37,7 @@ jobs:
           sudo apt-get install -y libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 libxtst6
           # Additional dependencies for .NET 10.0 SkiaSharp
           sudo apt-get install -y libglib2.0-0 libgtk-3-0 libxss1 libasound2-dev
+          sudo apt install mesa-utils libgl1-mesa-glx ttf-mscorefonts-installer dbus libfontconfig1 libxrandr2 libxi-dev
 
       - name: Cache NuGet Packages
         uses: actions/cache@v5
