@@ -1,7 +1,7 @@
 
 # QRCoder.Core - QR Code Generator Library
 
-[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml)
+[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml)
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
 [![NuGet Badge](https://buildstats.info/nuget/QRCoder.Core?rnd=0892982314)](https://www.nuget.org/packages/QRCoder.Core/)
 [![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
@@ -155,6 +155,28 @@ O projeto `QRCoder.Core` é uma biblioteca que facilita a geração de códigos 
 2.  **Renderização**: Classes que herdam de `AbstractQRCode` (como `QRCode`, `PngByteQRCode`, `SvgQRCode`, `ASCIIQRCode`, etc.) usam `QRCodeData` para renderizar o Código QR em diferentes formatos gráficos (Bitmap, PNG, SVG, ASCII, etc.).
 3.  **Geração de Payload**: A classe `PayloadGenerator` oferece métodos para criar payloads formatados para tipos específicos de Código QR, como URLs, SMS, contatos, Wi-Fi, entre outros, simplificando a criação de Códigos QR para casos de uso comuns.
 4.  **Tratamento de Exceções**: O projeto inclui exceções personalizadas, como `DataTooLongException`, para lidar com cenários onde os dados fornecidos excedem a capacidade máxima de um Código QR.
+
+## 🔐 Tokens de Segurança
+
+O projeto utiliza os seguintes tokens de segurança configurados nos secrets do GitHub:
+
+### Tokens Necessários
+- **CODECOV_TOKEN**: Token para upload de relatórios de cobertura para Codecov
+- **NUGET_TOKEN**: Token para publicação de pacotes no NuGet.org
+- **SONNAR_TOKEN**: Token para análise de código no SonarCloud
+
+### Configuração
+Para desenvolvedores que desejam rodar os workflows localmente ou configurar o fork:
+
+1. Vá para **Settings** > **Secrets and variables** > **Actions** no seu repositório GitHub
+2. Adicione os seguintes secrets:
+   - `CODECOV_TOKEN`: Obtido em [codecov.io](https://codecov.io/)
+   - `NUGET_TOKEN`: Obtido em [nuget.org](https://www.nuget.org/) (apenas para publicação)
+   - `SONNAR_TOKEN`: Obtido em [sonarcloud.io](https://sonarcloud.io/)
+
+### Tokens Opcionais
+- **SNYK_TOKEN**: Para análise de vulnerabilidades com Snyk
+- **QODANA_TOKEN**: Para análise de código com Qodana (JetBrains)
 
 ## CI/CD e Build
 O projeto utiliza um pipeline completo de CI/CD com GitHub Actions para garantir qualidade e automação:
