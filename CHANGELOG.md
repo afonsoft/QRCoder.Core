@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test framework stability with graceful error handling
 
 ### Security
+- **Updated Security Tokens**: Standardized token usage across all GitHub Actions workflows
+  - `CODECOV_TOKEN`: Configured for codecov coverage uploads
+  - `NUGET_TOKEN`: Configured for NuGet.org publishing
+  - `SONNAR_TOKEN`: Updated from SONAR_TOKEN for SonarCloud analysis
 - Architecture improvements following security best practices
 - Enhanced validation framework for input sanitization
 - Proper dependency injection patterns
@@ -27,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored validation system with extensible framework
 - Improved code organization following Clean Architecture
 - Enhanced test structure with better coverage reporting
+- **GitHub Actions**: Updated all workflows to use standardized security tokens
+- **Documentation**: Added security tokens configuration section to README
 
 ## [1.0.8] - 2026-02-18
 
