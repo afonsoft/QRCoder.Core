@@ -120,7 +120,7 @@ jobs:
         run: |
           echo "📦 Publishing to NuGet.org..."
           Get-ChildItem -Path "./packages" -Filter "*.nupkg" | ForEach-Object {
-            dotnet nuget push $_.FullName --source 'https://api.nuget.org/v3/index.json' --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+            dotnet nuget push $_.FullName --source 'https://api.nuget.org/v3/index.json' --api-key ${{ secrets.NUGET_TOKEN }} --skip-duplicate
           }
 
       - name: ✅ NuGet Summary
