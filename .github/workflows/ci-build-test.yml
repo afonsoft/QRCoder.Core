@@ -288,7 +288,7 @@ jobs:
           git config --global user.email "actions@github.com"
 
       - name: 🔄 Create PR to main
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "🚀 Auto-merge: ${{ github.event.head_commit.message }}"
