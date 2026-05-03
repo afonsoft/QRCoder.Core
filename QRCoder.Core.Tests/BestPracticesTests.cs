@@ -24,8 +24,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_WithEmptyString_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("", QRCodeGenerator.ECCLevel.L);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("", QRCodeGenerator.ECCLevel.L);
             data.ShouldNotBeNull();
             data.ModuleMatrix.ShouldNotBeNull();
             data.ModuleMatrix.Count.ShouldBeGreaterThan(0);
@@ -35,8 +35,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_WithUnicode_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Olá mundo! 你好世界 🌍", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Olá mundo! 你好世界 🌍", QRCodeGenerator.ECCLevel.M);
             data.ShouldNotBeNull();
             data.ModuleMatrix.Count.ShouldBeGreaterThan(0);
         }
@@ -45,8 +45,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_WithUrl_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("https://github.com/afonsoft/QRCoder.Core", QRCodeGenerator.ECCLevel.Q);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("https://github.com/afonsoft/QRCoder.Core", QRCodeGenerator.ECCLevel.Q);
             data.ShouldNotBeNull();
         }
 
@@ -58,8 +58,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_AllECCLevels_ShouldSucceed(QRCodeGenerator.ECCLevel eccLevel)
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test", eccLevel);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test", eccLevel);
             data.ShouldNotBeNull();
         }
 
@@ -67,8 +67,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_ForceUtf8_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test UTF8", QRCodeGenerator.ECCLevel.M, forceUtf8: true);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test UTF8", QRCodeGenerator.ECCLevel.M, forceUtf8: true);
             data.ShouldNotBeNull();
         }
 
@@ -76,8 +76,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_WithUtf8BOM_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test BOM", QRCodeGenerator.ECCLevel.M, forceUtf8: true, utf8BOM: true);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test BOM", QRCodeGenerator.ECCLevel.M, forceUtf8: true, utf8BOM: true);
             data.ShouldNotBeNull();
         }
 
@@ -85,8 +85,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_WithFixedVersion_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L, requestedVersion: 5);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L, requestedVersion: 5);
             data.ShouldNotBeNull();
             data.Version.ShouldBe(5);
         }
@@ -104,8 +104,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_NumericMode_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("0123456789", QRCodeGenerator.ECCLevel.L);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("0123456789", QRCodeGenerator.ECCLevel.L);
             data.ShouldNotBeNull();
         }
 
@@ -113,8 +113,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeGenerator")]
         public void QRCodeGenerator_CreateQrCode_AlphanumericMode_ShouldSucceed()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("HELLO WORLD 123", QRCodeGenerator.ECCLevel.L);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("HELLO WORLD 123", QRCodeGenerator.ECCLevel.L);
             data.ShouldNotBeNull();
         }
 
@@ -126,14 +126,14 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeData")]
         public void QRCodeData_RoundTrip_Uncompressed_ShouldPreserveData()
         {
-            using var gen = new QRCodeGenerator();
-            using var original = gen.CreateQrCode("Round trip test", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var original = gen.CreateQrCode("Round trip test", QRCodeGenerator.ECCLevel.M);
 
             var rawData = original.GetRawData(QRCodeData.Compression.Uncompressed);
             rawData.ShouldNotBeNull();
             rawData.Length.ShouldBeGreaterThan(0);
 
-            using var restored = new QRCodeData(rawData, QRCodeData.Compression.Uncompressed);
+            var restored = new QRCodeData(rawData, QRCodeData.Compression.Uncompressed);
             restored.ModuleMatrix.Count.ShouldBe(original.ModuleMatrix.Count);
         }
 
@@ -141,13 +141,13 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeData")]
         public void QRCodeData_RoundTrip_Deflate_ShouldPreserveData()
         {
-            using var gen = new QRCodeGenerator();
-            using var original = gen.CreateQrCode("Deflate test", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var original = gen.CreateQrCode("Deflate test", QRCodeGenerator.ECCLevel.M);
 
             var rawData = original.GetRawData(QRCodeData.Compression.Deflate);
             rawData.ShouldNotBeNull();
 
-            using var restored = new QRCodeData(rawData, QRCodeData.Compression.Deflate);
+            var restored = new QRCodeData(rawData, QRCodeData.Compression.Deflate);
             restored.ModuleMatrix.Count.ShouldBe(original.ModuleMatrix.Count);
         }
 
@@ -155,13 +155,13 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeData")]
         public void QRCodeData_RoundTrip_GZip_ShouldPreserveData()
         {
-            using var gen = new QRCodeGenerator();
-            using var original = gen.CreateQrCode("GZip test", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var original = gen.CreateQrCode("GZip test", QRCodeGenerator.ECCLevel.M);
 
             var rawData = original.GetRawData(QRCodeData.Compression.GZip);
             rawData.ShouldNotBeNull();
 
-            using var restored = new QRCodeData(rawData, QRCodeData.Compression.GZip);
+            var restored = new QRCodeData(rawData, QRCodeData.Compression.GZip);
             restored.ModuleMatrix.Count.ShouldBe(original.ModuleMatrix.Count);
         }
 
@@ -181,13 +181,13 @@ namespace QRCoder.Core.Tests
             var tempPath = Path.Combine(Path.GetTempPath(), $"qrdata_test_{Guid.NewGuid()}.qrr");
             try
             {
-                using var gen = new QRCodeGenerator();
-                using var original = gen.CreateQrCode("File round trip", QRCodeGenerator.ECCLevel.M);
+                var gen = new QRCodeGenerator();
+                var original = gen.CreateQrCode("File round trip", QRCodeGenerator.ECCLevel.M);
 
                 original.SaveRawData(tempPath, QRCodeData.Compression.Uncompressed);
                 File.Exists(tempPath).ShouldBeTrue();
 
-                using var restored = new QRCodeData(tempPath, QRCodeData.Compression.Uncompressed);
+                var restored = new QRCodeData(tempPath, QRCodeData.Compression.Uncompressed);
                 restored.ModuleMatrix.Count.ShouldBe(original.ModuleMatrix.Count);
             }
             finally
@@ -201,7 +201,7 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeData")]
         public void QRCodeData_Dispose_ShouldClearModuleMatrix()
         {
-            using var gen = new QRCodeGenerator();
+            var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("Dispose test", QRCodeGenerator.ECCLevel.M);
             data.ModuleMatrix.ShouldNotBeNull();
 
@@ -213,8 +213,8 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCodeData")]
         public void QRCodeData_Version_ShouldBePositive()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Version test", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Version test", QRCodeGenerator.ECCLevel.M);
             data.Version.ShouldBeGreaterThan(0);
         }
 
@@ -226,9 +226,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AbstractQRCode")]
         public void AbstractQRCode_SetQRCodeData_ShouldUpdateData()
         {
-            using var gen = new QRCodeGenerator();
-            using var data1 = gen.CreateQrCode("First", QRCodeGenerator.ECCLevel.L);
-            using var data2 = gen.CreateQrCode("Second with more data", QRCodeGenerator.ECCLevel.H);
+            var gen = new QRCodeGenerator();
+            var data1 = gen.CreateQrCode("First", QRCodeGenerator.ECCLevel.L);
+            var data2 = gen.CreateQrCode("Second with more data", QRCodeGenerator.ECCLevel.H);
 
             var qrCode = new QRCode(data1);
             var size1 = qrCode.GetGraphic(1).Width;
@@ -243,7 +243,7 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AbstractQRCode")]
         public void AbstractQRCode_Dispose_ShouldBeIdempotent()
         {
-            using var gen = new QRCodeGenerator();
+            var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L);
             var qrCode = new QRCode(data);
 
@@ -259,11 +259,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_GetGraphic_WithCustomColors_ShouldReturnBitmap()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Color test", QRCodeGenerator.ECCLevel.M);
-            using var qr = new QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Color test", QRCodeGenerator.ECCLevel.M);
+            var qr = new QRCode(data);
 
-            using var bmp = qr.GetGraphic(5, new SKColor(255, 0, 0), new SKColor(0, 255, 0), true);
+            var bmp = qr.GetGraphic(5, new SKColor(255, 0, 0), new SKColor(0, 255, 0), true);
             bmp.ShouldNotBeNull();
             bmp.Width.ShouldBeGreaterThan(0);
             bmp.Height.ShouldBeGreaterThan(0);
@@ -273,11 +273,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_GetGraphic_WithHexColors_ShouldReturnBitmap()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Hex color test", QRCodeGenerator.ECCLevel.M);
-            using var qr = new QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Hex color test", QRCodeGenerator.ECCLevel.M);
+            var qr = new QRCode(data);
 
-            using var bmp = qr.GetGraphic(5, "#FF0000", "#00FF00");
+            var bmp = qr.GetGraphic(5, "#FF0000", "#00FF00");
             bmp.ShouldNotBeNull();
         }
 
@@ -285,14 +285,14 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_GetGraphic_WithoutQuietZones_ShouldBeSmallerThanWithQuietZones()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Quiet zone test", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Quiet zone test", QRCodeGenerator.ECCLevel.M);
 
-            using var qrWith = new QRCode(data);
-            using var bmpWith = qrWith.GetGraphic(5, SKColors.Black, SKColors.White, true);
+            var qrWith = new QRCode(data);
+            var bmpWith = qrWith.GetGraphic(5, SKColors.Black, SKColors.White, true);
 
-            using var qrWithout = new QRCode(data);
-            using var bmpWithout = qrWithout.GetGraphic(5, SKColors.Black, SKColors.White, false);
+            var qrWithout = new QRCode(data);
+            var bmpWithout = qrWithout.GetGraphic(5, SKColors.Black, SKColors.White, false);
 
             bmpWithout.Width.ShouldBeLessThan(bmpWith.Width);
         }
@@ -301,9 +301,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_ParseHtmlColor_InvalidFormat_ShouldThrowArgumentException()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L);
-            using var qr = new QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L);
+            var qr = new QRCode(data);
 
             Should.Throw<FormatException>(() => qr.GetGraphic(5, "#ZZZZZZ", "#ffffff"));
         }
@@ -312,9 +312,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_ParseHtmlColor_EmptyString_ShouldThrowArgumentException()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L);
-            using var qr = new QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Test", QRCodeGenerator.ECCLevel.L);
+            var qr = new QRCode(data);
 
             Should.Throw<Exception>(() => qr.GetGraphic(5, "", "#ffffff"));
         }
@@ -323,11 +323,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCode_ParseHtmlColor_WithAlpha_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Alpha test", QRCodeGenerator.ECCLevel.L);
-            using var qr = new QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Alpha test", QRCodeGenerator.ECCLevel.L);
+            var qr = new QRCode(data);
 
-            using var bmp = qr.GetGraphic(5, "#80000000", "#80FFFFFF");
+            var bmp = qr.GetGraphic(5, "#80000000", "#80FFFFFF");
             bmp.ShouldNotBeNull();
         }
 
@@ -343,7 +343,7 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/QRCode")]
         public void QRCodeHelper_GetQRCode_ShouldReturnValidBitmap()
         {
-            using var bmp = QRCodeHelper.GetQRCode("Helper test", 5, SKColors.Black, SKColors.White, QRCodeGenerator.ECCLevel.M);
+            var bmp = QRCodeHelper.GetQRCode("Helper test", 5, SKColors.Black, SKColors.White, QRCodeGenerator.ECCLevel.M);
             bmp.ShouldNotBeNull();
             bmp.Width.ShouldBeGreaterThan(0);
         }
@@ -356,9 +356,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AsciiQRCode")]
         public void AsciiQRCode_GetGraphic_ShouldReturnNonEmptyString()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("ASCII test", QRCodeGenerator.ECCLevel.M);
-            using var ascii = new AsciiQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("ASCII test", QRCodeGenerator.ECCLevel.M);
+            var ascii = new AsciiQRCode(data);
 
             var result = ascii.GetGraphic(1);
             result.ShouldNotBeNullOrEmpty();
@@ -369,9 +369,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AsciiQRCode")]
         public void AsciiQRCode_GetGraphic_WithCustomSymbols_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Custom symbols", QRCodeGenerator.ECCLevel.M);
-            using var ascii = new AsciiQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Custom symbols", QRCodeGenerator.ECCLevel.M);
+            var ascii = new AsciiQRCode(data);
 
             var result = ascii.GetGraphic(1, "XX", "..", true);
             result.ShouldNotBeNullOrEmpty();
@@ -383,9 +383,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AsciiQRCode")]
         public void AsciiQRCode_GetLineByLineGraphic_ShouldReturnLines()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Line test", QRCodeGenerator.ECCLevel.L);
-            using var ascii = new AsciiQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Line test", QRCodeGenerator.ECCLevel.L);
+            var ascii = new AsciiQRCode(data);
 
             var lines = ascii.GetLineByLineGraphic(1);
             lines.ShouldNotBeNull();
@@ -396,13 +396,13 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/AsciiQRCode")]
         public void AsciiQRCode_WithoutQuietZones_ShouldHaveFewerLines()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("QZ test", QRCodeGenerator.ECCLevel.L);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("QZ test", QRCodeGenerator.ECCLevel.L);
 
-            using var withQz = new AsciiQRCode(data);
+            var withQz = new AsciiQRCode(data);
             var linesWith = withQz.GetLineByLineGraphic(1, drawQuietZones: true);
 
-            using var withoutQz = new AsciiQRCode(data);
+            var withoutQz = new AsciiQRCode(data);
             var linesWithout = withoutQz.GetLineByLineGraphic(1, drawQuietZones: false);
 
             linesWithout.Length.ShouldBeLessThan(linesWith.Length);
@@ -424,9 +424,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PngByteQRCode")]
         public void PngByteQRCode_GetGraphic_BlackWhite_ShouldReturnValidPng()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PNG test", QRCodeGenerator.ECCLevel.M);
-            using var png = new PngByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PNG test", QRCodeGenerator.ECCLevel.M);
+            var png = new PngByteQRCode(data);
 
             var bytes = png.GetGraphic(5);
             bytes.ShouldNotBeNull();
@@ -442,9 +442,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PngByteQRCode")]
         public void PngByteQRCode_GetGraphic_WithColors_ShouldReturnValidPng()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Color PNG", QRCodeGenerator.ECCLevel.M);
-            using var png = new PngByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Color PNG", QRCodeGenerator.ECCLevel.M);
+            var png = new PngByteQRCode(data);
 
             var darkColor = new byte[] { 255, 0, 0 };
             var lightColor = new byte[] { 0, 255, 0 };
@@ -457,9 +457,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PngByteQRCode")]
         public void PngByteQRCode_GetGraphic_WithAlpha_ShouldReturnValidPng()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Alpha PNG", QRCodeGenerator.ECCLevel.M);
-            using var png = new PngByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Alpha PNG", QRCodeGenerator.ECCLevel.M);
+            var png = new PngByteQRCode(data);
 
             var darkColor = new byte[] { 0, 0, 0, 255 };
             var lightColor = new byte[] { 255, 255, 255, 128 };
@@ -471,13 +471,13 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PngByteQRCode")]
         public void PngByteQRCode_WithoutQuietZones_ShouldReturnSmallerPng()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("QZ PNG", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("QZ PNG", QRCodeGenerator.ECCLevel.M);
 
-            using var pngWith = new PngByteQRCode(data);
+            var pngWith = new PngByteQRCode(data);
             var bytesWith = pngWith.GetGraphic(5, true);
 
-            using var pngWithout = new PngByteQRCode(data);
+            var pngWithout = new PngByteQRCode(data);
             var bytesWithout = pngWithout.GetGraphic(5, false);
 
             bytesWithout.Length.ShouldBeLessThan(bytesWith.Length);
@@ -491,9 +491,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/SKBitmapByteQRCode")]
         public void SKBitmapByteQRCode_GetGraphic_Default_ShouldReturnBytes()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("BMP test", QRCodeGenerator.ECCLevel.M);
-            using var bmp = new SKBitmapByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("BMP test", QRCodeGenerator.ECCLevel.M);
+            var bmp = new SKBitmapByteQRCode(data);
 
             var bytes = bmp.GetGraphic(5);
             bytes.ShouldNotBeNull();
@@ -507,9 +507,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/SKBitmapByteQRCode")]
         public void SKBitmapByteQRCode_GetGraphic_WithHexColors_ShouldReturnBytes()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("BMP hex", QRCodeGenerator.ECCLevel.M);
-            using var bmp = new SKBitmapByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("BMP hex", QRCodeGenerator.ECCLevel.M);
+            var bmp = new SKBitmapByteQRCode(data);
 
             var bytes = bmp.GetGraphic(5, "#FF0000", "#00FF00");
             bytes.ShouldNotBeNull();
@@ -520,9 +520,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/SKBitmapByteQRCode")]
         public void SKBitmapByteQRCode_GetGraphic_WithByteColors_ShouldReturnBytes()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("BMP byte colors", QRCodeGenerator.ECCLevel.M);
-            using var bmp = new SKBitmapByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("BMP byte colors", QRCodeGenerator.ECCLevel.M);
+            var bmp = new SKBitmapByteQRCode(data);
 
             var bytes = bmp.GetGraphic(5, new byte[] { 0, 0, 255 }, new byte[] { 255, 255, 0 });
             bytes.ShouldNotBeNull();
@@ -554,9 +554,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/Base64QRCode")]
         public void Base64QRCode_GetGraphic_ShouldReturnValidBase64()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Base64 test", QRCodeGenerator.ECCLevel.M);
-            using var b64 = new Base64QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Base64 test", QRCodeGenerator.ECCLevel.M);
+            var b64 = new Base64QRCode(data);
 
             var result = b64.GetGraphic(5);
             result.ShouldNotBeNullOrEmpty();
@@ -570,9 +570,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/Base64QRCode")]
         public void Base64QRCode_GetGraphic_AsJpeg_ShouldReturnBase64()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("JPEG test", QRCodeGenerator.ECCLevel.M);
-            using var b64 = new Base64QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("JPEG test", QRCodeGenerator.ECCLevel.M);
+            var b64 = new Base64QRCode(data);
 
             var result = b64.GetGraphic(5, SKColors.Black, SKColors.White, true, Base64QRCode.ImageType.Jpeg);
             result.ShouldNotBeNullOrEmpty();
@@ -584,11 +584,11 @@ namespace QRCoder.Core.Tests
         {
             if (!HelperFunctions.IsSkiaSharpAvailable()) return;
 
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Icon test", QRCodeGenerator.ECCLevel.H);
-            using var b64 = new Base64QRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Icon test", QRCodeGenerator.ECCLevel.H);
+            var b64 = new Base64QRCode(data);
 
-            using var icon = new SKBitmap(10, 10);
+            var icon = new SKBitmap(10, 10);
             var result = b64.GetGraphic(5, SKColors.Black, SKColors.White, icon, 15, 2);
             result.ShouldNotBeNullOrEmpty();
         }
@@ -601,9 +601,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PdfByteQRCode")]
         public void PdfByteQRCode_GetGraphic_ShouldReturnValidPdf()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PDF test", QRCodeGenerator.ECCLevel.M);
-            using var pdf = new PdfByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PDF test", QRCodeGenerator.ECCLevel.M);
+            var pdf = new PdfByteQRCode(data);
 
             var bytes = pdf.GetGraphic(5);
             bytes.ShouldNotBeNull();
@@ -617,9 +617,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PdfByteQRCode")]
         public void PdfByteQRCode_GetGraphic_WithColors_ShouldReturnValidPdf()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PDF color", QRCodeGenerator.ECCLevel.M);
-            using var pdf = new PdfByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PDF color", QRCodeGenerator.ECCLevel.M);
+            var pdf = new PdfByteQRCode(data);
 
             var bytes = pdf.GetGraphic(5, "#FF0000", "#00FF00");
             bytes.ShouldNotBeNull();
@@ -630,9 +630,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PdfByteQRCode")]
         public void PdfByteQRCode_GetGraphic_WithCustomDpi_ShouldReturnValidPdf()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PDF DPI", QRCodeGenerator.ECCLevel.M);
-            using var pdf = new PdfByteQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PDF DPI", QRCodeGenerator.ECCLevel.M);
+            var pdf = new PdfByteQRCode(data);
 
             var bytes = pdf.GetGraphic(5, "#000000", "#FFFFFF", 300, 95);
             bytes.ShouldNotBeNull();
@@ -646,9 +646,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_GetGraphic_ShouldReturnValidPostscript()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PS test", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PS test", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(5);
             result.ShouldNotBeNullOrEmpty();
@@ -660,9 +660,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_GetGraphic_AsEps_ShouldReturnValidEps()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("EPS test", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("EPS test", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(5, epsFormat: true);
             result.ShouldNotBeNullOrEmpty();
@@ -673,9 +673,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_GetGraphic_WithColors_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PS colors", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PS colors", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(5, new SKColor(255, 0, 0), new SKColor(0, 255, 0));
             result.ShouldNotBeNullOrEmpty();
@@ -685,9 +685,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_GetGraphic_WithHexColors_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PS hex", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PS hex", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(5, "#FF0000", "#00FF00");
             result.ShouldNotBeNullOrEmpty();
@@ -697,9 +697,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_GetGraphic_WithViewBox_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PS viewbox", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PS viewbox", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(new Size(200, 200));
             result.ShouldNotBeNullOrEmpty();
@@ -709,9 +709,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/PostscriptQRCode")]
         public void PostscriptQRCode_WithoutQuietZones_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("PS no QZ", QRCodeGenerator.ECCLevel.M);
-            using var ps = new PostscriptQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("PS no QZ", QRCodeGenerator.ECCLevel.M);
+            var ps = new PostscriptQRCode(data);
 
             var result = ps.GetGraphic(5, SKColors.Black, SKColors.White, false);
             result.ShouldNotBeNullOrEmpty();
@@ -725,11 +725,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/ArtQRCode")]
         public void ArtQRCode_GetGraphic_Default_ShouldReturnBitmap()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Art test", QRCodeGenerator.ECCLevel.H);
-            using var art = new ArtQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Art test", QRCodeGenerator.ECCLevel.H);
+            var art = new ArtQRCode(data);
 
-            using var bmp = art.GetGraphic(10);
+            var bmp = art.GetGraphic(10);
             bmp.ShouldNotBeNull();
             bmp.Width.ShouldBeGreaterThan(0);
         }
@@ -738,11 +738,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/ArtQRCode")]
         public void ArtQRCode_GetGraphic_WithCustomPixelSizeFactor_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Art pixel", QRCodeGenerator.ECCLevel.H);
-            using var art = new ArtQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Art pixel", QRCodeGenerator.ECCLevel.H);
+            var art = new ArtQRCode(data);
 
-            using var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 0.5);
+            var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 0.5);
             bmp.ShouldNotBeNull();
         }
 
@@ -750,11 +750,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/ArtQRCode")]
         public void ArtQRCode_GetGraphic_FlatQuietZone_ShouldWork()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Art flat QZ", QRCodeGenerator.ECCLevel.H);
-            using var art = new ArtQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Art flat QZ", QRCodeGenerator.ECCLevel.H);
+            var art = new ArtQRCode(data);
 
-            using var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent,
+            var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent,
                 quietZoneRenderingStyle: ArtQRCode.QuietZoneStyle.Flat);
             bmp.ShouldNotBeNull();
         }
@@ -763,9 +763,9 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/ArtQRCode")]
         public void ArtQRCode_PixelSizeFactor_GreaterThanOne_ShouldThrow()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Out of range", QRCodeGenerator.ECCLevel.H);
-            using var art = new ArtQRCode(data);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Out of range", QRCodeGenerator.ECCLevel.H);
+            var art = new ArtQRCode(data);
 
             Should.Throw<ArgumentOutOfRangeException>(() =>
                 art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 1.5));
@@ -1000,11 +1000,11 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/CrossPlatform")]
         public void QRCode_SameInput_ShouldProduceSameModuleMatrix()
         {
-            using var gen1 = new QRCodeGenerator();
-            using var gen2 = new QRCodeGenerator();
+            var gen1 = new QRCodeGenerator();
+            var gen2 = new QRCodeGenerator();
 
-            using var data1 = gen1.CreateQrCode("Deterministic test", QRCodeGenerator.ECCLevel.M);
-            using var data2 = gen2.CreateQrCode("Deterministic test", QRCodeGenerator.ECCLevel.M);
+            var data1 = gen1.CreateQrCode("Deterministic test", QRCodeGenerator.ECCLevel.M);
+            var data2 = gen2.CreateQrCode("Deterministic test", QRCodeGenerator.ECCLevel.M);
 
             data1.ModuleMatrix.Count.ShouldBe(data2.ModuleMatrix.Count);
             for (int i = 0; i < data1.ModuleMatrix.Count; i++)
@@ -1020,13 +1020,13 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/CrossPlatform")]
         public void PngByteQRCode_SameInput_ShouldProduceSameOutput()
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Deterministic PNG", QRCodeGenerator.ECCLevel.M);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Deterministic PNG", QRCodeGenerator.ECCLevel.M);
 
-            using var png1 = new PngByteQRCode(data);
+            var png1 = new PngByteQRCode(data);
             var bytes1 = png1.GetGraphic(5);
 
-            using var png2 = new PngByteQRCode(data);
+            var png2 = new PngByteQRCode(data);
             var bytes2 = png2.GetGraphic(5);
 
             bytes1.Length.ShouldBe(bytes2.Length);
@@ -1044,10 +1044,10 @@ namespace QRCoder.Core.Tests
         [Category("BestPractices/CrossPlatform")]
         public void QRCode_DifferentModuleSizes_ShouldScaleCorrectly(int pixelsPerModule)
         {
-            using var gen = new QRCodeGenerator();
-            using var data = gen.CreateQrCode("Scale test", QRCodeGenerator.ECCLevel.L);
+            var gen = new QRCodeGenerator();
+            var data = gen.CreateQrCode("Scale test", QRCodeGenerator.ECCLevel.L);
 
-            using var png = new PngByteQRCode(data);
+            var png = new PngByteQRCode(data);
             var bytes = png.GetGraphic(pixelsPerModule);
             bytes.ShouldNotBeNull();
             bytes.Length.ShouldBeGreaterThan(0);
