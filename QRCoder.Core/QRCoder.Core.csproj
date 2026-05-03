@@ -40,7 +40,7 @@
 	<PackageIcon>nuget-icon.png</PackageIcon>
 	<PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
 	<PackageTags>c# csharp qr qrcoder qrcode qr-generator qr-code-generator Core NET</PackageTags>
-	<RepositoryUrl>https://github.com/codebude/QRCoder.git</RepositoryUrl>
+	<RepositoryUrl>https://github.com/afonsoft/QRCoder.Core.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
 	<Description>QRCoder.Core, written in C#.NET, which enables you to create QR codes.</Description>
@@ -69,13 +69,13 @@
 		<PackageReference Include="System.Memory" Version="4.5.5" />
 	</ItemGroup>
 
-	<ItemGroup Condition=" 'Linux' == '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' ">
+	<ItemGroup Condition="$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))">
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.119.0" />
 	</ItemGroup>
-	<ItemGroup Condition=" 'OSX' == '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' ">
+	<ItemGroup Condition="$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))">
 		<PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.119.0" />
 	</ItemGroup>
-	<ItemGroup Condition=" 'Windows' == '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' ">
+	<ItemGroup Condition="$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))">
 		<PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.119.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">

@@ -62,7 +62,7 @@ namespace QRCoder.Core
                                  BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
         {
             if (pixelSizeFactor > 1)
-                throw new Exception("The parameter pixelSize must be between 0 and 1. (0-100%)");
+                throw new ArgumentOutOfRangeException(nameof(pixelSizeFactor), "The parameter pixelSizeFactor must be between 0 and 1. (0-100%)");
             int pixelSize = (int)Math.Min(pixelsPerModule, Math.Floor(pixelsPerModule / pixelSizeFactor));
 
             var numModules = QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8);
@@ -221,9 +221,6 @@ namespace QRCoder.Core
                 using (var brush = new SKPaint { Color = SKColors.Transparent, })
                 {
                     graphics.DrawRect(new SKRect(0, 0, newSize, newSize), brush);
-
-                    brush.FilterQuality = SKFilterQuality.High; // TODO: Update to SKSamplingOptions when available
-
                     brush.IsAntialias = true;
 
                     graphics.DrawBitmap(scaledImage, new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight));

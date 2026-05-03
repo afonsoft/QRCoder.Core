@@ -74,7 +74,7 @@ namespace QRCoder.Core
             }
 
             if (bytes[0] != 0x51 || bytes[1] != 0x52 || bytes[2] != 0x52)
-                throw new Exception("Invalid raw data file. Filetype doesn't match \"QRR\".");
+                throw new InvalidOperationException("Invalid raw data file. Filetype doesn't match \"QRR\".");
 
             //Set QR code version
             var sideLen = (int)bytes[4];
@@ -188,17 +188,28 @@ namespace QRCoder.Core
             return 21 + (version - 1) * 4;
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             this.ModuleMatrix = null;
             this.Version = 0;
         }
 
+        /// <summary>
+        /// Finalizer.
+        /// </summary>
         ~QRCodeData()
         {
             Dispose(false);
