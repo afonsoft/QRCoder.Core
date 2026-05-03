@@ -1569,9 +1569,13 @@ namespace QRCoder.Core
             }
         }
 
+        /// <summary>
+        /// Releases all resources used by this instance.
+        /// Kept for backward compatibility.
+        /// </summary>
         public void Dispose()
         {
-            // left for back-compat
+            GC.SuppressFinalize(this);
         }
     }
 }
