@@ -7,23 +7,27 @@
 [![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
 
-## 📊 Test Coverage
+## Documentation / Documentação
+
+- **[Usage Guide (English)](docs/en-US/usage-guide.md)**
+- **[Guia de Uso (Português)](docs/pt-BR/guia-de-uso.md)**
+
+## Test Coverage
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| **Line Coverage** | 78% | 🟡 Good |
-| **Branch Coverage** | 83.1% | 🟢 Excellent |
-| **Method Coverage** | 78.1% | 🟡 Good |
-| **Total Tests** | 239 | ✅ All Passed |
+| **Line Coverage** | 78%+ | Good |
+| **Branch Coverage** | 83%+ | Excellent |
+| **Method Coverage** | 78%+ | Good |
+| **Total Tests** | 300+ | All Passed |
 
-### Coverage by Class
-- 🟢 **Excellent (95%+)**: ArtQRCode (98.8%), PngByteQRCode (100%), SvgQRCode (100%), QRCodeHelper (100%), AsciiQRCode (100%), Size (100%), CustomExtensions (100%), StringValueAttribute (100%)
-- 🟡 **Good (70-94%)**: QRCode (89.4%), PayloadGenerator (86.5%), QRCodeGenerator (86.8%), AbstractQRCode (88.2%)
-- 🟠 **Needs Improvement**: QRCodeData (20%)
-- 🔴 **No Coverage**: Base64QRCode, PdfByteQRCode, PostscriptQRCode, SKBitmapByteQRCode, DataTooLongException, SKColorExtensions (11.1%)
+## Descrição do Projeto / Project Description
 
-## Descrição do Projeto
-QRCoder.Core é uma biblioteca C# .NET simples, baseada em [QrCode](https://github.com/codebude/QRCoder), que permite a criação de códigos QR. Esta versão é otimizada para .NET Core e está disponível como um pacote NuGet. O projeto é desenvolvido e mantido pela AFONSOFT, com foco em fornecer uma solução robusta e fácil de usar para a geração de códigos QR em ambientes .NET.
+QRCoder.Core is a cross-platform .NET library for QR Code generation using **SkiaSharp** for image rendering. Compatible with **Windows**, **Linux**, **macOS**, and **mobile** (Xamarin / MAUI).
+
+QRCoder.Core é uma biblioteca .NET multiplataforma para geração de QR Codes usando **SkiaSharp** para renderização de imagens. Compatível com **Windows**, **Linux**, **macOS** e **mobile** (Xamarin / MAUI).
+
+Based on [QRCoder](https://github.com/codebude/QRCoder). Developed and maintained by AFONSOFT.
 
 ## Status do Projeto
 Concluída
@@ -110,44 +114,46 @@ dotnet add package QRCoder.Core
 Você pode gerar e visualizar seu primeiro código QR com apenas algumas linhas de código C#.
 
 ```csharp
-using QRCoder;
-using System.Drawing; // Necessário para Bitmap, pode variar dependendo do ambiente .NET
+using QRCoder.Core;
+using SkiaSharp;
 
-// Instancia o gerador de código QR
-using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
-{
-    // Cria dados do código QR a partir de uma string e nível de correção de erro
-    using (QRCodeData qrCodeData = qrGenerator.CreateQrCode("O texto a ser codificado.", QRCodeGenerator.ECCLevel.Q))
-    {
-        // Cria uma instância de QRCode com os dados
-        using (QRCode qrCode = new QRCode(qrCodeData))
-        {
-            // Obtém a representação gráfica do código QR como um Bitmap
-            // O parâmetro '20' define o tamanho do módulo (pixel) do código QR
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+// Create the QR Code generator
+using var generator = new QRCodeGenerator();
+using var data = generator.CreateQrCode("https://github.com/afonsoft/QRCoder.Core",
+    QRCodeGenerator.ECCLevel.M);
 
-            // Exemplo de como salvar a imagem (requer System.Drawing.Common para .NET Core/5+)
-            // qrCodeImage.Save("qrcode.png", System.Drawing.Imaging.ImageFormat.Png);
-        }
-    }
-}
+// Render as PNG bytes (cross-platform, no System.Drawing needed)
+using var png = new PngByteQRCode(data);
+byte[] pngBytes = png.GetGraphic(10);
+File.WriteAllBytes("qrcode.png", pngBytes);
+
+// Or render as SKBitmap
+using var qrCode = new QRCode(data);
+using var bitmap = qrCode.GetGraphic(10);
 ```
 
-### Parâmetros Opcionais e Sobrecargas
-O método `GetGraphic` possui várias sobrecargas. As duas primeiras permitem definir a cor gráfica do código QR usando tipos `Color` ou notação de cor hexadecimal HTML.
+### More Examples / Mais Exemplos
+
+See the full documentation for all output formats and payload types:
+- **[English Guide](docs/en-US/usage-guide.md)** — PNG, SVG, PDF, ASCII, Base64, Postscript, Artistic
+- **[Guia Português](docs/pt-BR/guia-de-uso.md)** — PNG, SVG, PDF, ASCII, Base64, Postscript, Artístico
 
 ```csharp
-// Define a cor usando tipos Color
-Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.DarkRed, Color.PaleGreen, true);
+// SVG output
+using var svg = new SvgQRCode(data);
+string svgString = svg.GetGraphic(10);
 
-// Define a cor usando notação de cor hexadecimal HTML
-Bitmap qrCodeImage = qrCode.GetGraphic(20, "#000ff0", "#0ff000");
-```
+// ASCII output (great for terminal)
+using var ascii = new AsciiQRCode(data);
+Console.WriteLine(ascii.GetGraphic(1));
 
-Esta sobrecarga permite renderizar um logotipo/imagem no centro do código QR.
+// PDF output
+using var pdf = new PdfByteQRCode(data);
+byte[] pdfBytes = pdf.GetGraphic(5);
 
-```csharp
-Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.Black, Color.White, (Bitmap)Bitmap.FromFile("path/to/your/image.png"));
+// With colors
+using var colorQr = new QRCode(data);
+using var colorBmp = colorQr.GetGraphic(10, "#1a1a2e", "#e0e0e0");
 ```
 
 ## Fluxo do Projeto
@@ -168,15 +174,10 @@ O projeto utiliza um pipeline completo de CI/CD com GitHub Actions para garantir
 - **🧪 CI Build & Test**: Build contínuo e testes automatizados
 
 ### 📊 Test Results & Coverage
-- **Total Tests**: 239 testes unitários
-- **Test Status**: ✅ All passing
-- **Coverage Metrics**: 
-  - Line Coverage: 78%
-  - Branch Coverage: 83.1%
-  - Method Coverage: 78.1%
+- **Total Tests**: 300+ testes unitários
+- **Test Status**: All passing
+- **Coverage Metrics**: Line 78%+, Branch 83%+, Method 78%+
 - **Frameworks Testados**: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
-- **Classes com 100% cobertura**: 10 classes principais
-- **Classes sem cobertura**: 8 renderizadores alternativos (Base64QRCode, PdfByteQRCode, PostscriptQRCode, SKBitmapByteQRCode, etc.)
 - **Relatórios**: HTML coverage reports disponíveis em cada build
 
 ### 🧪 Executando Testes Localmente
