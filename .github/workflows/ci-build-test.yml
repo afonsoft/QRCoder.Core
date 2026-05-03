@@ -138,7 +138,7 @@ jobs:
           dotnet test QRCoder.Core.Tests/ --configuration Release --logger "trx;LogFileName=test-results-net48.trx" --results-directory TestResults --framework net48 --verbosity normal
 
       - name: Upload Windows Test Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: test-results-windows
@@ -237,7 +237,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: 📤 Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: test-results-coverage
@@ -245,7 +245,7 @@ jobs:
           retention-days: 7
 
       - name: 📤 Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: coverage-report
