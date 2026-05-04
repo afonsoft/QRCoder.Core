@@ -30,9 +30,11 @@ namespace QRCoder.Core.Tests.Exceptions
         public void data_too_long_is_thrown_for_oversized_payload()
         {
             var longText = new string('A', 10000);
-            using var gen = new QRCodeGenerator();
-            Should.Throw<DataTooLongException>(() =>
-                gen.CreateQrCode(longText, QRCodeGenerator.ECCLevel.H));
+            using (var gen = new QRCodeGenerator())
+            {
+                Should.Throw<DataTooLongException>(() =>
+                    gen.CreateQrCode(longText, QRCodeGenerator.ECCLevel.H));
+            }
         }
 
         [Fact]
