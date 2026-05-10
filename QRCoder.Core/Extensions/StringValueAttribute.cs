@@ -10,7 +10,7 @@ namespace QRCoder.Core.Extensions
         #region Properties
 
         /// <summary>
-        /// Holds the alue in an enum
+        /// Holds the string value associated with the enum member.
         /// </summary>
         public string StringValue { get; protected set; }
 
@@ -27,7 +27,7 @@ namespace QRCoder.Core.Extensions
     }
 
     /// <summary>
-    /// CustomExtensions
+    /// Extension methods for retrieving <see cref="StringValueAttribute"/> values from enum members.
     /// </summary>
     public static class CustomExtensions
     {

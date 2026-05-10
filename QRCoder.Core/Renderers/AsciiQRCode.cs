@@ -9,7 +9,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// AsciiQRCode
+    /// Renders a QR code as ASCII art text, suitable for terminal/console output.
+    /// Each module is represented by configurable dark and light character strings.
     /// </summary>
     public class AsciiQRCode : AbstractQRCode
     {

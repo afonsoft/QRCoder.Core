@@ -3,7 +3,8 @@
 namespace QRCoder.Core.Exceptions
 {
     /// <summary>
-    /// DataTooLongException
+    /// Thrown when the input data exceeds the maximum capacity allowed by the QR code standard
+    /// for the specified error correction level, encoding mode, and optional fixed version.
     /// </summary>
     public class DataTooLongException : Exception
     {

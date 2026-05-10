@@ -9,7 +9,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// SKBitmapByteQRCode
+    /// Renders a QR code as a raw BMP (bitmap) byte array. Produces an uncompressed
+    /// 24-bit color bitmap image suitable for further processing or display.
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public class SKBitmapByteQRCode : AbstractQRCode

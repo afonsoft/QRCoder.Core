@@ -9,7 +9,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// PngByteQRCode
+    /// Renders a QR code as a PNG image byte array. This renderer does not require System.Drawing
+    /// and works cross-platform on Windows, Linux, macOS, and mobile.
     /// </summary>
     public sealed class PngByteQRCode : AbstractQRCode
     {

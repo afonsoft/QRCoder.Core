@@ -10,7 +10,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// ArtQRCode
+    /// Renders a QR code with artistic styling using rounded dots instead of square modules.
+    /// Supports custom dot colors, background images, and quiet zone control.
     /// </summary>
     public class ArtQRCode : AbstractQRCode
     {

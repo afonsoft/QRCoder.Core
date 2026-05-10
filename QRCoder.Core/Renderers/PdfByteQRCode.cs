@@ -15,7 +15,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// PdfByteQRCode
+    /// Renders a QR code as a PDF document byte array. Generates a minimal valid PDF
+    /// containing the QR code image with configurable colors and quiet zone.
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public class PdfByteQRCode : AbstractQRCode
