@@ -84,7 +84,7 @@ jobs:
           fetch-depth: 0
 
       - name: 📦 Setup NuGet
-        uses: NuGet/setup-nuget@v2.0.1
+        uses: NuGet/setup-nuget@v3.1.0
 
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
