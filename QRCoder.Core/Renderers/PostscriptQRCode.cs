@@ -9,7 +9,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// PostscriptQRCode
+    /// Renders a QR code as a Postscript or EPS (Encapsulated PostScript) string.
+    /// Suitable for high-quality print output and vector graphics workflows.
     /// </summary>
     public class PostscriptQRCode : AbstractQRCode
     {

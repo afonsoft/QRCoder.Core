@@ -12,7 +12,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// SvgQRCode
+    /// Renders a QR code as an SVG (Scalable Vector Graphics) string. Supports custom colors,
+    /// sizing modes, quiet zones, and optional embedded logos (bitmap or SVG).
     /// </summary>
     public class SvgQRCode : AbstractQRCode
     {

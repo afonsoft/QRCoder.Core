@@ -12,7 +12,8 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
-    /// Base64QRCode
+    /// Renders a QR code as a Base64-encoded image string. Useful for embedding QR codes
+    /// directly in HTML img tags or CSS without requiring a separate file.
     /// </summary>
     public class Base64QRCode : AbstractQRCode
     {
