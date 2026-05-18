@@ -1,0 +1,55 @@
+# Build outputs
+bin/
+obj/
+out/
+dist/
+build/
+
+# Dependencies
+packages/
+
+# Version control
+.git/
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem
+
+# IDE
+.vs/
+.idea/
+.vscode/
+
+# Test artifacts
+TestResults/
+coverage/
+*.coverage
+
+# Logs
+*.log
+
+# Generated docs
+Docs/
+
+# Large binaries
+*.dll
+*.exe
+*.so
+*.dylib
+*.nupkg
+*.snupkg
+
+# Database files
+*.db
+*.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.temp
+*.cache
