@@ -55,10 +55,10 @@ docs/                          # Documentação bilíngue
 
 | Plataforma | Config Principal | Skills | Rules |
 |-----------|-----------------|--------|-------|
-| Todos | `AGENTS.md` | `.agents/skills/` | `.agents/RULES.md`, `rules/` |
+| Base (todas) | `AGENTS.md` | `.agents/skills/` | `.agents/RULES.md`, `rules/` |
 | Claude Code | `CLAUDE.md` | auto-loaded | `.agents/RULES.md` |
-| Devin | `DEVIN.md` | `.agents/skills/` | `.agents/RULES.md` |
-| Gemini CLI | `GEMINI.md` | `.agents/skills/` | `.agents/RULES.md` |
+| Devin | `AGENTS.md` | `.agents/skills/` | `.agents/RULES.md` |
+| Windsurf | `.windsurfignore` | `.agents/skills/` | `rules/*.instructions.md` |
 
 ## Comandos de Build
 
