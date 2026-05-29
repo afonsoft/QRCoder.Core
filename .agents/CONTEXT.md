@@ -13,7 +13,7 @@
 
 1. Instruções do usuário (chat/prompt)
 2. `AGENTS.md` (SSoT)
-3. Arquivo de plataforma (`CLAUDE.md`, `DEVIN.md`, `GEMINI.md`)
+3. Arquivo de plataforma (`CLAUDE.md`) — Devin e Windsurf leem `AGENTS.md` diretamente
 4. `.agents/RULES.md`
 5. `rules/*.instructions.md`
 6. `.agents/skills/`
