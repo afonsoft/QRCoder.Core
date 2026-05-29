@@ -3,15 +3,10 @@
 ## Diagrama de Arquivos
 
 ```
-AGENTS.md                 ← SSoT (≤500 linhas)
-CLAUDE.md                 ← Delta para Claude Code
-DEVIN.md                  ← Delta para Devin
-GEMINI.md                 ← Delta para Gemini CLI
-.aiignore                 ← Ignore JetBrains AI
+AGENTS.md                 ← SSoT (≤500 linhas) — lido por Devin e Windsurf
+CLAUDE.md                 ← Delta para Claude Code (@import AGENTS.md)
 .claudeignore             ← Ignore Claude Code
-.cursorignore             ← Ignore Cursor
 .devinignore              ← Ignore Devin
-.geminiignore             ← Ignore Gemini CLI
 .windsurfignore           ← Ignore Windsurf
 .agents/
 ├── CONTEXT.md            ← Estratégias de contexto
@@ -36,12 +31,13 @@ rules/
 
 ## Compatibilidade
 
-| Feature | Claude | Devin | Gemini | Cursor | Windsurf |
-|---------|--------|-------|--------|--------|----------|
-| AGENTS.md | Sim | Sim | Sim | Sim | Sim |
-| Skills | Sim | Sim | Sim | Sim | Sim |
-| Rules | Sim | Sim | Sim | Sim | Sim |
-| Ignore | .claudeignore | .devinignore | .geminiignore | .cursorignore | .windsurfignore |
+| Feature | Claude Code | Devin | Windsurf |
+|---------|-------------|-------|----------|
+| AGENTS.md (SSoT) | Sim | Sim | Sim |
+| Platform file | CLAUDE.md | AGENTS.md | AGENTS.md |
+| Skills (.agents/skills/) | Sim | Sim | Sim |
+| Rules (rules/) | Sim | Sim | Sim |
+| Ignore file | .claudeignore | .devinignore | .windsurfignore |
 
 ## Referências
 
