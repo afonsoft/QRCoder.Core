@@ -107,7 +107,11 @@ dotnet add package QRCoder.Core
 Gere seu primeiro QR code com apenas algumas linhas de codigo:
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
 using SkiaSharp;
 
 // Criar o gerador de QR Code
@@ -128,6 +132,13 @@ using var bitmap = qrCode.GetGraphic(10);
 ### Mais Formatos de Saida
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 // Saida SVG
 using var svg = new SvgQRCode(data);
 string svgString = svg.GetGraphic(10);
@@ -152,7 +163,12 @@ using var colorBmp = colorQr.GetGraphic(10, "#1a1a2e", "#e0e0e0");
 ### Exemplos de Payload
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
 
 // QR Code Wi-Fi
 var wifiPayload = new PayloadGenerator.WiFi("MinhaRede", "MinhaSenha",

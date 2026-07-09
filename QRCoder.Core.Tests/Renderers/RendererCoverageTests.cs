@@ -7,6 +7,7 @@ using QRCoder.Core.Generators;
 using QRCoder.Core.Models;
 using QRCoder.Core.Renderers;
 using QRCoder.Core.Exceptions;
+using SkiaSharp;
 
 namespace QRCoder.Core.Tests
 {
@@ -106,6 +107,31 @@ namespace QRCoder.Core.Tests
                 result.ShouldNotBeNull();
                 result.Length.ShouldBeGreaterThan(0);
                 result.ShouldStartWith("iVBORw0KGgoAAAANS"); // Base64 PNG header
+            }
+
+            /// <summary>
+            /// Dado que tenho um tipo de imagem invalido
+            /// Quando gero o grafico Base64
+            /// Entao deve retornar PNG base64 por padrao
+            /// </summary>
+            [Fact]
+            public void Dado_TipoImagemInvalido_Quando_GerarGraficoBase64_Entao_RetornaPngBase64()
+            {
+                // Arrange
+                using (var gen = new QRCodeGenerator())
+                using (var data = gen.CreateQrCode("Test Data", QRCodeGenerator.ECCLevel.M))
+                {
+                    var base64QR = new Base64QRCode(data);
+                    var invalidImageType = (Base64QRCode.ImageType)999;
+
+                    // Act
+                    var result = base64QR.GetGraphic(5, SKColors.Black, SKColors.White, true, invalidImageType);
+
+                    // Assert
+                    result.ShouldNotBeNull();
+                    result.Length.ShouldBeGreaterThan(0);
+                    result.ShouldStartWith("iVBORw0KGgoAAAANS"); // Base64 PNG header
+                }
             }
         }
 
