@@ -9,7 +9,12 @@ Based on [QRCoder](https://github.com/codebude/QRCoder). Supports **.NET Standar
 ## Quick Start
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
 
 // Generate QR code data
 using var generator = new QRCodeGenerator();
@@ -39,7 +44,12 @@ File.WriteAllBytes("qrcode.png", pngBytes);
 ## Multiple Formats Example
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
 
 using var gen = new QRCodeGenerator();
 using var data = gen.CreateQrCode("Hello World", QRCodeGenerator.ECCLevel.M);
@@ -66,7 +76,12 @@ using var bitmap = qr.GetGraphic(10, "#1a1a2e", "#e0e0e0");
 Generate formatted QR code content for common use cases:
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
 
 using var gen = new QRCodeGenerator();
 

@@ -113,7 +113,11 @@ dotnet add package QRCoder.Core
 Generate your first QR code with just a few lines of code:
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
 using SkiaSharp;
 
 // Create the QR Code generator
@@ -134,6 +138,13 @@ using var bitmap = qrCode.GetGraphic(10);
 ### More Output Formats
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 // SVG output
 using var svg = new SvgQRCode(data);
 string svgString = svg.GetGraphic(10);
@@ -163,7 +174,12 @@ string psString = ps.GetGraphic(5);
 ### Payload Examples
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
 
 // Wi-Fi QR Code
 var wifiPayload = new PayloadGenerator.WiFi("MyNetwork", "MyPassword",

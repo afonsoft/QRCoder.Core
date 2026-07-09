@@ -51,7 +51,11 @@ SkiaSharp requires native libraries for each platform. `QRCoder.Core` automatica
 ## Quick Start
 
 ```csharp
-using QRCoder.Core;
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
 using SkiaSharp;
 
 // 1. Create the generator
@@ -79,6 +83,13 @@ image.Encode(stream, SKEncodedImageFormat.Png, 100);
 Generates an `SKBitmap` with the QR Code rendered via SkiaSharp.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Hello World!", QRCodeGenerator.ECCLevel.H);
 using var qr = new QRCode(data);
@@ -103,6 +114,13 @@ using var logoBmp = qr.GetGraphic(10, SKColors.Black, SKColors.White,
 Generates the QR Code directly as a PNG byte array — ideal for APIs and web services.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("API Data", QRCodeGenerator.ECCLevel.M);
 using var png = new PngByteQRCode(data);
@@ -127,6 +145,13 @@ byte[] alphaBytes = png.GetGraphic(5, darkAlpha, lightAlpha);
 Generates the QR Code as an SVG string — perfect for web and vector documents.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("https://example.com", QRCodeGenerator.ECCLevel.Q);
 using var svg = new SvgQRCode(data);
@@ -155,6 +180,13 @@ string logoSvg = svg.GetGraphic(10, SKColors.Black, SKColors.White, logo: logoOb
 Generates the QR Code as Base64-encoded string — useful for embedding in HTML/CSS.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Base64 Data", QRCodeGenerator.ECCLevel.M);
 using var b64 = new Base64QRCode(data);
@@ -175,6 +207,13 @@ string htmlImg = $"<img src=\"data:image/png;base64,{base64Png}\" alt=\"QR Code\
 Generates the QR Code as a PDF document in bytes.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("PDF Document", QRCodeGenerator.ECCLevel.M);
 using var pdf = new PdfByteQRCode(data);
@@ -192,6 +231,13 @@ byte[] colorPdf = pdf.GetGraphic(5, "#000080", "#FFFFFF", 300, 95);
 Generates the QR Code as ASCII text — useful for terminal output and logs.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Terminal QR", QRCodeGenerator.ECCLevel.L);
 using var ascii = new AsciiQRCode(data);
@@ -218,6 +264,13 @@ string result = AsciiQRCodeHelper.GetQRCode("Quick!", 1, "██", "  ",
 Generates the QR Code in Postscript or EPS format.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Print Quality", QRCodeGenerator.ECCLevel.M);
 using var ps = new PostscriptQRCode(data);
@@ -242,6 +295,13 @@ string viewBoxPs = ps.GetGraphic(new Size(200, 200));
 Generates QR Codes with artistic styling (dots instead of squares).
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Artistic QR", QRCodeGenerator.ECCLevel.H);
 using var art = new ArtQRCode(data);
@@ -268,6 +328,13 @@ using var customBmp = art.GetGraphic(10, SKColors.Black, SKColors.White,
 Generates the QR Code as a Windows Bitmap byte array.
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("BMP test", QRCodeGenerator.ECCLevel.M);
 using var bmp = new SKBitmapByteQRCode(data);
@@ -292,6 +359,13 @@ The `PayloadGenerator` creates structured content for various QR Code types:
 ### WiFi
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var wifi = new PayloadGenerator.WiFi("MyNetwork", "MyPassword123",
     PayloadGenerator.WiFi.Authentication.WPA);
 string content = wifi.ToString();
@@ -304,6 +378,13 @@ var hiddenWifi = new PayloadGenerator.WiFi("HiddenNet", "Password",
 ### URL
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var url = new PayloadGenerator.Url("https://github.com/afonsoft/QRCoder.Core");
 string content = url.ToString();
 ```
@@ -311,6 +392,13 @@ string content = url.ToString();
 ### Email
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var email = new PayloadGenerator.Mail("contact@example.com",
     "Email Subject", "Message body");
 string content = email.ToString();
@@ -319,6 +407,13 @@ string content = email.ToString();
 ### SMS
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var sms = new PayloadGenerator.SMS("+1234567890", "Hello via QR Code!");
 string content = sms.ToString();
 ```
@@ -326,6 +421,13 @@ string content = sms.ToString();
 ### Phone Number
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var phone = new PayloadGenerator.PhoneNumber("+1234567890");
 string content = phone.ToString();
 // Result: tel:+1234567890
@@ -334,6 +436,13 @@ string content = phone.ToString();
 ### Geolocation
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var geo = new PayloadGenerator.Geolocation("40.7128", "-74.0060");
 string content = geo.ToString();
 // Result: geo:40.7128,-74.0060
@@ -342,6 +451,13 @@ string content = geo.ToString();
 ### Bitcoin
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var btc = new PayloadGenerator.BitcoinAddress(
     "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
     amount: 0.001,
@@ -353,6 +469,13 @@ string content = btc.ToString();
 ### vCard (Contact)
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var contact = new PayloadGenerator.ContactData(
     PayloadGenerator.ContactData.ContactOutputType.VCard3,
     firstname: "John",
@@ -370,6 +493,13 @@ string content = contact.ToString();
 ### Calendar Event
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 var calEvent = new PayloadGenerator.CalendarEvent(
     "Team Meeting",
     "Event description",
@@ -396,6 +526,13 @@ string content = calEvent.ToString();
 ### Data Serialization
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Serializable data", QRCodeGenerator.ECCLevel.M);
 
@@ -415,6 +552,13 @@ using var fromBytes = new QRCodeData(rawBytes, QRCodeData.Compression.Deflate);
 ### Force UTF-8
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 // Force UTF-8 encoding with BOM
 using var data = generator.CreateQrCode("Text with special characters",
@@ -426,6 +570,13 @@ using var data = generator.CreateQrCode("Text with special characters",
 ### Fixed QR Code Version
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 // Force QR Code version 10 (57x57 modules)
 using var data = generator.CreateQrCode("Text",
@@ -450,6 +601,13 @@ using var data = generator.CreateQrCode("Text",
 ### ASP.NET Core API Example
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 [HttpGet("qrcode")]
 public IActionResult GenerateQRCode([FromQuery] string text)
 {
@@ -465,6 +623,13 @@ public IActionResult GenerateQRCode([FromQuery] string text)
 ### .NET MAUI / Xamarin Example
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 public ImageSource GenerateQRCodeImage(string text)
 {
     using var generator = new QRCodeGenerator();
@@ -479,6 +644,13 @@ public ImageSource GenerateQRCodeImage(string text)
 ### Console Example
 
 ```csharp
+using System;
+using System.IO;
+using QRCoder.Core.Generators;
+using QRCoder.Core.Models;
+using QRCoder.Core.Renderers;
+using SkiaSharp;
+
 using var generator = new QRCodeGenerator();
 using var data = generator.CreateQrCode("Terminal!", QRCodeGenerator.ECCLevel.L);
 using var ascii = new AsciiQRCode(data);
