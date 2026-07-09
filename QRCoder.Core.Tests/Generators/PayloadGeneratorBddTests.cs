@@ -217,7 +217,7 @@ namespace QRCoder.Core.Tests.Generators
                 result.ShouldContain("E");
                 result.ShouldContain("F");
                 result.ShouldContain("IBAN");
-                result.ShouldContain("DESC");
+                result.ShouldContain("Desc");
                 result.ShouldContain("00000000123");
             }
 
