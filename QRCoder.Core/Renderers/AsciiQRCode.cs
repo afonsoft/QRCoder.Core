@@ -59,13 +59,15 @@ namespace QRCoder.Core.Renderers
             var quietZonesOffset = (int)(quietZonesModifier * 0.5);
             var adjustmentValueForNumberOfCharacters = darkSKColorString.Length / 2 != 1 ? darkSKColorString.Length / 2 : 0;
             var verticalNumberOfRepeats = repeatPerModule + adjustmentValueForNumberOfCharacters;
-            var sideLength = (QrCodeData.ModuleMatrix.Count - quietZonesModifier) * verticalNumberOfRepeats;
+            var moduleCount = QrCodeData.ModuleMatrix.Count - quietZonesModifier;
+            var sideLength = moduleCount * verticalNumberOfRepeats;
             for (var y = 0; y < sideLength; y++)
             {
                 var lineBuilder = new StringBuilder();
-                for (var x = 0; x < QrCodeData.ModuleMatrix.Count - quietZonesModifier; x++)
+                var moduleRow = ((y + verticalNumberOfRepeats) / verticalNumberOfRepeats - 1) + quietZonesOffset;
+                for (var x = 0; x < moduleCount; x++)
                 {
-                    var module = QrCodeData.ModuleMatrix[x + quietZonesOffset][((y + verticalNumberOfRepeats) / verticalNumberOfRepeats - 1) + quietZonesOffset];
+                    var module = QrCodeData.ModuleMatrix[moduleRow][x + quietZonesOffset];
                     for (var i = 0; i < repeatPerModule; i++)
                     {
                         lineBuilder.Append(module ? darkSKColorString : whiteSpaceString);

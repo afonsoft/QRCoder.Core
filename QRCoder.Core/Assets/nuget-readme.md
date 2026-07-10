@@ -34,7 +34,7 @@ File.WriteAllBytes("qrcode.png", pngBytes);
 | **PNG** | `PngByteQRCode` | `new PngByteQRCode(data).GetGraphic(10)` → `byte[]` |
 | **SVG** | `SvgQRCode` | `new SvgQRCode(data).GetGraphic(10)` → `string` |
 | **PDF** | `PdfByteQRCode` | `new PdfByteQRCode(data).GetGraphic(5)` → `byte[]` |
-| **ASCII** | `ASCIIQRCode` | `new ASCIIQRCode(data).GetGraphic(1)` → `string` |
+| **ASCII** | `AsciiQRCode` | `new AsciiQRCode(data).GetGraphic(1)` → `string` |
 | **Base64** | `Base64QRCode` | `new Base64QRCode(data).GetGraphic(10)` → `string` |
 | **SKBitmap** | `QRCode` | `new QRCode(data).GetGraphic(10)` → `SKBitmap` |
 | **Postscript** | `PostscriptQRCode` | `new PostscriptQRCode(data).GetGraphic(5)` → `string` |
@@ -59,7 +59,7 @@ using var svg = new SvgQRCode(data);
 string svgString = svg.GetGraphic(10);
 
 // ASCII (terminal)
-using var ascii = new ASCIIQRCode(data);
+using var ascii = new AsciiQRCode(data);
 Console.WriteLine(ascii.GetGraphic(1));
 
 // PDF

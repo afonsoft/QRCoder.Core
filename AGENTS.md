@@ -29,7 +29,7 @@ QRCoder.Core/                  # Biblioteca principal
 │   ├── PngByteQRCode.cs       # PNG puro (.NET)
 │   ├── SvgQRCode.cs           # SVG string
 │   ├── PdfByteQRCode.cs       # PDF byte array
-│   ├── ASCIIQRCode.cs         # ASCII art
+│   ├── AsciiQRCode.cs         # ASCII art
 │   ├── Base64QRCode.cs        # Base64 image
 │   ├── PostscriptQRCode.cs    # Postscript/EPS
 │   ├── ArtQRCode.cs           # QR artístico
