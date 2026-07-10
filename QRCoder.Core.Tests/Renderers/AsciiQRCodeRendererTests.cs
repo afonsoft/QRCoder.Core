@@ -14,35 +14,7 @@ namespace QRCoder.Core.Tests
         [Category("QRRenderer/AsciiQRCode")]
         public void can_render_ascii_qrcode()
         {
-            var targetCode = @"                                                          
-                                                          
-                                                          
-                                                          
-        ██████████████  ████  ██    ██████████████        
-        ██          ██  ████    ██  ██          ██        
-        ██  ██████  ██  ██  ██  ██  ██  ██████  ██        
-        ██  ██████  ██  ██      ██  ██  ██████  ██        
-        ██  ██████  ██  ██████████  ██  ██████  ██        
-        ██          ██              ██          ██        
-        ██████████████  ██  ██  ██  ██████████████        
-                        ██████████                        
-          ████  ██  ████    ██████  ██  ██████████        
-        ██        ██        ██      ██    ██  ████        
-            ████  ██████  ██████        ██████  ██        
-        ████      ██  ██████  ██    ██        ██          
-          ████    ████  ██  ██      ██  ██  ████          
-                        ██    ██  ██  ██  ██              
-        ██████████████  ██  ████  ██████    ██            
-        ██          ██    ██    ████  ██████              
-        ██  ██████  ██  ██████  ████████    ██  ██        
-        ██  ██████  ██    ██        ██      ████          
-        ██  ██████  ██  ██████  ██      ██      ██        
-        ██          ██  ██  ██      ██      ██████        
-        ██████████████    ██    ██  ██  ██  ██  ██        
-                                                          
-                                                          
-                                                          
-                                                          ";
+            var targetCode = "                                                          \n                                                          \n                                                          \n                                                          \n        ██████████████  ████  ██    ██████████████        \n        ██          ██  ████    ██  ██          ██        \n        ██  ██████  ██  ██  ██  ██  ██  ██████  ██        \n        ██  ██████  ██  ██      ██  ██  ██████  ██        \n        ██  ██████  ██  ██████████  ██  ██████  ██        \n        ██          ██              ██          ██        \n        ██████████████  ██  ██  ██  ██████████████        \n                        ██████████                        \n          ████  ██  ████    ██████  ██  ██████████        \n        ██        ██        ██      ██    ██  ████        \n            ████  ██████  ██████        ██████  ██        \n        ████      ██  ██████  ██    ██        ██          \n          ████    ████  ██  ██      ██  ██  ████          \n                        ██    ██  ██  ██  ██              \n        ██████████████  ██  ████  ██████    ██            \n        ██          ██    ██    ████  ██████              \n        ██  ██████  ██  ██████  ████████    ██  ██        \n        ██  ██████  ██    ██        ██      ████          \n        ██  ██████  ██  ██████  ██      ██      ██        \n        ██          ██  ██  ██      ██      ██████        \n        ██████████████    ██    ██  ██  ██  ██  ██        \n                                                          \n                                                          \n                                                          \n                                                          ";
 
             //Create QR code
             var gen = new QRCodeGenerator();
@@ -56,27 +28,7 @@ namespace QRCoder.Core.Tests
         [Category("QRRenderer/AsciiQRCode")]
         public void can_render_ascii_qrcode_without_quietzones()
         {
-            var targetCode = @"██████████████  ████  ██    ██████████████
-██          ██  ████    ██  ██          ██
-██  ██████  ██  ██  ██  ██  ██  ██████  ██
-██  ██████  ██  ██      ██  ██  ██████  ██
-██  ██████  ██  ██████████  ██  ██████  ██
-██          ██              ██          ██
-██████████████  ██  ██  ██  ██████████████
-                ██████████                
-  ████  ██  ████    ██████  ██  ██████████
-██        ██        ██      ██    ██  ████
-    ████  ██████  ██████        ██████  ██
-████      ██  ██████  ██    ██        ██  
-  ████    ████  ██  ██      ██  ██  ████  
-                ██    ██  ██  ██  ██      
-██████████████  ██  ████  ██████    ██    
-██          ██    ██    ████  ██████      
-██  ██████  ██  ██████  ████████    ██  ██
-██  ██████  ██    ██        ██      ████  
-██  ██████  ██  ██████  ██      ██      ██
-██          ██  ██  ██      ██      ██████
-██████████████    ██    ██  ██  ██  ██  ██";
+            var targetCode = "██████████████  ████  ██    ██████████████\n██          ██  ████    ██  ██          ██\n██  ██████  ██  ██  ██  ██  ██  ██████  ██\n██  ██████  ██  ██      ██  ██  ██████  ██\n██  ██████  ██  ██████████  ██  ██████  ██\n██          ██              ██          ██\n██████████████  ██  ██  ██  ██████████████\n                ██████████                \n  ████  ██  ████    ██████  ██  ██████████\n██        ██        ██      ██    ██  ████\n    ████  ██████  ██████        ██████  ██\n████      ██  ██████  ██    ██        ██  \n  ████    ████  ██  ██      ██  ██  ████  \n                ██    ██  ██  ██  ██      \n██████████████  ██  ████  ██████    ██    \n██          ██    ██    ████  ██████      \n██  ██████  ██  ██████  ████████    ██  ██\n██  ██████  ██    ██        ██      ████  \n██  ██████  ██  ██████  ██      ██      ██\n██          ██  ██  ██      ██      ██████\n██████████████    ██    ██  ██  ██  ██  ██";
 
             //Create QR code
             var gen = new QRCodeGenerator();
@@ -90,64 +42,7 @@ namespace QRCoder.Core.Tests
         [Category("QRRenderer/AsciiQRCode")]
         public void can_render_ascii_qrcode_with_custom_symbols()
         {
-            var targetCode = @"                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        
-        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        
-        XX          XX        XXXX  XX          XX        
-        XX          XX        XXXX  XX          XX        
-        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        
-        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        
-        XX          XX  XX      XX  XX          XX        
-        XX          XX  XX      XX  XX          XX        
-        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        
-        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        
-                          XX  XX                          
-                          XX  XX                          
-          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            
-          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            
-          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        
-          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        
-          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            
-          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            
-        XX  XX  XX    XX  XX    XXXXXX  XX  XX            
-        XX  XX  XX    XX  XX    XXXXXX  XX  XX            
-        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        
-        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        
-                        XXXXXX    XXXX      XX  XX        
-                        XXXXXX    XXXX      XX  XX        
-        XXXXXXXXXXXXXX        XXXXXX            XX        
-        XXXXXXXXXXXXXX        XXXXXX            XX        
-        XX          XX          XX    XX  XX              
-        XX          XX          XX    XX  XX              
-        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        
-        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        
-        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        
-        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        
-        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            
-        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            
-        XX          XX  XX        XXXX  XX  XX  XX        
-        XX          XX  XX        XXXX  XX  XX  XX        
-        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        
-        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          ";
+            var targetCode = "                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        \n        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        \n        XX          XX        XXXX  XX          XX        \n        XX          XX        XXXX  XX          XX        \n        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        \n        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        \n        XX          XX  XX      XX  XX          XX        \n        XX          XX  XX      XX  XX          XX        \n        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        \n        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        \n                          XX  XX                          \n                          XX  XX                          \n          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            \n          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            \n          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        \n          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        \n          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            \n          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            \n        XX  XX  XX    XX  XX    XXXXXX  XX  XX            \n        XX  XX  XX    XX  XX    XXXXXX  XX  XX            \n        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        \n        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        \n                        XXXXXX    XXXX      XX  XX        \n                        XXXXXX    XXXX      XX  XX        \n        XXXXXXXXXXXXXX        XXXXXX            XX        \n        XXXXXXXXXXXXXX        XXXXXX            XX        \n        XX          XX          XX    XX  XX              \n        XX          XX          XX    XX  XX              \n        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        \n        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        \n        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        \n        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        \n        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            \n        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            \n        XX          XX  XX        XXXX  XX  XX  XX        \n        XX          XX  XX        XXXX  XX  XX  XX        \n        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        \n        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          ";
 
             //Create QR code
             var gen = new QRCodeGenerator();
@@ -170,64 +65,7 @@ namespace QRCoder.Core.Tests
         [Category("QRRenderer/AsciiQRCode")]
         public void can_render_ascii_qrcode_from_helper()
         {
-            var targetCode = @"                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        
-        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        
-        XX          XX        XXXX  XX          XX        
-        XX          XX        XXXX  XX          XX        
-        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        
-        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        
-        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        
-        XX          XX  XX      XX  XX          XX        
-        XX          XX  XX      XX  XX          XX        
-        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        
-        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        
-                          XX  XX                          
-                          XX  XX                          
-          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            
-          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            
-          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        
-          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        
-          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            
-          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            
-        XX  XX  XX    XX  XX    XXXXXX  XX  XX            
-        XX  XX  XX    XX  XX    XXXXXX  XX  XX            
-        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        
-        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        
-                        XXXXXX    XXXX      XX  XX        
-                        XXXXXX    XXXX      XX  XX        
-        XXXXXXXXXXXXXX        XXXXXX            XX        
-        XXXXXXXXXXXXXX        XXXXXX            XX        
-        XX          XX          XX    XX  XX              
-        XX          XX          XX    XX  XX              
-        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        
-        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        
-        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        
-        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        
-        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            
-        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            
-        XX          XX  XX        XXXX  XX  XX  XX        
-        XX          XX  XX        XXXX  XX  XX  XX        
-        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        
-        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          
-                                                          ";
+            var targetCode = "                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        \n        XXXXXXXXXXXXXX    XX        XXXXXXXXXXXXXX        \n        XX          XX        XXXX  XX          XX        \n        XX          XX        XXXX  XX          XX        \n        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX        XX  XXXXXX  XX        \n        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX    XX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        \n        XX  XXXXXX  XX  XXXX    XX  XX  XXXXXX  XX        \n        XX          XX  XX      XX  XX          XX        \n        XX          XX  XX      XX  XX          XX        \n        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        \n        XXXXXXXXXXXXXX  XX  XX  XX  XXXXXXXXXXXXXX        \n                          XX  XX                          \n                          XX  XX                          \n          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            \n          XX    XX  XX  XXXXXX  XXXX  XXXX  XX            \n          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        \n          XXXXXX  XX  XXXX      XX    XX  XX  XXXX        \n          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            \n          XXXXXX    XXXXXXXXXX      XXXXXXXXXX            \n        XX  XX  XX    XX  XX    XXXXXX  XX  XX            \n        XX  XX  XX    XX  XX    XXXXXX  XX  XX            \n        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        \n        XXXXXX      XXXX  XX  XX  XXXX      XX  XX        \n                        XXXXXX    XXXX      XX  XX        \n                        XXXXXX    XXXX      XX  XX        \n        XXXXXXXXXXXXXX        XXXXXX            XX        \n        XXXXXXXXXXXXXX        XXXXXX            XX        \n        XX          XX          XX    XX  XX              \n        XX          XX          XX    XX  XX              \n        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        \n        XX  XXXXXX  XX  XXXXXXXXXX  XXXXXXXXXXXXXX        \n        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        \n        XX  XXXXXX  XX    XX  XXXX    XX  XX  XXXX        \n        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            \n        XX  XXXXXX  XX    XXXXXX    XXXXXXXXXX            \n        XX          XX  XX        XXXX  XX  XX  XX        \n        XX          XX  XX        XXXX  XX  XX  XX        \n        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        \n        XXXXXXXXXXXXXX    XX    XXXXXX      XXXXXX        \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          \n                                                          ";
 
             var asciiCode = AsciiQRCodeHelper.GetQRCode("A", 2, "X", " ", QRCodeGenerator.ECCLevel.Q);
             asciiCode.ShouldBe(targetCode);

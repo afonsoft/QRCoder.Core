@@ -30,7 +30,7 @@ jobs:
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
         with:
-          args: --linter,qodana-community-for-net --baseline,qodana.sarif.json --fail-threshold,0
+          args: --linter,qodana-cdnet --project,QRCoder.Core/QRCoder.Core.csproj --baseline,qodana.sarif.json --fail-threshold,0
           cache-default-branch-only: true
           upload-result: false
           primary-cache-key: qodana-2025.3-refs/heads/main-${{ github.sha }}
