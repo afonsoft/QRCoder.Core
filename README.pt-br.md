@@ -27,7 +27,7 @@ Baseado em [QRCoder](https://github.com/codebude/QRCoder). Desenvolvido e mantid
 | **PNG** | `PngByteQRCode` | Array de bytes PNG (sem System.Drawing) |
 | **SVG** | `SvgQRCode` | String de graficos vetoriais escalaveis |
 | **PDF** | `PdfByteQRCode` | Documento PDF como array de bytes |
-| **ASCII** | `ASCIIQRCode` | Arte ASCII para saida em terminal |
+| **ASCII** | `AsciiQRCode` | Arte ASCII para saida em terminal |
 | **Base64** | `Base64QRCode` | String de imagem codificada em Base64 |
 | **Postscript** | `PostscriptQRCode` | Formato Postscript/EPS |
 | **Artistico** | `ArtQRCode` | QR personalizado com pontos arredondados e fundos |
@@ -144,7 +144,7 @@ using var svg = new SvgQRCode(data);
 string svgString = svg.GetGraphic(10);
 
 // Saida ASCII (otimo para terminal)
-using var ascii = new ASCIIQRCode(data);
+using var ascii = new AsciiQRCode(data);
 Console.WriteLine(ascii.GetGraphic(1));
 
 // Saida PDF

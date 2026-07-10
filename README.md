@@ -27,7 +27,7 @@ Based on [QRCoder](https://github.com/codebude/QRCoder). Developed and maintaine
 | **PNG** | `PngByteQRCode` | PNG byte array (no System.Drawing needed) |
 | **SVG** | `SvgQRCode` | Scalable vector graphics string |
 | **PDF** | `PdfByteQRCode` | PDF document as byte array |
-| **ASCII** | `ASCIIQRCode` | ASCII art for terminal output |
+| **ASCII** | `AsciiQRCode` | ASCII art for terminal output |
 | **Base64** | `Base64QRCode` | Base64-encoded image string |
 | **Postscript** | `PostscriptQRCode` | Postscript/EPS format |
 | **Artistic** | `ArtQRCode` | Custom QR with rounded dots and backgrounds |
@@ -150,7 +150,7 @@ using var svg = new SvgQRCode(data);
 string svgString = svg.GetGraphic(10);
 
 // ASCII output (great for terminal)
-using var ascii = new ASCIIQRCode(data);
+using var ascii = new AsciiQRCode(data);
 Console.WriteLine(ascii.GetGraphic(1));
 
 // PDF output
@@ -230,7 +230,7 @@ See the full **[Usage Guide](docs/en-US/usage-guide.md)** for all output formats
 │   ├── PngByteQRCode.cs       # PNG byte array renderer
 │   ├── SvgQRCode.cs           # SVG string renderer
 │   ├── PdfByteQRCode.cs       # PDF byte array renderer
-│   ├── ASCIIQRCode.cs         # ASCII art renderer
+│   ├── AsciiQRCode.cs         # ASCII art renderer
 │   ├── Base64QRCode.cs        # Base64 image renderer
 │   ├── PostscriptQRCode.cs    # Postscript/EPS renderer
 │   ├── ArtQRCode.cs           # Artistic QR code renderer
