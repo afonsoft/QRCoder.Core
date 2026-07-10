@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -48,7 +48,7 @@ jobs:
           echo "LIBGL_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri" >> $GITHUB_ENV
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -115,7 +115,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Cache NuGet Packages
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
@@ -154,7 +154,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🔍 Security Scan (QRCoder.Core)
         run: |
@@ -175,7 +175,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
@@ -202,7 +202,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 🗄️ Setup .NET
         uses: actions/setup-dotnet@v5
@@ -228,7 +228,7 @@ jobs:
           fi
 
       - name: 📊 Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           files: TestResults/CoverageReport/Summary.xml
           flags: unittests
@@ -277,7 +277,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
