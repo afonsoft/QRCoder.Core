@@ -335,6 +335,14 @@ reportgenerator \
 
 - **Afonso Dutra Nogueira Filho** (AFONSOFT) — Lead developer
 
+## Star History
+
+See the [star history chart](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left) for this repository.
+
+## StarMapper
+
+[![StarMapper Map](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core/opengraph-image)](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core)
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
