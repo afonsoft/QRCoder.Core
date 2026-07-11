@@ -337,7 +337,7 @@ reportgenerator \
 
 ## Star History
 
-See the [star history chart](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left) for this repository.
+[![Star History Chart](https://api.star-history.com/chart?repos=afonsoft/QRCoder.Core&type=date&legend=top-left&sealed_token=a1KQPztifboHTq3RlLRkwvvPGw3dtFbndqZQpJxDeVkKCiIiJQyi1kuTEocyVlxTQ_wR7U0f6lQ1gBk00x7MNA3wOhureCKWKGRw0nT27SQSXMsSECsH8w)](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left)
 
 ## StarMapper
 
