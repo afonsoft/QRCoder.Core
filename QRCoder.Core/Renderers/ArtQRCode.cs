@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using SkiaSharp;
 using static QRCoder.Core.Renderers.ArtQRCode;
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -238,7 +238,13 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         public enum QuietZoneStyle
         {
+            /// <summary>
+            /// dotted.
+            /// </summary>
             Dotted,
+            /// <summary>
+            /// flat.
+            /// </summary>
             Flat
         }
 
@@ -247,11 +253,20 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         public enum BackgroundImageStyle
         {
+            /// <summary>
+            /// fill.
+            /// </summary>
             Fill,
+            /// <summary>
+            /// data area only.
+            /// </summary>
             DataAreaOnly
         }
     }
 
+    /// <summary>
+    /// Represents a art qr code helper.
+    /// </summary>
     public static class ArtQRCodeHelper
     {
         /// <summary>

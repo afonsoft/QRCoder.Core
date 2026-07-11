@@ -1,4 +1,4 @@
-using QRCoder.Core.Extensions;
+﻿using QRCoder.Core.Extensions;
 using System;
 using System.Collections;
 using SkiaSharp;
@@ -23,6 +23,10 @@ namespace QRCoder.Core.Renderers
         public SvgQRCode()
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SvgQRCode"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public SvgQRCode(QRCodeData data) : base(data)
         {
         }
@@ -259,7 +263,13 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         public enum SizingMode
         {
+            /// <summary>
+            /// width height attribute.
+            /// </summary>
             WidthHeightAttribute,
+            /// <summary>
+            /// view box attribute.
+            /// </summary>
             ViewBoxAttribute
         }
 
@@ -375,17 +385,42 @@ namespace QRCoder.Core.Renderers
             /// </summary>
             public enum MediaType : int
             {
+                /// <summary>
+                /// png.
+                /// </summary>
                 [StringValue("image/png")]
                 PNG = 0,
 
+                /// <summary>
+                /// svg.
+                /// </summary>
                 [StringValue("image/svg+xml")]
                 SVG = 1
             }
         }
     }
 
+    /// <summary>
+    /// Represents a svg qr code helper.
+    /// </summary>
     public static class SvgQRCodeHelper
     {
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColorHex">The dark sk color hex.</param>
+        /// <param name="lightSKColorHex">The light sk color hex.</param>
+        /// <param name="eccLevel">The ecc level.</param>
+        /// <param name="forceUtf8">The force utf8.</param>
+        /// <param name="utf8BOM">The utf8bom.</param>
+        /// <param name="eciMode">The eci mode.</param>
+        /// <param name="requestedVersion">The requested version.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <param name="sizingMode">The sizing mode.</param>
+        /// <param name="logo">The logo.</param>
+        /// <returns>The string result.</returns>
         public static string GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHex, string lightSKColorHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true, SizingMode sizingMode = SizingMode.WidthHeightAttribute, SvgLogo logo = null)
         {
             using (var qrGenerator = new QRCodeGenerator())

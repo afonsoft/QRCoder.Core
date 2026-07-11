@@ -18,6 +18,9 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public abstract class Payload
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.Payload"/> class.
+            /// </summary>
             protected Payload()
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -41,6 +44,10 @@ namespace QRCoder.Core.Generators
             public virtual QRCodeGenerator.EciMode EciMode
             { get { return QRCodeGenerator.EciMode.Default; } }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public abstract override string ToString();
         }
 
@@ -70,16 +77,32 @@ namespace QRCoder.Core.Generators
                 this.isHiddenSsid = isHiddenSSID;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 return
                     $"WIFI:T:{this.authenticationMode};S:{this.ssid};P:{this.password};{(this.isHiddenSsid ? "H:true" : string.Empty)};";
             }
 
+            /// <summary>
+            /// Defines the authentication values.
+            /// </summary>
             public enum Authentication
             {
+                /// <summary>
+                /// wep.
+                /// </summary>
                 WEP,
+                /// <summary>
+                /// wpa.
+                /// </summary>
                 WPA,
+                /// <summary>
+                /// nopass.
+                /// </summary>
                 nopass
             }
         }
@@ -107,6 +130,10 @@ namespace QRCoder.Core.Generators
                 this.encoding = encoding;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var returnVal = string.Empty;
@@ -133,10 +160,22 @@ namespace QRCoder.Core.Generators
                 return returnVal;
             }
 
+            /// <summary>
+            /// Defines the mail encoding values.
+            /// </summary>
             public enum MailEncoding
             {
+                /// <summary>
+                /// mailto.
+                /// </summary>
                 MAILTO,
+                /// <summary>
+                /// matmsg.
+                /// </summary>
                 MATMSG,
+                /// <summary>
+                /// smtp.
+                /// </summary>
                 SMTP
             }
         }
@@ -174,6 +213,10 @@ namespace QRCoder.Core.Generators
                 this.encoding = encoding;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var returnVal = string.Empty;
@@ -200,10 +243,22 @@ namespace QRCoder.Core.Generators
                 return returnVal;
             }
 
+            /// <summary>
+            /// Defines the sms encoding values.
+            /// </summary>
             public enum SMSEncoding
             {
+                /// <summary>
+                /// sms.
+                /// </summary>
                 SMS,
+                /// <summary>
+                /// smsto.
+                /// </summary>
                 SMSTO,
+                /// <summary>
+                /// sms_i os.
+                /// </summary>
                 SMS_iOS
             }
         }
@@ -241,6 +296,10 @@ namespace QRCoder.Core.Generators
                 this.encoding = encoding;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var returnVal = string.Empty;
@@ -263,9 +322,18 @@ namespace QRCoder.Core.Generators
                 return returnVal;
             }
 
+            /// <summary>
+            /// Defines the mms encoding values.
+            /// </summary>
             public enum MMSEncoding
             {
+                /// <summary>
+                /// mms.
+                /// </summary>
                 MMS,
+                /// <summary>
+                /// mmsto.
+                /// </summary>
                 MMSTO
             }
         }
@@ -291,6 +359,10 @@ namespace QRCoder.Core.Generators
                 this.encoding = encoding;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 switch (this.encoding)
@@ -306,9 +378,18 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Defines the geolocation encoding values.
+            /// </summary>
             public enum GeolocationEncoding
             {
+                /// <summary>
+                /// geo.
+                /// </summary>
                 GEO,
+                /// <summary>
+                /// google maps.
+                /// </summary>
                 GoogleMaps
             }
         }
@@ -329,6 +410,10 @@ namespace QRCoder.Core.Generators
                 this.number = number;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 return $"tel:{this.number}";
@@ -351,6 +436,10 @@ namespace QRCoder.Core.Generators
                 this.skypeUsername = skypeUsername;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 return $"skype:{this.skypeUsername}?call";
@@ -373,6 +462,10 @@ namespace QRCoder.Core.Generators
                 this.url = url;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var urlFix = this.url.Replace("http:", "https:");
@@ -411,6 +504,10 @@ namespace QRCoder.Core.Generators
                 this.message = message;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var cleanedPhone = Regex.Replace(this.number, @"^[0+]+|[ ()-]", string.Empty);
@@ -436,6 +533,10 @@ namespace QRCoder.Core.Generators
                 this.title = EscapeInput(title);
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 return $"MEBKM:TITLE:{this.title};URL:{this.url};;";
@@ -515,6 +616,10 @@ namespace QRCoder.Core.Generators
                 this.outputType = outputType;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 string payload = string.Empty;
@@ -654,9 +759,21 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public enum ContactOutputType
             {
+                /// <summary>
+                /// me card.
+                /// </summary>
                 MeCard,
+                /// <summary>
+                /// v card21.
+                /// </summary>
                 VCard21,
+                /// <summary>
+                /// v card3.
+                /// </summary>
                 VCard3,
+                /// <summary>
+                /// v card4.
+                /// </summary>
                 VCard4
             }
 
@@ -667,7 +784,13 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public enum AddressOrder
             {
+                /// <summary>
+                /// default.
+                /// </summary>
                 Default,
+                /// <summary>
+                /// reversed.
+                /// </summary>
                 Reversed
             }
         }
@@ -707,6 +830,10 @@ namespace QRCoder.Core.Generators
                 this.amount = amount;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 string query = null;
@@ -758,6 +885,13 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public class BitcoinAddress : BitcoinLikeCryptoCurrencyAddress
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.BitcoinAddress"/> class.
+            /// </summary>
+            /// <param name="address">The address.</param>
+            /// <param name="amount">The amount.</param>
+            /// <param name="label">The label.</param>
+            /// <param name="message">The message.</param>
             public BitcoinAddress(string address, double? amount, string label = null, string message = null)
                 : base(BitcoinLikeCryptoCurrencyType.Bitcoin, address, amount, label, message) { }
         }
@@ -767,6 +901,13 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public class BitcoinCashAddress : BitcoinLikeCryptoCurrencyAddress
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.BitcoinCashAddress"/> class.
+            /// </summary>
+            /// <param name="address">The address.</param>
+            /// <param name="amount">The amount.</param>
+            /// <param name="label">The label.</param>
+            /// <param name="message">The message.</param>
             public BitcoinCashAddress(string address, double? amount, string label = null, string message = null)
                 : base(BitcoinLikeCryptoCurrencyType.BitcoinCash, address, amount, label, message) { }
         }
@@ -776,6 +917,13 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public class LitecoinAddress : BitcoinLikeCryptoCurrencyAddress
         {
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.LitecoinAddress"/> class.
+            /// </summary>
+            /// <param name="address">The address.</param>
+            /// <param name="amount">The amount.</param>
+            /// <param name="label">The label.</param>
+            /// <param name="message">The message.</param>
             public LitecoinAddress(string address, double? amount, string label = null, string message = null)
                 : base(BitcoinLikeCryptoCurrencyType.Litecoin, address, amount, label, message) { }
         }
@@ -846,6 +994,9 @@ namespace QRCoder.Core.Generators
                 this.alternativeProcedure2 = alternativeProcedure2;
             }
 
+            /// <summary>
+            /// Represents a additional information.
+            /// </summary>
             public class AdditionalInformation
             {
                 private readonly string unstructuredMessage, billInformation, trailer;
@@ -864,32 +1015,56 @@ namespace QRCoder.Core.Generators
                     this.trailer = "EPD";
                 }
 
+                /// <summary>
+                /// The unstructure message value.
+                /// </summary>
                 public string UnstructureMessage
                 {
                     get { return !string.IsNullOrEmpty(unstructuredMessage) ? unstructuredMessage.Replace("\n", "") : null; }
                 }
 
+                /// <summary>
+                /// The bill information value.
+                /// </summary>
                 public string BillInformation
                 {
                     get { return !string.IsNullOrEmpty(billInformation) ? billInformation.Replace("\n", "") : null; }
                 }
 
+                /// <summary>
+                /// The trailer value.
+                /// </summary>
                 public string Trailer
                 {
                     get { return trailer; }
                 }
 
+                /// <summary>
+                /// Represents a swiss qr code additional information exception.
+                /// </summary>
                 public class SwissQrCodeAdditionalInformationException : Exception
                 {
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.AdditionalInformation.SwissQrCodeAdditionalInformationException"/> class.
+                    /// </summary>
                     public SwissQrCodeAdditionalInformationException()
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.AdditionalInformation.SwissQrCodeAdditionalInformationException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
                     public SwissQrCodeAdditionalInformationException(string message)
                         : base(message)
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.AdditionalInformation.SwissQrCodeAdditionalInformationException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
+                    /// <param name="inner">The inner.</param>
                     public SwissQrCodeAdditionalInformationException(string message, Exception inner)
                         : base(message, inner)
                     {
@@ -897,6 +1072,9 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Represents a reference.
+            /// </summary>
             public class Reference
             {
                 private readonly ReferenceType referenceType;
@@ -930,11 +1108,17 @@ namespace QRCoder.Core.Generators
                     this.reference = reference;
                 }
 
+                /// <summary>
+                /// The ref type value.
+                /// </summary>
                 public ReferenceType RefType
                 {
                     get { return referenceType; }
                 }
 
+                /// <summary>
+                /// The reference text value.
+                /// </summary>
                 public string ReferenceText
                 {
                     get { return !string.IsNullOrEmpty(reference) ? reference.Replace("\n", "") : null; }
@@ -945,28 +1129,61 @@ namespace QRCoder.Core.Generators
                 /// </summary>
                 public enum ReferenceType
                 {
+                    /// <summary>
+                    /// qrr.
+                    /// </summary>
                     QRR,
+                    /// <summary>
+                    /// scor.
+                    /// </summary>
                     SCOR,
+                    /// <summary>
+                    /// non.
+                    /// </summary>
                     NON
                 }
 
+                /// <summary>
+                /// Defines the reference text type values.
+                /// </summary>
                 public enum ReferenceTextType
                 {
+                    /// <summary>
+                    /// qr reference.
+                    /// </summary>
                     QrReference,
+                    /// <summary>
+                    /// creditor reference iso11649.
+                    /// </summary>
                     CreditorReferenceIso11649
                 }
 
+                /// <summary>
+                /// Represents a swiss qr code reference exception.
+                /// </summary>
                 public class SwissQrCodeReferenceException : Exception
                 {
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Reference.SwissQrCodeReferenceException"/> class.
+                    /// </summary>
                     public SwissQrCodeReferenceException()
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Reference.SwissQrCodeReferenceException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
                     public SwissQrCodeReferenceException(string message)
                         : base(message)
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Reference.SwissQrCodeReferenceException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
+                    /// <param name="inner">The inner.</param>
                     public SwissQrCodeReferenceException(string message, Exception inner)
                         : base(message, inner)
                     {
@@ -974,6 +1191,9 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Represents a iban.
+            /// </summary>
             public class Iban
             {
                 private string iban;
@@ -996,33 +1216,64 @@ namespace QRCoder.Core.Generators
                     this.ibanType = ibanType;
                 }
 
+                /// <summary>
+                /// The is qr iban value.
+                /// </summary>
                 public bool IsQrIban
                 {
                     get { return ibanType == IbanType.QrIban; }
                 }
 
+                /// <summary>
+                /// Returns the string representation of the current object.
+                /// </summary>
+                /// <returns>The string result.</returns>
                 public override string ToString()
                 {
                     return iban.Replace("-", "").Replace("\n", "").Replace(" ", "");
                 }
 
+                /// <summary>
+                /// Defines the iban type values.
+                /// </summary>
                 public enum IbanType
                 {
+                    /// <summary>
+                    /// iban.
+                    /// </summary>
                     Iban,
+                    /// <summary>
+                    /// qr iban.
+                    /// </summary>
                     QrIban
                 }
 
+                /// <summary>
+                /// Represents a swiss qr code iban exception.
+                /// </summary>
                 public class SwissQrCodeIbanException : Exception
                 {
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Iban.SwissQrCodeIbanException"/> class.
+                    /// </summary>
                     public SwissQrCodeIbanException()
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Iban.SwissQrCodeIbanException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
                     public SwissQrCodeIbanException(string message)
                         : base(message)
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Iban.SwissQrCodeIbanException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
+                    /// <param name="inner">The inner.</param>
                     public SwissQrCodeIbanException(string message, Exception inner)
                         : base(message, inner)
                     {
@@ -1030,6 +1281,9 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Represents a contact.
+            /// </summary>
             public class Contact
             {
                 private static readonly HashSet<string> twoLetterCodes = ValidTwoLetterCodes();
@@ -1063,11 +1317,29 @@ namespace QRCoder.Core.Generators
                 {
                 }
 
+                /// <summary>
+                /// Creates a new contact with the specified address format.
+                /// </summary>
+                /// <param name="name">The name.</param>
+                /// <param name="zipCode">The zip code.</param>
+                /// <param name="city">The city.</param>
+                /// <param name="country">The country.</param>
+                /// <param name="street">The street.</param>
+                /// <param name="houseNumber">The house number.</param>
+                /// <returns>The contact result.</returns>
                 public static Contact WithStructuredAddress(string name, string zipCode, string city, string country, string street = null, string houseNumber = null)
                 {
                     return new Contact(name, zipCode, city, country, street, houseNumber, AddressType.StructuredAddress);
                 }
 
+                /// <summary>
+                /// Creates a new contact with the specified address format.
+                /// </summary>
+                /// <param name="name">The name.</param>
+                /// <param name="country">The country.</param>
+                /// <param name="addressLine1">The address line1.</param>
+                /// <param name="addressLine2">The address line2.</param>
+                /// <returns>The contact result.</returns>
                 public static Contact WithCombinedAddress(string name, string country, string addressLine1, string addressLine2)
                 {
                     return new Contact(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress);
@@ -1154,6 +1426,10 @@ namespace QRCoder.Core.Generators
                     return new HashSet<string>(codes, StringComparer.OrdinalIgnoreCase);
                 }
 
+                /// <summary>
+                /// Returns the string representation of the current object.
+                /// </summary>
+                /// <returns>The string result.</returns>
                 public override string ToString()
                 {
                     string contactData = $"{(AddressType.StructuredAddress == adrType ? "S" : "K")}{br}"; //AdrTp
@@ -1166,23 +1442,47 @@ namespace QRCoder.Core.Generators
                     return contactData;
                 }
 
+                /// <summary>
+                /// Defines the address type values.
+                /// </summary>
                 public enum AddressType
                 {
+                    /// <summary>
+                    /// structured address.
+                    /// </summary>
                     StructuredAddress,
+                    /// <summary>
+                    /// combined address.
+                    /// </summary>
                     CombinedAddress
                 }
 
+                /// <summary>
+                /// Represents a swiss qr code contact exception.
+                /// </summary>
                 public class SwissQrCodeContactException : Exception
                 {
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Contact.SwissQrCodeContactException"/> class.
+                    /// </summary>
                     public SwissQrCodeContactException()
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Contact.SwissQrCodeContactException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
                     public SwissQrCodeContactException(string message)
                         : base(message)
                     {
                     }
 
+                    /// <summary>
+                    /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Contact.SwissQrCodeContactException"/> class.
+                    /// </summary>
+                    /// <param name="message">The message.</param>
+                    /// <param name="inner">The inner.</param>
                     public SwissQrCodeContactException(string message, Exception inner)
                         : base(message, inner)
                     {
@@ -1190,6 +1490,10 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 //Header "logical" element
@@ -1247,21 +1551,42 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public enum Currency
             {
+                /// <summary>
+                /// chf.
+                /// </summary>
                 CHF = 756,
+                /// <summary>
+                /// eur.
+                /// </summary>
                 EUR = 978
             }
 
+            /// <summary>
+            /// Represents a swiss qr code exception.
+            /// </summary>
             public class SwissQrCodeException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.SwissQrCodeException"/> class.
+                /// </summary>
                 public SwissQrCodeException()
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.SwissQrCodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public SwissQrCodeException(string message)
                     : base(message)
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.SwissQrCodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
+                /// <param name="inner">The inner.</param>
                 public SwissQrCodeException(string message, Exception inner)
                     : base(message, inner)
                 {
@@ -1269,6 +1594,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a girocode.
+        /// </summary>
         public class Girocode : Payload
         {
             //Keep in mind, that the ECC level has to be set to "M" when generating a Girocode!
@@ -1328,6 +1656,10 @@ namespace QRCoder.Core.Generators
                 this.messageToGirocodeUser = messageToGirocodeUser;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var girocodePayload = "BCD" + br;
@@ -1350,41 +1682,101 @@ namespace QRCoder.Core.Generators
                 return ConvertStringToEncoding(girocodePayload, encoding.ToString().Replace("_", "-"));
             }
 
+            /// <summary>
+            /// Defines the girocode version values.
+            /// </summary>
             public enum GirocodeVersion
             {
+                /// <summary>
+                /// version1.
+                /// </summary>
                 Version1,
+                /// <summary>
+                /// version2.
+                /// </summary>
                 Version2
             }
 
+            /// <summary>
+            /// Defines the type of remittance values.
+            /// </summary>
             public enum TypeOfRemittance
             {
+                /// <summary>
+                /// structured.
+                /// </summary>
                 Structured,
+                /// <summary>
+                /// unstructured.
+                /// </summary>
                 Unstructured
             }
 
+            /// <summary>
+            /// Defines the girocode encoding values.
+            /// </summary>
             public enum GirocodeEncoding
             {
+                /// <summary>
+                /// utf_8.
+                /// </summary>
                 UTF_8,
+                /// <summary>
+                /// iso_8859_1.
+                /// </summary>
                 ISO_8859_1,
+                /// <summary>
+                /// iso_8859_2.
+                /// </summary>
                 ISO_8859_2,
+                /// <summary>
+                /// iso_8859_4.
+                /// </summary>
                 ISO_8859_4,
+                /// <summary>
+                /// iso_8859_5.
+                /// </summary>
                 ISO_8859_5,
+                /// <summary>
+                /// iso_8859_7.
+                /// </summary>
                 ISO_8859_7,
+                /// <summary>
+                /// iso_8859_10.
+                /// </summary>
                 ISO_8859_10,
+                /// <summary>
+                /// iso_8859_15.
+                /// </summary>
                 ISO_8859_15
             }
 
+            /// <summary>
+            /// Represents a girocode exception.
+            /// </summary>
             public class GirocodeException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.Girocode.GirocodeException"/> class.
+                /// </summary>
                 public GirocodeException()
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.Girocode.GirocodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public GirocodeException(string message)
                     : base(message)
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.Girocode.GirocodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
+                /// <param name="inner">The inner.</param>
                 public GirocodeException(string message, Exception inner)
                     : base(message, inner)
                 {
@@ -1392,6 +1784,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a bezahl code.
+        /// </summary>
         public class BezahlCode : Payload
         {
             //BezahlCode specification: http://www.bezahlcode.de/wp-content/uploads/BezahlCode_TechDok.pdf
@@ -1615,6 +2010,10 @@ namespace QRCoder.Core.Generators
                 }
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var bezahlCodePayload = $"bank://{authority}?";
@@ -1703,183 +2102,717 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public enum Currency
             {
+                /// <summary>
+                /// aed.
+                /// </summary>
                 AED = 784,
+                /// <summary>
+                /// afn.
+                /// </summary>
                 AFN = 971,
+                /// <summary>
+                /// all.
+                /// </summary>
                 ALL = 008,
+                /// <summary>
+                /// amd.
+                /// </summary>
                 AMD = 051,
+                /// <summary>
+                /// ang.
+                /// </summary>
                 ANG = 532,
+                /// <summary>
+                /// aoa.
+                /// </summary>
                 AOA = 973,
+                /// <summary>
+                /// ars.
+                /// </summary>
                 ARS = 032,
+                /// <summary>
+                /// aud.
+                /// </summary>
                 AUD = 036,
+                /// <summary>
+                /// awg.
+                /// </summary>
                 AWG = 533,
+                /// <summary>
+                /// azn.
+                /// </summary>
                 AZN = 944,
+                /// <summary>
+                /// bam.
+                /// </summary>
                 BAM = 977,
+                /// <summary>
+                /// bbd.
+                /// </summary>
                 BBD = 052,
+                /// <summary>
+                /// bdt.
+                /// </summary>
                 BDT = 050,
+                /// <summary>
+                /// bgn.
+                /// </summary>
                 BGN = 975,
+                /// <summary>
+                /// bhd.
+                /// </summary>
                 BHD = 048,
+                /// <summary>
+                /// bif.
+                /// </summary>
                 BIF = 108,
+                /// <summary>
+                /// bmd.
+                /// </summary>
                 BMD = 060,
+                /// <summary>
+                /// bnd.
+                /// </summary>
                 BND = 096,
+                /// <summary>
+                /// bob.
+                /// </summary>
                 BOB = 068,
+                /// <summary>
+                /// bov.
+                /// </summary>
                 BOV = 984,
+                /// <summary>
+                /// brl.
+                /// </summary>
                 BRL = 986,
+                /// <summary>
+                /// bsd.
+                /// </summary>
                 BSD = 044,
+                /// <summary>
+                /// btn.
+                /// </summary>
                 BTN = 064,
+                /// <summary>
+                /// bwp.
+                /// </summary>
                 BWP = 072,
+                /// <summary>
+                /// byr.
+                /// </summary>
                 BYR = 974,
+                /// <summary>
+                /// bzd.
+                /// </summary>
                 BZD = 084,
+                /// <summary>
+                /// cad.
+                /// </summary>
                 CAD = 124,
+                /// <summary>
+                /// cdf.
+                /// </summary>
                 CDF = 976,
+                /// <summary>
+                /// che.
+                /// </summary>
                 CHE = 947,
+                /// <summary>
+                /// chf.
+                /// </summary>
                 CHF = 756,
+                /// <summary>
+                /// chw.
+                /// </summary>
                 CHW = 948,
+                /// <summary>
+                /// clf.
+                /// </summary>
                 CLF = 990,
+                /// <summary>
+                /// clp.
+                /// </summary>
                 CLP = 152,
+                /// <summary>
+                /// cny.
+                /// </summary>
                 CNY = 156,
+                /// <summary>
+                /// cop.
+                /// </summary>
                 COP = 170,
+                /// <summary>
+                /// cou.
+                /// </summary>
                 COU = 970,
+                /// <summary>
+                /// crc.
+                /// </summary>
                 CRC = 188,
+                /// <summary>
+                /// cuc.
+                /// </summary>
                 CUC = 931,
+                /// <summary>
+                /// cup.
+                /// </summary>
                 CUP = 192,
+                /// <summary>
+                /// cve.
+                /// </summary>
                 CVE = 132,
+                /// <summary>
+                /// czk.
+                /// </summary>
                 CZK = 203,
+                /// <summary>
+                /// djf.
+                /// </summary>
                 DJF = 262,
+                /// <summary>
+                /// dkk.
+                /// </summary>
                 DKK = 208,
+                /// <summary>
+                /// dop.
+                /// </summary>
                 DOP = 214,
+                /// <summary>
+                /// dzd.
+                /// </summary>
                 DZD = 012,
+                /// <summary>
+                /// egp.
+                /// </summary>
                 EGP = 818,
+                /// <summary>
+                /// ern.
+                /// </summary>
                 ERN = 232,
+                /// <summary>
+                /// etb.
+                /// </summary>
                 ETB = 230,
+                /// <summary>
+                /// eur.
+                /// </summary>
                 EUR = 978,
+                /// <summary>
+                /// fjd.
+                /// </summary>
                 FJD = 242,
+                /// <summary>
+                /// fkp.
+                /// </summary>
                 FKP = 238,
+                /// <summary>
+                /// gbp.
+                /// </summary>
                 GBP = 826,
+                /// <summary>
+                /// gel.
+                /// </summary>
                 GEL = 981,
+                /// <summary>
+                /// ghs.
+                /// </summary>
                 GHS = 936,
+                /// <summary>
+                /// gip.
+                /// </summary>
                 GIP = 292,
+                /// <summary>
+                /// gmd.
+                /// </summary>
                 GMD = 270,
+                /// <summary>
+                /// gnf.
+                /// </summary>
                 GNF = 324,
+                /// <summary>
+                /// gtq.
+                /// </summary>
                 GTQ = 320,
+                /// <summary>
+                /// gyd.
+                /// </summary>
                 GYD = 328,
+                /// <summary>
+                /// hkd.
+                /// </summary>
                 HKD = 344,
+                /// <summary>
+                /// hnl.
+                /// </summary>
                 HNL = 340,
+                /// <summary>
+                /// hrk.
+                /// </summary>
                 HRK = 191,
+                /// <summary>
+                /// htg.
+                /// </summary>
                 HTG = 332,
+                /// <summary>
+                /// huf.
+                /// </summary>
                 HUF = 348,
+                /// <summary>
+                /// idr.
+                /// </summary>
                 IDR = 360,
+                /// <summary>
+                /// ils.
+                /// </summary>
                 ILS = 376,
+                /// <summary>
+                /// inr.
+                /// </summary>
                 INR = 356,
+                /// <summary>
+                /// iqd.
+                /// </summary>
                 IQD = 368,
+                /// <summary>
+                /// irr.
+                /// </summary>
                 IRR = 364,
+                /// <summary>
+                /// isk.
+                /// </summary>
                 ISK = 352,
+                /// <summary>
+                /// jmd.
+                /// </summary>
                 JMD = 388,
+                /// <summary>
+                /// jod.
+                /// </summary>
                 JOD = 400,
+                /// <summary>
+                /// jpy.
+                /// </summary>
                 JPY = 392,
+                /// <summary>
+                /// kes.
+                /// </summary>
                 KES = 404,
+                /// <summary>
+                /// kgs.
+                /// </summary>
                 KGS = 417,
+                /// <summary>
+                /// khr.
+                /// </summary>
                 KHR = 116,
+                /// <summary>
+                /// kmf.
+                /// </summary>
                 KMF = 174,
+                /// <summary>
+                /// kpw.
+                /// </summary>
                 KPW = 408,
+                /// <summary>
+                /// krw.
+                /// </summary>
                 KRW = 410,
+                /// <summary>
+                /// kwd.
+                /// </summary>
                 KWD = 414,
+                /// <summary>
+                /// kyd.
+                /// </summary>
                 KYD = 136,
+                /// <summary>
+                /// kzt.
+                /// </summary>
                 KZT = 398,
+                /// <summary>
+                /// lak.
+                /// </summary>
                 LAK = 418,
+                /// <summary>
+                /// lbp.
+                /// </summary>
                 LBP = 422,
+                /// <summary>
+                /// lkr.
+                /// </summary>
                 LKR = 144,
+                /// <summary>
+                /// lrd.
+                /// </summary>
                 LRD = 430,
+                /// <summary>
+                /// lsl.
+                /// </summary>
                 LSL = 426,
+                /// <summary>
+                /// lyd.
+                /// </summary>
                 LYD = 434,
+                /// <summary>
+                /// mad.
+                /// </summary>
                 MAD = 504,
+                /// <summary>
+                /// mdl.
+                /// </summary>
                 MDL = 498,
+                /// <summary>
+                /// mga.
+                /// </summary>
                 MGA = 969,
+                /// <summary>
+                /// mkd.
+                /// </summary>
                 MKD = 807,
+                /// <summary>
+                /// mmk.
+                /// </summary>
                 MMK = 104,
+                /// <summary>
+                /// mnt.
+                /// </summary>
                 MNT = 496,
+                /// <summary>
+                /// mop.
+                /// </summary>
                 MOP = 446,
+                /// <summary>
+                /// mro.
+                /// </summary>
                 MRO = 478,
+                /// <summary>
+                /// mur.
+                /// </summary>
                 MUR = 480,
+                /// <summary>
+                /// mvr.
+                /// </summary>
                 MVR = 462,
+                /// <summary>
+                /// mwk.
+                /// </summary>
                 MWK = 454,
+                /// <summary>
+                /// mxn.
+                /// </summary>
                 MXN = 484,
+                /// <summary>
+                /// mxv.
+                /// </summary>
                 MXV = 979,
+                /// <summary>
+                /// myr.
+                /// </summary>
                 MYR = 458,
+                /// <summary>
+                /// mzn.
+                /// </summary>
                 MZN = 943,
+                /// <summary>
+                /// nad.
+                /// </summary>
                 NAD = 516,
+                /// <summary>
+                /// ngn.
+                /// </summary>
                 NGN = 566,
+                /// <summary>
+                /// nio.
+                /// </summary>
                 NIO = 558,
+                /// <summary>
+                /// nok.
+                /// </summary>
                 NOK = 578,
+                /// <summary>
+                /// npr.
+                /// </summary>
                 NPR = 524,
+                /// <summary>
+                /// nzd.
+                /// </summary>
                 NZD = 554,
+                /// <summary>
+                /// omr.
+                /// </summary>
                 OMR = 512,
+                /// <summary>
+                /// pab.
+                /// </summary>
                 PAB = 590,
+                /// <summary>
+                /// pen.
+                /// </summary>
                 PEN = 604,
+                /// <summary>
+                /// pgk.
+                /// </summary>
                 PGK = 598,
+                /// <summary>
+                /// php.
+                /// </summary>
                 PHP = 608,
+                /// <summary>
+                /// pkr.
+                /// </summary>
                 PKR = 586,
+                /// <summary>
+                /// pln.
+                /// </summary>
                 PLN = 985,
+                /// <summary>
+                /// pyg.
+                /// </summary>
                 PYG = 600,
+                /// <summary>
+                /// qar.
+                /// </summary>
                 QAR = 634,
+                /// <summary>
+                /// ron.
+                /// </summary>
                 RON = 946,
+                /// <summary>
+                /// rsd.
+                /// </summary>
                 RSD = 941,
+                /// <summary>
+                /// rub.
+                /// </summary>
                 RUB = 643,
+                /// <summary>
+                /// rwf.
+                /// </summary>
                 RWF = 646,
+                /// <summary>
+                /// sar.
+                /// </summary>
                 SAR = 682,
+                /// <summary>
+                /// sbd.
+                /// </summary>
                 SBD = 090,
+                /// <summary>
+                /// scr.
+                /// </summary>
                 SCR = 690,
+                /// <summary>
+                /// sdg.
+                /// </summary>
                 SDG = 938,
+                /// <summary>
+                /// sek.
+                /// </summary>
                 SEK = 752,
+                /// <summary>
+                /// sgd.
+                /// </summary>
                 SGD = 702,
+                /// <summary>
+                /// shp.
+                /// </summary>
                 SHP = 654,
+                /// <summary>
+                /// sll.
+                /// </summary>
                 SLL = 694,
+                /// <summary>
+                /// sos.
+                /// </summary>
                 SOS = 706,
+                /// <summary>
+                /// srd.
+                /// </summary>
                 SRD = 968,
+                /// <summary>
+                /// ssp.
+                /// </summary>
                 SSP = 728,
+                /// <summary>
+                /// std.
+                /// </summary>
                 STD = 678,
+                /// <summary>
+                /// svc.
+                /// </summary>
                 SVC = 222,
+                /// <summary>
+                /// syp.
+                /// </summary>
                 SYP = 760,
+                /// <summary>
+                /// szl.
+                /// </summary>
                 SZL = 748,
+                /// <summary>
+                /// thb.
+                /// </summary>
                 THB = 764,
+                /// <summary>
+                /// tjs.
+                /// </summary>
                 TJS = 972,
+                /// <summary>
+                /// tmt.
+                /// </summary>
                 TMT = 934,
+                /// <summary>
+                /// tnd.
+                /// </summary>
                 TND = 788,
+                /// <summary>
+                /// top.
+                /// </summary>
                 TOP = 776,
+                /// <summary>
+                /// try.
+                /// </summary>
                 TRY = 949,
+                /// <summary>
+                /// ttd.
+                /// </summary>
                 TTD = 780,
+                /// <summary>
+                /// twd.
+                /// </summary>
                 TWD = 901,
+                /// <summary>
+                /// tzs.
+                /// </summary>
                 TZS = 834,
+                /// <summary>
+                /// uah.
+                /// </summary>
                 UAH = 980,
+                /// <summary>
+                /// ugx.
+                /// </summary>
                 UGX = 800,
+                /// <summary>
+                /// usd.
+                /// </summary>
                 USD = 840,
+                /// <summary>
+                /// usn.
+                /// </summary>
                 USN = 997,
+                /// <summary>
+                /// uyi.
+                /// </summary>
                 UYI = 940,
+                /// <summary>
+                /// uyu.
+                /// </summary>
                 UYU = 858,
+                /// <summary>
+                /// uzs.
+                /// </summary>
                 UZS = 860,
+                /// <summary>
+                /// vef.
+                /// </summary>
                 VEF = 937,
+                /// <summary>
+                /// vnd.
+                /// </summary>
                 VND = 704,
+                /// <summary>
+                /// vuv.
+                /// </summary>
                 VUV = 548,
+                /// <summary>
+                /// wst.
+                /// </summary>
                 WST = 882,
+                /// <summary>
+                /// xaf.
+                /// </summary>
                 XAF = 950,
+                /// <summary>
+                /// xag.
+                /// </summary>
                 XAG = 961,
+                /// <summary>
+                /// xau.
+                /// </summary>
                 XAU = 959,
+                /// <summary>
+                /// xba.
+                /// </summary>
                 XBA = 955,
+                /// <summary>
+                /// xbb.
+                /// </summary>
                 XBB = 956,
+                /// <summary>
+                /// xbc.
+                /// </summary>
                 XBC = 957,
+                /// <summary>
+                /// xbd.
+                /// </summary>
                 XBD = 958,
+                /// <summary>
+                /// xcd.
+                /// </summary>
                 XCD = 951,
+                /// <summary>
+                /// xdr.
+                /// </summary>
                 XDR = 960,
+                /// <summary>
+                /// xof.
+                /// </summary>
                 XOF = 952,
+                /// <summary>
+                /// xpd.
+                /// </summary>
                 XPD = 964,
+                /// <summary>
+                /// xpf.
+                /// </summary>
                 XPF = 953,
+                /// <summary>
+                /// xpt.
+                /// </summary>
                 XPT = 962,
+                /// <summary>
+                /// xsu.
+                /// </summary>
                 XSU = 994,
+                /// <summary>
+                /// xts.
+                /// </summary>
                 XTS = 963,
+                /// <summary>
+                /// xua.
+                /// </summary>
                 XUA = 965,
+                /// <summary>
+                /// xxx.
+                /// </summary>
                 XXX = 999,
+                /// <summary>
+                /// yer.
+                /// </summary>
                 YER = 886,
+                /// <summary>
+                /// zar.
+                /// </summary>
                 ZAR = 710,
+                /// <summary>
+                /// zmw.
+                /// </summary>
                 ZMW = 967,
+                /// <summary>
+                /// zwl.
+                /// </summary>
                 ZWL = 932
             }
 
@@ -1932,17 +2865,32 @@ namespace QRCoder.Core.Generators
                 contact_v2
             }
 
+            /// <summary>
+            /// Represents a bezahl code exception.
+            /// </summary>
             public class BezahlCodeException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.BezahlCode.BezahlCodeException"/> class.
+                /// </summary>
                 public BezahlCodeException()
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.BezahlCode.BezahlCodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public BezahlCodeException(string message)
                     : base(message)
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.BezahlCode.BezahlCodeException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
+                /// <param name="inner">The inner.</param>
                 public BezahlCodeException(string message, Exception inner)
                     : base(message, inner)
                 {
@@ -1950,6 +2898,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a calendar event.
+        /// </summary>
         public class CalendarEvent : Payload
         {
             private readonly string subject, description, location, start, end;
@@ -1976,6 +2927,10 @@ namespace QRCoder.Core.Generators
                 this.end = end.ToString(dtFormat);
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var vEvent = $"BEGIN:VEVENT{Environment.NewLine}";
@@ -1992,22 +2947,46 @@ namespace QRCoder.Core.Generators
                 return vEvent;
             }
 
+            /// <summary>
+            /// Defines the event encoding values.
+            /// </summary>
             public enum EventEncoding
             {
+                /// <summary>
+                /// i cal complete.
+                /// </summary>
                 iCalComplete,
+                /// <summary>
+                /// universal.
+                /// </summary>
                 Universal
             }
         }
 
+        /// <summary>
+        /// Represents a one time password.
+        /// </summary>
         public class OneTimePassword : Payload
         {
             //https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+            /// <summary>
+            /// Gets or sets the type.
+            /// </summary>
             public OneTimePasswordAuthType Type { get; set; } = OneTimePasswordAuthType.TOTP;
 
+            /// <summary>
+            /// Gets or sets the secret.
+            /// </summary>
             public string Secret { get; set; }
 
+            /// <summary>
+            /// Gets or sets the auth algorithm.
+            /// </summary>
             public OneTimePasswordAuthAlgorithm AuthAlgorithm { get; set; } = OneTimePasswordAuthAlgorithm.SHA1;
 
+            /// <summary>
+            /// The algorithm value.
+            /// </summary>
             [Obsolete("This property is obsolete, use " + nameof(AuthAlgorithm) + " instead", false)]
             public OoneTimePasswordAuthAlgorithm Algorithm
             {
@@ -2015,33 +2994,85 @@ namespace QRCoder.Core.Generators
                 set { AuthAlgorithm = (OneTimePasswordAuthAlgorithm)Enum.Parse(typeof(OneTimePasswordAuthAlgorithm), value.ToString()); }
             }
 
+            /// <summary>
+            /// Gets or sets the issuer.
+            /// </summary>
             public string Issuer { get; set; }
+            /// <summary>
+            /// Gets or sets the label.
+            /// </summary>
             public string Label { get; set; }
+            /// <summary>
+            /// Gets or sets the digits.
+            /// </summary>
             public int Digits { get; set; } = 6;
+            /// <summary>
+            /// Gets or sets the counter.
+            /// </summary>
             public int? Counter { get; set; } = null;
+            /// <summary>
+            /// Gets or sets the period.
+            /// </summary>
             public int? Period { get; set; } = 30;
 
+            /// <summary>
+            /// Defines the one time password auth type values.
+            /// </summary>
             public enum OneTimePasswordAuthType
             {
+                /// <summary>
+                /// totp.
+                /// </summary>
                 TOTP,
+                /// <summary>
+                /// hotp.
+                /// </summary>
                 HOTP,
             }
 
+            /// <summary>
+            /// Defines the one time password auth algorithm values.
+            /// </summary>
             public enum OneTimePasswordAuthAlgorithm
             {
+                /// <summary>
+                /// sha1.
+                /// </summary>
                 SHA1,
+                /// <summary>
+                /// sha256.
+                /// </summary>
                 SHA256,
+                /// <summary>
+                /// sha512.
+                /// </summary>
                 SHA512,
             }
 
+            /// <summary>
+            /// Defines the oone time password auth algorithm values.
+            /// </summary>
             [Obsolete("This enum is obsolete, use " + nameof(OneTimePasswordAuthAlgorithm) + " instead", false)]
             public enum OoneTimePasswordAuthAlgorithm
             {
+                /// <summary>
+                /// sha1.
+                /// </summary>
                 SHA1,
+                /// <summary>
+                /// sha256.
+                /// </summary>
                 SHA256,
+                /// <summary>
+                /// sha512.
+                /// </summary>
                 SHA512,
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 return Type switch
@@ -2134,6 +3165,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a shadow socks config.
+        /// </summary>
         public class ShadowSocksConfig : Payload
         {
             private readonly string hostname, password, tag, methodStr, parameter;
@@ -2198,6 +3232,16 @@ namespace QRCoder.Core.Generators
                 this(hostname, port, password, method, null, tag)
             { }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig"/> class.
+            /// </summary>
+            /// <param name="hostname">The hostname.</param>
+            /// <param name="port">The port.</param>
+            /// <param name="password">The password.</param>
+            /// <param name="method">The method.</param>
+            /// <param name="plugin">The plugin.</param>
+            /// <param name="pluginOption">The plugin option.</param>
+            /// <param name="tag">The tag.</param>
             public ShadowSocksConfig(string hostname, int port, string password, Method method, string plugin, string pluginOption, string tag = null) :
                 this(hostname, port, password, method, new Dictionary<string, string>
                 {
@@ -2253,6 +3297,15 @@ namespace QRCoder.Core.Generators
                 return j;
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig"/> class.
+            /// </summary>
+            /// <param name="hostname">The hostname.</param>
+            /// <param name="port">The port.</param>
+            /// <param name="password">The password.</param>
+            /// <param name="method">The method.</param>
+            /// <param name="parameters">The parameters.</param>
+            /// <param name="tag">The tag.</param>
             public ShadowSocksConfig(string hostname, int port, string password, Method method, Dictionary<string, string> parameters, string tag = null)
             {
                 this.hostname = Uri.CheckHostName(hostname) == UriHostNameType.IPv6
@@ -2274,6 +3327,10 @@ namespace QRCoder.Core.Generators
                         ).ToArray());
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 if (string.IsNullOrEmpty(parameter))
@@ -2290,76 +3347,205 @@ namespace QRCoder.Core.Generators
                 return $"ss://{authStringEncoded}@{hostname}:{port}/?{parameter}{(!string.IsNullOrEmpty(tag) ? $"#{tag}" : string.Empty)}";
             }
 
+            /// <summary>
+            /// Defines the method values.
+            /// </summary>
             public enum Method
             {
                 // AEAD
+                /// <summary>
+                /// chacha20ietf poly1305.
+                /// </summary>
                 Chacha20IetfPoly1305,
 
+                /// <summary>
+                /// aes128gcm.
+                /// </summary>
                 Aes128Gcm,
+                /// <summary>
+                /// aes192gcm.
+                /// </summary>
                 Aes192Gcm,
+                /// <summary>
+                /// aes256gcm.
+                /// </summary>
                 Aes256Gcm,
 
                 // AEAD, not standard
+                /// <summary>
+                /// x chacha20ietf poly1305.
+                /// </summary>
                 XChacha20IetfPoly1305,
 
                 // Stream cipher
+                /// <summary>
+                /// aes128cfb.
+                /// </summary>
                 Aes128Cfb,
 
+                /// <summary>
+                /// aes192cfb.
+                /// </summary>
                 Aes192Cfb,
+                /// <summary>
+                /// aes256cfb.
+                /// </summary>
                 Aes256Cfb,
+                /// <summary>
+                /// aes128ctr.
+                /// </summary>
                 Aes128Ctr,
+                /// <summary>
+                /// aes192ctr.
+                /// </summary>
                 Aes192Ctr,
+                /// <summary>
+                /// aes256ctr.
+                /// </summary>
                 Aes256Ctr,
+                /// <summary>
+                /// camellia128cfb.
+                /// </summary>
                 Camellia128Cfb,
+                /// <summary>
+                /// camellia192cfb.
+                /// </summary>
                 Camellia192Cfb,
+                /// <summary>
+                /// camellia256cfb.
+                /// </summary>
                 Camellia256Cfb,
+                /// <summary>
+                /// chacha20ietf.
+                /// </summary>
                 Chacha20Ietf,
 
                 // alias of Aes256Cfb
+                /// <summary>
+                /// aes256cb.
+                /// </summary>
                 Aes256Cb,
 
                 // Stream cipher, not standard
+                /// <summary>
+                /// aes128ofb.
+                /// </summary>
                 Aes128Ofb,
 
+                /// <summary>
+                /// aes192ofb.
+                /// </summary>
                 Aes192Ofb,
+                /// <summary>
+                /// aes256ofb.
+                /// </summary>
                 Aes256Ofb,
+                /// <summary>
+                /// aes128cfb1.
+                /// </summary>
                 Aes128Cfb1,
+                /// <summary>
+                /// aes192cfb1.
+                /// </summary>
                 Aes192Cfb1,
+                /// <summary>
+                /// aes256cfb1.
+                /// </summary>
                 Aes256Cfb1,
+                /// <summary>
+                /// aes128cfb8.
+                /// </summary>
                 Aes128Cfb8,
+                /// <summary>
+                /// aes192cfb8.
+                /// </summary>
                 Aes192Cfb8,
+                /// <summary>
+                /// aes256cfb8.
+                /// </summary>
                 Aes256Cfb8,
 
                 // Stream cipher, deprecated
+                /// <summary>
+                /// chacha20.
+                /// </summary>
                 Chacha20,
 
+                /// <summary>
+                /// bf cfb.
+                /// </summary>
                 BfCfb,
+                /// <summary>
+                /// rc4md5.
+                /// </summary>
                 Rc4Md5,
+                /// <summary>
+                /// salsa20.
+                /// </summary>
                 Salsa20,
 
                 // Not standard and not in acitve use
+                /// <summary>
+                /// des cfb.
+                /// </summary>
                 DesCfb,
 
+                /// <summary>
+                /// idea cfb.
+                /// </summary>
                 IdeaCfb,
+                /// <summary>
+                /// rc2cfb.
+                /// </summary>
                 Rc2Cfb,
+                /// <summary>
+                /// cast5cfb.
+                /// </summary>
                 Cast5Cfb,
+                /// <summary>
+                /// salsa20ctr.
+                /// </summary>
                 Salsa20Ctr,
+                /// <summary>
+                /// rc4.
+                /// </summary>
                 Rc4,
+                /// <summary>
+                /// seed cfb.
+                /// </summary>
                 SeedCfb,
+                /// <summary>
+                /// table.
+                /// </summary>
                 Table
             }
 
+            /// <summary>
+            /// Represents a shadow socks config exception.
+            /// </summary>
             public class ShadowSocksConfigException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig.ShadowSocksConfigException"/> class.
+                /// </summary>
                 public ShadowSocksConfigException()
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig.ShadowSocksConfigException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public ShadowSocksConfigException(string message)
                     : base(message)
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig.ShadowSocksConfigException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
+                /// <param name="inner">The inner.</param>
                 public ShadowSocksConfigException(string message, Exception inner)
                     : base(message, inner)
                 {
@@ -2367,6 +3553,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a monero transaction.
+        /// </summary>
         public class MoneroTransaction : Payload
         {
             private readonly string address, txPaymentId, recipientName, txDescription;
@@ -2393,6 +3582,10 @@ namespace QRCoder.Core.Generators
                 this.txDescription = txDescription;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var moneroUri = $"monero://{address}{(!string.IsNullOrEmpty(txPaymentId) || !string.IsNullOrEmpty(recipientName) || !string.IsNullOrEmpty(txDescription) || txAmount != null ? "?" : string.Empty)}";
@@ -2403,17 +3596,32 @@ namespace QRCoder.Core.Generators
                 return moneroUri.TrimEnd('&');
             }
 
+            /// <summary>
+            /// Represents a monero transaction exception.
+            /// </summary>
             public class MoneroTransactionException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.MoneroTransaction.MoneroTransactionException"/> class.
+                /// </summary>
                 public MoneroTransactionException()
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.MoneroTransaction.MoneroTransactionException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public MoneroTransactionException(string message)
                     : base(message)
                 {
                 }
 
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.MoneroTransaction.MoneroTransactionException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
+                /// <param name="inner">The inner.</param>
                 public MoneroTransactionException(string message, Exception inner)
                     : base(message, inner)
                 {
@@ -2421,6 +3629,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a slovenian upn qr.
+        /// </summary>
         public class SlovenianUpnQr : Payload
         {
             //Keep in mind, that the ECC level has to be set to "M", version to 15 and ECI to EciMode.Iso8859_2 when generating a SlovenianUpnQr!
@@ -2440,12 +3651,21 @@ namespace QRCoder.Core.Generators
             private string _recipientSiModel = "";
             private string _recipientSiReference = "";
 
+            /// <summary>
+            /// The version value.
+            /// </summary>
             public override int Version
             { get { return 15; } }
 
+            /// <summary>
+            /// The ecc level value.
+            /// </summary>
             public override QRCodeGenerator.ECCLevel EccLevel
             { get { return QRCodeGenerator.ECCLevel.M; } }
 
+            /// <summary>
+            /// The eci mode value.
+            /// </summary>
             public override QRCodeGenerator.EciMode EciMode
             { get { return QRCodeGenerator.EciMode.Iso8859_2; } }
 
@@ -2454,10 +3674,41 @@ namespace QRCoder.Core.Generators
                 return (value.Length <= maxLength) ? value : value.Substring(0, maxLength);
             }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.SlovenianUpnQr"/> class.
+            /// </summary>
+            /// <param name="payerName">The payer name.</param>
+            /// <param name="payerAddress">The payer address.</param>
+            /// <param name="payerPlace">The payer place.</param>
+            /// <param name="recipientName">The recipient name.</param>
+            /// <param name="recipientAddress">The recipient address.</param>
+            /// <param name="recipientPlace">The recipient place.</param>
+            /// <param name="recipientIban">The recipient iban.</param>
+            /// <param name="description">The description.</param>
+            /// <param name="amount">The amount.</param>
+            /// <param name="recipientSiModel">The recipient si model.</param>
+            /// <param name="recipientSiReference">The recipient si reference.</param>
+            /// <param name="code">The code.</param>
             public SlovenianUpnQr(string payerName, string payerAddress, string payerPlace, string recipientName, string recipientAddress, string recipientPlace, string recipientIban, string description, double amount, string recipientSiModel = "SI00", string recipientSiReference = "", string code = "OTHR") :
                 this(payerName, payerAddress, payerPlace, recipientName, recipientAddress, recipientPlace, recipientIban, description, amount, null, recipientSiModel, recipientSiReference, code)
             { }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.SlovenianUpnQr"/> class.
+            /// </summary>
+            /// <param name="payerName">The payer name.</param>
+            /// <param name="payerAddress">The payer address.</param>
+            /// <param name="payerPlace">The payer place.</param>
+            /// <param name="recipientName">The recipient name.</param>
+            /// <param name="recipientAddress">The recipient address.</param>
+            /// <param name="recipientPlace">The recipient place.</param>
+            /// <param name="recipientIban">The recipient iban.</param>
+            /// <param name="description">The description.</param>
+            /// <param name="amount">The amount.</param>
+            /// <param name="deadline">The deadline.</param>
+            /// <param name="recipientSiModel">The recipient si model.</param>
+            /// <param name="recipientSiReference">The recipient si reference.</param>
+            /// <param name="code">The code.</param>
             public SlovenianUpnQr(string payerName, string payerAddress, string payerPlace, string recipientName, string recipientAddress, string recipientPlace, string recipientIban, string description, double amount, DateTime? deadline, string recipientSiModel = "SI99", string recipientSiReference = "", string code = "OTHR")
             {
                 _payerName = LimitLength(payerName.Trim(), 33);
@@ -2500,6 +3751,10 @@ namespace QRCoder.Core.Generators
                 return _cs;
             }
 
+            /// <summary>
+            /// Returns the string representation of the current object.
+            /// </summary>
+            /// <returns>The string result.</returns>
             public override string ToString()
             {
                 var _sb = new StringBuilder();
@@ -2522,6 +3777,9 @@ namespace QRCoder.Core.Generators
             }
         }
 
+        /// <summary>
+        /// Represents a russia payment order.
+        /// </summary>
         public class RussiaPaymentOrder : Payload
         {
             // Specification of RussianPaymentOrder
@@ -2714,6 +3972,9 @@ namespace QRCoder.Core.Generators
                 public string CorrespAcc;
             }
 
+            /// <summary>
+            /// Represents a optional fields.
+            /// </summary>
             public class OptionalFields
             {
                 private string _sum;
@@ -3071,32 +4332,96 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public enum TechCode
             {
+                /// <summary>
+                /// мобильная_связь_стационарный_телефон.
+                /// </summary>
                 Мобильная_связь_стационарный_телефон = 01,
+                /// <summary>
+                /// коммунальные_услуги_жкхafn.
+                /// </summary>
                 Коммунальные_услуги_ЖКХAFN = 02,
+                /// <summary>
+                /// гибдд_налоги_пошлины_бюджетные_платежи.
+                /// </summary>
                 ГИБДД_налоги_пошлины_бюджетные_платежи = 03,
+                /// <summary>
+                /// охранные_услуги.
+                /// </summary>
                 Охранные_услуги = 04,
+                /// <summary>
+                /// услуги_оказываемые_уфмс.
+                /// </summary>
                 Услуги_оказываемые_УФМС = 05,
+                /// <summary>
+                /// пфр.
+                /// </summary>
                 ПФР = 06,
+                /// <summary>
+                /// погашение_кредитов.
+                /// </summary>
                 Погашение_кредитов = 07,
+                /// <summary>
+                /// образовательные_учреждения.
+                /// </summary>
                 Образовательные_учреждения = 08,
+                /// <summary>
+                /// интернет_и_тв.
+                /// </summary>
                 Интернет_и_ТВ = 09,
+                /// <summary>
+                /// электронные_деньги.
+                /// </summary>
                 Электронные_деньги = 10,
+                /// <summary>
+                /// отдых_и_путешествия.
+                /// </summary>
                 Отдых_и_путешествия = 11,
+                /// <summary>
+                /// инвестиции_и_страхование.
+                /// </summary>
                 Инвестиции_и_страхование = 12,
+                /// <summary>
+                /// спорт_и_здоровье.
+                /// </summary>
                 Спорт_и_здоровье = 13,
+                /// <summary>
+                /// благотворительные_и_общественные_организации.
+                /// </summary>
                 Благотворительные_и_общественные_организации = 14,
+                /// <summary>
+                /// прочие_услуги.
+                /// </summary>
                 Прочие_услуги = 15
             }
 
+            /// <summary>
+            /// Defines the character sets values.
+            /// </summary>
             public enum CharacterSets
             {
+                /// <summary>
+                /// windows_1251.
+                /// </summary>
                 windows_1251 = 1,       // Encoding.GetEncoding("windows-1251")
+                /// <summary>
+                /// utf_8.
+                /// </summary>
                 utf_8 = 2,              // Encoding.UTF8
+                /// <summary>
+                /// koi8_r.
+                /// </summary>
                 koi8_r = 3              // Encoding.GetEncoding("koi8-r")
             }
 
+            /// <summary>
+            /// Represents a russia payment order exception.
+            /// </summary>
             public class RussiaPaymentOrderException : Exception
             {
+                /// <summary>
+                /// Initializes a new instance of the <see cref="PayloadGenerator.RussiaPaymentOrder.RussiaPaymentOrderException"/> class.
+                /// </summary>
+                /// <param name="message">The message.</param>
                 public RussiaPaymentOrderException(string message)
                     : base(message)
                 {
@@ -3170,6 +4495,11 @@ namespace QRCoder.Core.Generators
             return inp;
         }
 
+        /// <summary>
+        /// Performs the checksum mod10 operation.
+        /// </summary>
+        /// <param name="digits">The digits.</param>
+        /// <returns>The bool result.</returns>
         public static bool ChecksumMod10(string digits)
         {
             if (string.IsNullOrEmpty(digits) || digits.Length < 2)

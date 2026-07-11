@@ -20,6 +20,10 @@ namespace QRCoder.Core.Renderers
         public PngByteQRCode()
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PngByteQRCode"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public PngByteQRCode(QRCodeData data) : base(data)
         {
         }
@@ -321,8 +325,25 @@ namespace QRCoder.Core.Renderers
         }
     }
 
+    /// <summary>
+    /// Represents a png byte qr code helper.
+    /// </summary>
     public static class PngByteQRCodeHelper
     {
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
+        /// <param name="plainText">The plain text.</param>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColorRgba">The dark sk color rgba.</param>
+        /// <param name="lightSKColorRgba">The light sk color rgba.</param>
+        /// <param name="eccLevel">The ecc level.</param>
+        /// <param name="forceUtf8">The force utf8.</param>
+        /// <param name="utf8BOM">The utf8bom.</param>
+        /// <param name="eciMode">The eci mode.</param>
+        /// <param name="requestedVersion">The requested version.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <returns>The byte[] result.</returns>
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, byte[] darkSKColorRgba, byte[] lightSKColorRgba, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())
@@ -331,6 +352,14 @@ namespace QRCoder.Core.Renderers
                 return qrCode.GetGraphic(pixelsPerModule, darkSKColorRgba, lightSKColorRgba, drawQuietZones);
         }
 
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
+        /// <param name="txt">The txt.</param>
+        /// <param name="eccLevel">The ecc level.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <returns>The byte[] result.</returns>
         public static byte[] GetQRCode(string txt, QRCodeGenerator.ECCLevel eccLevel, int size, bool drawQuietZones = true)
         {
             using (var qrGen = new QRCodeGenerator())

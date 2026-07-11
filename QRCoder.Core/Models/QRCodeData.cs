@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -18,6 +18,10 @@ namespace QRCoder.Core.Models
         /// </summary>
         public List<BitArray> ModuleMatrix { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QRCodeData"/> class.
+        /// </summary>
+        /// <param name="version">The version.</param>
         public QRCodeData(int version)
         {
             this.Version = version;
@@ -185,6 +189,9 @@ namespace QRCoder.Core.Models
             File.WriteAllBytes(filePath, GetRawData(compressMode));
         }
 
+        /// <summary>
+        /// Gets or sets the version.
+        /// </summary>
         public int Version { get; private set; }
 
         private static int ModulesPerSideFromVersion(int version)
@@ -224,8 +231,17 @@ namespace QRCoder.Core.Models
         /// </summary>
         public enum Compression
         {
+            /// <summary>
+            /// uncompressed.
+            /// </summary>
             Uncompressed,
+            /// <summary>
+            /// deflate.
+            /// </summary>
             Deflate,
+            /// <summary>
+            /// g zip.
+            /// </summary>
             GZip
         }
     }

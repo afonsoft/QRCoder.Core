@@ -21,20 +21,43 @@ namespace QRCoder.Core.Renderers
         public SKBitmapByteQRCode()
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SKBitmapByteQRCode"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public SKBitmapByteQRCode(QRCodeData data) : base(data)
         {
         }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <returns>The byte[] result.</returns>
         public byte[] GetGraphic(int pixelsPerModule)
         {
             return GetGraphic(pixelsPerModule, new byte[] { 0x00, 0x00, 0x00 }, new byte[] { 0xFF, 0xFF, 0xFF });
         }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColorHtmlHex">The dark sk color html hex.</param>
+        /// <param name="lightSKColorHtmlHex">The light sk color html hex.</param>
+        /// <returns>The byte[] result.</returns>
         public byte[] GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex)
         {
             return GetGraphic(pixelsPerModule, HexSKColorToByteArray(darkSKColorHtmlHex), HexSKColorToByteArray(lightSKColorHtmlHex));
         }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColorRgb">The dark sk color rgb.</param>
+        /// <param name="lightSKColorRgb">The light sk color rgb.</param>
+        /// <returns>The byte[] result.</returns>
         public byte[] GetGraphic(int pixelsPerModule, byte[] darkSKColorRgb, byte[] lightSKColorRgb)
         {
             var sideLength = this.QrCodeData.ModuleMatrix.Count * pixelsPerModule;
@@ -107,8 +130,14 @@ namespace QRCoder.Core.Renderers
         }
     }
 
+    /// <summary>
+    /// Represents a sk bitmap byte qr code helper.
+    /// </summary>
     public static class SKBitmapByteQRCodeHelper
     {
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex,
             string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
             EciMode eciMode = EciMode.Default, int requestedVersion = -1)
@@ -121,6 +150,13 @@ namespace QRCoder.Core.Renderers
                 return qrCode.GetGraphic(pixelsPerModule, darkSKColorHtmlHex, lightSKColorHtmlHex);
         }
 
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
+        /// <param name="txt">The txt.</param>
+        /// <param name="eccLevel">The ecc level.</param>
+        /// <param name="size">The size.</param>
+        /// <returns>The byte[] result.</returns>
         public static byte[] GetQRCode(string txt, QRCodeGenerator.ECCLevel eccLevel, int size)
         {
             using (var qrGen = new QRCodeGenerator())

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +30,21 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public enum EciMode
         {
+            /// <summary>
+            /// default.
+            /// </summary>
             Default = 0,
+            /// <summary>
+            /// iso8859_1.
+            /// </summary>
             Iso8859_1 = 3,
+            /// <summary>
+            /// iso8859_2.
+            /// </summary>
             Iso8859_2 = 4,
+            /// <summary>
+            /// utf8.
+            /// </summary>
             Utf8 = 26
         }
 
