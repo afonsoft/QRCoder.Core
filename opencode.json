@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "server": {
+    "port": 4096,
+    "hostname": "0.0.0.0",
+    "mdns": true,
+    "cors": ["https://opencode.afonsoft.dev"]
+  },
+  "provider": {
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OmniRoute",
+      "options": {
+        "baseURL": "{env:OMNIROUTE_BASE_URL}",
+        "apiKey": "{env:OMNIROUTE_API_KEY}"
+      },
+      "models": {
+        "auto/claude-opus": { "name": "auto/claude-opus" },
+        "auto/claude-sonnet": { "name": "auto/claude-sonnet" },
+        "auto/pro-coding": { "name": "auto/pro-coding" },
+        "auto/best-coding": { "name": "auto/best-coding" }
+      }
+    }
+  }
+}
