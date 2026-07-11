@@ -282,6 +282,15 @@ The project uses GitHub Actions for automated build, test, security scanning, an
 
 - **Afonso Dutra Nogueira Filho** ([AFONSOFT](https://github.com/afonsoft)) — Lead developer
 
+## Star History / Histórico de Estrelas
+
+See the [star history chart](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left) for this repository.<br/>
+Veja o [gráfico de histórico de estrelas](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left) deste repositório.
+
+## StarMapper
+
+[![StarMapper Map](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core/opengraph-image)](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core)
+
 ## License / Licença
 
 This project is licensed under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.

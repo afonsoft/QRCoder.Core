@@ -359,6 +359,14 @@ reportgenerator \
 
 - **Afonso Dutra Nogueira Filho** (AFONSOFT) — Desenvolvedor principal
 
+## Historico de Estrelas
+
+Veja o [grafico de historico de estrelas](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left) deste repositorio.
+
+## StarMapper
+
+[![Mapa StarMapper](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core/opengraph-image)](https://starmapper.bruniaux.com/afonsoft/QRCoder.Core)
+
 ## Licenca
 
 Este projeto esta licenciado sob a Licenca MIT. Consulte o arquivo [LICENSE.txt](LICENSE.txt) para mais detalhes.
