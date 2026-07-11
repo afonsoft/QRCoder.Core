@@ -1,128 +1,84 @@
 # Changelog
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Todas as alterações notáveis deste projeto serão documentadas neste arquivo.
+
+O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
+e este projeto adere à [Semantic Versioning](https://semver.org/lang/pt-BR/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Added
-- SRE code quality improvements and architecture enhancements
-- SOLID principles implementation with validation framework
-- Domain-Driven Design patterns with Value Objects and Domain Services
-- Enhanced test coverage with BDD-style Portuguese tests
-- Clean Architecture separation between layers
+## [2.0.1] - 2026-07-11
 
-### Fixed
-- CS0618: Documented obsolete SkiaSharp SKFilterQuality warnings
-- Build stability improvements with proper dependency management
-- Test framework stability with graceful error handling
+### Adicionado
+- Documentação XML em todas as APIs públicas da biblioteca.
+- Seções de estrutura do repositório, visão de negócio e visão técnica nos READMEs.
+- `BDDTests.cs` com testes no estilo Dado/Quando/Então para validar geração e renderização de QR Codes.
 
-### Security
-- **Updated Security Tokens**: Standardized token usage across all GitHub Actions workflows
-  - `CODECOV_TOKEN`: Configured for codecov coverage uploads
-  - `NUGET_TOKEN`: Configured for NuGet.org publishing
-  - `SONNAR_TOKEN`: Updated from SONAR_TOKEN for SonarCloud analysis
-- Architecture improvements following security best practices
-- Enhanced validation framework for input sanitization
-- Proper dependency injection patterns
+### Alterado
+- Versão do pacote alterada de `2.0.0` para `2.0.1`.
+- Badges de CI, NuGet, SonarCloud e Codecov corrigidos/atualizados em `README.md`, `README.pt-br.md` e `readme.md`.
+- Links do SonarCloud ajustados para o projeto correto (`afonsoft_QRCoder.Core`).
+- `CHANGELOG.md` reescrito no padrão Keep a Changelog e SemVer.
 
-### Changed
-- Refactored validation system with extensible framework
-- Improved code organization following Clean Architecture
-- Enhanced test structure with better coverage reporting
-- **GitHub Actions**: Updated all workflows to use standardized security tokens
-- **Documentation**: Added security tokens configuration section to README
+### Corrigido
+- SonarQube S2184: divisão inteira no cálculo do tamanho de mídia do `PdfByteQRCode`.
+- SonarQube S4136: agrupamento dos overloads de `GetGraphic` em `QRCode` e `PdfByteQRCode`.
+- `CS1591` removido do `NoWarn` do `QRCoder.Core.csproj`; build agora é limpo sem warnings de documentação.
+
+## [2.0.0] - 2026-05-10
+
+### Alterado
+- Reorganização do código com separação em camadas inspiradas em SOLID e Clean Architecture.
+- Atualização dos frameworks-alvo para .NET Standard 2.1, .NET 8.0, .NET 10.0 e .NET Framework 4.8.
+- Documentação multi-idioma (en-US padrão + pt-BR).
+- Correção de testes e estabilização do build.
 
 ## [1.0.8] - 2026-02-18
 
-### Added
-- **SOLID Architecture**: Complete implementation of Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion principles
-- **DDD Patterns**: Value Objects (HexColor), Domain Services (QRCodeGenerationService), Repository pattern foundation
-- **Validation Framework**: Extensible IValidator<T> interface with concrete implementations
-- **Clean Architecture**: Proper layering between Domain, Application, Infrastructure, Presentation
-- **Enhanced Testing**: BDD-style tests in Portuguese with comprehensive coverage
-- **Code Quality**: Improved error handling, documentation, and type safety
+### Adicionado
+- Manipulação de bibliotecas nativas do SkiaSharp para CI no Linux.
+- Workflows de publicação consolidados e simplificados.
 
-### Fixed
-- **CS0618 Warnings**: Added TODO comments for obsolete SkiaSharp SKFilterQuality APIs
-- **Build Stability**: Resolved project file configuration issues
-- **Test Reliability**: Enhanced test stability with proper exception handling
+### Alterado
+- Atualização de dependências do GitHub Actions.
 
-### Security
-- **Input Validation**: Comprehensive validation framework for all user inputs
-- **Type Safety**: Immutable value objects with proper equality implementation
-- **Dependency Injection**: Secure dependency management with proper lifetime handling
+## [1.0.5] - 2025-07-13
 
-### Changed
-- **Architecture**: Refactored from monolithic to layered architecture
-- **Error Handling**: Implemented graceful degradation patterns
-- **Code Organization**: Separated concerns following SOLID principles
+### Alterado
+- Migração da renderização para SkiaSharp, removendo a dependência de `System.Drawing`.
+- Ajustes gerais no projeto, build e documentação.
 
-## [1.0.7] - 2026-02-17
+## [1.0.3] - 2024-04-01
 
-### Added
-- Comprehensive SRE stabilization and test coverage improvements
-- 13 new test cases for previously uncovered renderer classes
-- BDD-style tests in Portuguese (Dado, Quando, Então)
-- Comprehensive CHANGELOG.md following Keep a Changelog standard
-- Test coverage section to README.md with detailed metrics
+### Corrigido
+- Correções nas Actions do GitHub.
 
-### Fixed
-- SkiaSharp obsolete API warnings with TODO comments for future migration
-- Build warnings and project configuration issues
-- Test asset copying and path handling across platforms
+### Alterado
+- Atualização de dependências (`codecov/codecov-action`, `NuGet/setup-nuget`).
 
-### Security
-- Updated dependencies to latest secure versions
-- Enhanced dependency scanning workflows
+## [1.0.2] - 2024-03-12
 
-### Changed
-- Documentation updates with coverage metrics and changelog link
-- Improved CI/CD pipeline stability and error handling
+### Alterado
+- Ajustes de compatibilidade com .NET Framework 4.8 e netstandard2.1.
+- Melhorias no XML de documentação.
 
-## [1.0.6] - Previous Release
+## [1.0.1] - 2023-12-22
 
-### Added
-- Initial release of QRCoder.Core by AFONSOFT
-- Support for multiple QR code types (ASCII, Artistic, PNG, SVG, PDF, Base64)
-- Comprehensive payload generator for various data types
-- Cross-platform compatibility with SkiaSharp rendering engine
-
-### Features
-- **QR Code Types**: Standard, Artistic, ASCII, SVG, PNG, PDF, Base64
-- **Payload Support**: URL, WiFi, SMS, Email, Geographic Location, Contact Data, Calendar Events, Payment Information
-- **Rendering Options**: Custom colors, logos, quiet zones, transparency
-- **Cross-Platform**: Windows, Linux, macOS support
-- **.NET Support**: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
-
-### Test Coverage
-- **Line Coverage**: 78%
-- **Branch Coverage**: 83.1%
-- **Method Coverage**: 78.1%
-- **Total Tests**: 252 (All Passed)
-
----
+### Adicionado
+- Versão inicial do QRCoder.Core com suporte a múltiplos frameworks e QR Code generation.
 
 ## Migration Guide
 
-### From 1.0.7 to 1.0.8
-- **Architecture**: New SOLID-based validation framework
-- **Testing**: Enhanced BDD-style test structure
-- **Code Quality**: Improved error handling and type safety
-- **Documentation**: Updated with comprehensive coverage metrics
+### De 2.0.0 para 2.0.1
+- Nenhuma mudança quebradora. A versão foca em documentação, qualidade de código e correções de badges.
 
-### System Requirements
-- **.NET**: .NET Standard 2.1 or higher
-- **.NET 8.0+**: Recommended for best performance
-- **.NET Framework 4.8**: Windows-only support
-- **SkiaSharp**: Native dependencies handled automatically
+### De 1.0.x para 2.0.0
+- Os namespaces e a estrutura de pastas foram reorganizados. Atualize os `using` conforme a nova estrutura (`Abstractions`, `Models`, `Generators`, `Renderers`).
+- A biblioteca passou a depender exclusivamente do SkiaSharp para renderização cross-platform.
 
-### Dependencies
-- **Core**: SkiaSharp 3.119.0, System.Text.Encoding packages
-- **Performance**: Microsoft.Extensions.ObjectPool, System.Buffers, System.Memory
-- **Testing**: xUnit.Net v2, Shouldly assertions, Coverlet coverage
+## System Requirements
 
----
-
-*For more detailed information about each release, please refer to [GitHub Releases](https://github.com/afonsoft/QRCoder.Core/releases) page.*
+- **.NET**: .NET Standard 2.1 ou superior
+- **.NET 8.0+**: Recomendado para melhor desempenho
+- **.NET Framework 4.8**: Suporte Windows legado
+- **SkiaSharp**: Dependências nativas gerenciadas automaticamente

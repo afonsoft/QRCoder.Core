@@ -1,10 +1,10 @@
 # QRCoder.Core - QR Code Generator Library
 
-[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/build-and-pack.yml)
+[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml)
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
-[![NuGet Badge](https://buildstats.info/nuget/QRCoder.Core?rnd=0892982314)](https://www.nuget.org/packages/QRCoder.Core/)
-[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
+[![NuGet Badge](https://img.shields.io/nuget/v/QRCoder.Core.svg)](https://www.nuget.org/packages/QRCoder.Core/)
+[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=alert_status)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=security_rating)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
 
 > **[Leia em Portugues (pt-BR)](README.pt-br.md)**
 
@@ -64,14 +64,28 @@ The `PayloadGenerator` class provides formatted strings for common QR code use c
 
 | Metric | Coverage | Status |
 |--------|----------|--------|
-| **Line Coverage** | 78%+ | Good |
-| **Branch Coverage** | 83%+ | Excellent |
-| **Method Coverage** | 78%+ | Good |
-| **Total Tests** | 300+ | All Passed |
+| **Line Coverage** | 96.9% | Excellent |
+| **Branch Coverage** | 92.6% | Excellent |
+| **Method Coverage** | 96.0% | Excellent |
+| **Total Tests** | 502 | All Passed |
 
 ## Project Status
 
 **Complete** - Actively maintained with modern CI/CD pipelines.
+
+## Business Vision
+
+QRCoder.Core provides a lightweight, cross-platform foundation for QR code generation that can be embedded in any .NET product — from mobile and web backends to desktop and CLI tooling. The goal is to remove platform-specific graphics dependencies while offering a predictable, extensible API for multiple output formats and industry-standard payloads.
+
+## Technical Vision
+
+The library is organized as a **Clean Architecture** pipeline:
+
+- **Generation**: `QRCodeGenerator` builds an abstract `QRCodeData` matrix (models).
+- **Payloads**: `PayloadGenerator` formats standard data strings (Wi-Fi, vCard, SEPA, etc.) without coupling to rendering.
+- **Rendering**: `AbstractQRCode` implementations produce output formats (PNG, SVG, PDF, ASCII, Base64, Postscript, Art, BMP) using **SkiaSharp** for cross-platform bitmap rendering.
+- **Dependency rule**: `Abstractions` and `Models` have no external dependencies; `Renderers` and `Generators` depend only on `Models` and `Abstractions`.
+- **Quality gates**: build with zero warnings, xUnit tests with **~97% line coverage**, and static analysis via SonarCloud / Codecov / Snyk.
 
 ## Prerequisites
 
@@ -87,6 +101,15 @@ This library is compatible with multiple .NET versions:
 - **SkiaSharp** — Cross-platform graphics library for rendering
 - **SkiaSharp.Views** — SkiaSharp UI components
 - **System.Text.Encoding.CodePages** — Additional code page support
+- **Microsoft.Extensions.ObjectPool** — Reusable buffer pooling
+- **xUnit** — Unit testing framework
+- **Shouldly** — Assertion library
+- **coverlet** — Cross-platform code coverage
+- **dotnet-reportgenerator-globaltool** — Coverage report generation
+- **GitHub Actions** — CI/CD automation
+- **SonarCloud** — Static analysis and quality gates
+- **Codecov** — Coverage reporting
+- **Snyk** — Security vulnerability scanning
 
 ## Installation
 
@@ -105,7 +128,7 @@ dotnet add package QRCoder.Core
 ### PackageReference
 
 ```xml
-<PackageReference Include="QRCoder.Core" Version="2.0.0" />
+<PackageReference Include="QRCoder.Core" Version="2.0.1" />
 ```
 
 ## Quick Start
@@ -224,25 +247,35 @@ See the full **[Usage Guide](docs/en-US/usage-guide.md)** for all output formats
 ```
 .
 ├── QRCoder.Core/              # Core library source code
-│   ├── QRCodeGenerator.cs     # Main QR code data generator
-│   ├── QRCodeData.cs          # QR code data structure
-│   ├── QRCode.cs              # SKBitmap renderer
-│   ├── PngByteQRCode.cs       # PNG byte array renderer
-│   ├── SvgQRCode.cs           # SVG string renderer
-│   ├── PdfByteQRCode.cs       # PDF byte array renderer
-│   ├── AsciiQRCode.cs         # ASCII art renderer
-│   ├── Base64QRCode.cs        # Base64 image renderer
-│   ├── PostscriptQRCode.cs    # Postscript/EPS renderer
-│   ├── ArtQRCode.cs           # Artistic QR code renderer
-│   ├── BitmapByteQRCode.cs    # BMP byte array renderer
-│   ├── AbstractQRCode.cs      # Base class for renderers
-│   ├── PayloadGenerator.cs    # Payload formatters (WiFi, URL, etc.)
+│   ├── Abstractions/          # Abstract base class and contracts
+│   │   └── AbstractQRCode.cs  # Base class for all renderers
+│   ├── Models/                # QR code data model and value objects
+│   │   ├── QRCodeData.cs      # QR code data structure
+│   │   └── Size.cs            # Rendering size value object
+│   ├── Generators/            # QR code generation engine
+│   │   ├── QRCodeGenerator.cs # Main QR code data generator
+│   │   └── PayloadGenerator.cs# Payload formatters (WiFi, URL, etc.)
+│   ├── Renderers/             # Output format renderers
+│   │   ├── QRCode.cs          # SKBitmap renderer
+│   │   ├── PngByteQRCode.cs   # PNG byte array renderer
+│   │   ├── SvgQRCode.cs       # SVG string renderer
+│   │   ├── PdfByteQRCode.cs   # PDF byte array renderer
+│   │   ├── AsciiQRCode.cs     # ASCII art renderer
+│   │   ├── Base64QRCode.cs    # Base64 image renderer
+│   │   ├── PostscriptQRCode.cs# Postscript/EPS renderer
+│   │   ├── ArtQRCode.cs       # Artistic QR code renderer
+│   │   └── BitmapByteQRCode.cs# BMP byte array renderer
+│   ├── Extensions/            # SkiaSharp and helper extensions
+│   ├── Exceptions/            # Custom exceptions
 │   └── Assets/                # NuGet assets
-├── QRCoder.Core.Tests/        # Unit tests (300+ tests)
-├── docs/
+├── QRCoder.Core.Tests/        # Unit tests (502 tests)
+├── QRCoder.Core.Benchmarks/   # Performance benchmarks
+├── docs/                      # Usage guides
 │   ├── en-US/usage-guide.md   # English usage guide
 │   └── pt-BR/guia-de-uso.md   # Portuguese usage guide
-└── Docs/media/                # Documentation media assets
+├── .github/workflows/         # CI/CD pipelines
+├── CHANGELOG.md               # Version history
+└── README.md / README.pt-br.md# English and Portuguese documentation
 ```
 
 ## CI/CD and Build
@@ -308,41 +341,44 @@ This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.tx
 
 ## Changelog
 
-### [2.0.0] - Latest
-#### Changed
-- Multi-language documentation (en-US default + pt-BR)
-- Updated NuGet package README with examples
+See the full [CHANGELOG.md](CHANGELOG.md) for the complete version history.
 
-### [1.0.6] - 2025-02-17
+### [2.0.1] - 2026-07-11
 #### Added
-- Comprehensive test coverage reporting (78% line, 83.1% branch, 78.1% method)
-- 239 unit tests across all target frameworks
-- Performance optimization packages
-- Complete CI/CD pipeline with GitHub Actions
-- Support for .NET 10.0 target framework
-- Multiple security scans (CodeQL, Snyk, SonarCloud)
+- XML documentation for all public APIs (CS1591 removed from NoWarn).
+- Repository structure, business vision, and technical vision sections in README.
+- `BDDTests.cs` with BDD-style `Given/When/Then` tests for QR code generation and rendering.
 
 #### Changed
-- Updated README with detailed test coverage information
-- Updated target frameworks: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8
+- Bumped package version to `2.0.1`.
+- Updated CI, NuGet, SonarCloud, and Codecov badges in README files.
+- Updated SonarCloud links to the correct project (`afonsoft_QRCoder.Core`).
+- Consolidated CHANGELOG.md following Keep a Changelog and SemVer.
 
 #### Fixed
-- GitHub Actions syntax issues
-- Environment variable references
+- Broken NuGet badge (now using shields.io).
+- Broken CI build badge (now using `ci-build-test.yml`).
+- SonarQube S2184 (integer division in `PdfByteQRCode` media size).
+- SonarQube S4136 by grouping `GetGraphic` overloads in `QRCode` and `PdfByteQRCode`.
 
-### [1.0.5] - 2025-02-17
-#### Added
-- Support for .NET 10.0 target framework
-- Complete CI/CD pipeline
-- Automated NuGet publishing workflow
-
-### [1.0.4] - 2025-07-13
+### [2.0.0] - 2026-05-10
 #### Changed
-- General adjustments in the project and documentation
-- SkiaSharp adjustments
+- Reorganized codebase with SOLID and Clean Architecture folder structure.
+- Multi-language documentation (en-US default + pt-BR).
+- Updated target frameworks: .NET Standard 2.1, .NET 8.0, .NET 10.0, .NET Framework 4.8.
+
+### [1.0.8] - 2026-02-18
+#### Added
+- SkiaSharp native library handling for Linux CI.
+- Consolidated publish workflows.
+
+### [1.0.5] - 2025-07-13
+#### Changed
+- Migrated rendering to SkiaSharp.
+- General project and documentation adjustments.
 
 ### [1.0.3] - 2024-04-01
-#### Fixed
-- Action corrections
 #### Changed
-- Dependency updates (codecov/codecov-action, NuGet/setup-nuget)
+- Dependency updates.
+#### Fixed
+- Action corrections.

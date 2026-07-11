@@ -3,9 +3,9 @@
 
 [![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml)
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
-[![NuGet Badge](https://buildstats.info/nuget/QRCoder.Core?rnd=0892982314)](https://www.nuget.org/packages/QRCoder.Core/)
-[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=QrCode.Core&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=QrCode.Core)
+[![NuGet Badge](https://img.shields.io/nuget/v/QRCoder.Core.svg)](https://www.nuget.org/packages/QRCoder.Core/)
+[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=alert_status)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=security_rating)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
 
 ## Project Description / Descrição do Projeto
 
@@ -27,7 +27,7 @@ dotnet add package QRCoder.Core
 
 ### PackageReference
 ```xml
-<PackageReference Include="QRCoder.Core" Version="2.0.0" />
+<PackageReference Include="QRCoder.Core" Version="2.0.1" />
 ```
 
 ## Technologies / Tecnologias
@@ -38,8 +38,25 @@ dotnet add package QRCoder.Core
 | .NET Standard 2.1 / .NET 8.0 / .NET 10.0 / .NET Framework 4.8 | Target frameworks |
 | SkiaSharp | Cross-platform 2D graphics rendering |
 | Microsoft.Extensions.ObjectPool | Object pool performance optimization |
+| System.Text.Encoding.CodePages | Additional code page support |
 | xUnit + Shouldly | Unit testing |
+| coverlet | Cross-platform code coverage |
+| dotnet-reportgenerator-globaltool | Coverage report generation |
 | GitHub Actions | CI/CD pipelines |
+| SonarCloud | Static analysis and quality gates |
+| Codecov | Coverage reporting |
+| Snyk | Security vulnerability scanning |
+
+## Test Coverage / Cobertura de Testes
+
+| Metric / Métrica | Coverage / Cobertura | Status |
+|---|---|---|
+| Line Coverage / Cobertura de Linhas | 96.9% | Excellent / Excelente |
+| Branch Coverage / Cobertura de Branches | 92.6% | Excellent / Excelente |
+| Method Coverage / Cobertura de Métodos | 96.0% | Excellent / Excelente |
+| Total Tests / Total de Testes | 502 | All Passed / Todos Passaram |
+
+See the [CHANGELOG.md](CHANGELOG.md) for the full version history.
 
 ## Repository Structure / Estrutura do Repositório
 
