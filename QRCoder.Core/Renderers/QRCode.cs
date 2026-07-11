@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using SkiaSharp;
 
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -19,6 +19,10 @@ namespace QRCoder.Core.Renderers
         public QRCode()
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QRCode"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public QRCode(QRCodeData data) : base(data)
         {
         }
@@ -33,6 +37,14 @@ namespace QRCoder.Core.Renderers
             return this.GetGraphic(pixelsPerModule, new SKColor(0, 0, 0), new SKColor(255, 255, 255), true);
         }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColorHtmlHex">The dark sk color html hex.</param>
+        /// <param name="lightSKColorHtmlHex">The light sk color html hex.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <returns>The sk bitmap result.</returns>
         public SKBitmap GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, bool drawQuietZones = true)
         {
             return this.GetGraphic(
@@ -43,39 +55,16 @@ namespace QRCoder.Core.Renderers
             );
         }
 
-        // SkiaSharp-only HTML color parser
-        private static SKColor ParseHtmlColor(string htmlColor)
-        {
-            if (string.IsNullOrWhiteSpace(htmlColor))
-                throw new ArgumentException("Color string is null or empty.");
 
-            string color = htmlColor.TrimStart('#');
-            if (color.Length == 6)
-            {
-                // RRGGBB
-                return new SKColor(
-                    Convert.ToByte(color.Substring(0, 2), 16),
-                    Convert.ToByte(color.Substring(2, 2), 16),
-                    Convert.ToByte(color.Substring(4, 2), 16),
-                    255
-                );
-            }
-            else if (color.Length == 8)
-            {
-                // AARRGGBB
-                return new SKColor(
-                    Convert.ToByte(color.Substring(2, 2), 16),
-                    Convert.ToByte(color.Substring(4, 2), 16),
-                    Convert.ToByte(color.Substring(6, 2), 16),
-                    Convert.ToByte(color.Substring(0, 2), 16)
-                );
-            }
-            else
-            {
-                throw new ArgumentException("Invalid HTML color format. Use #RRGGBB or #AARRGGBB.");
-            }
-        }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColor">The dark sk color.</param>
+        /// <param name="lightSKColor">The light sk color.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <returns>The sk bitmap result.</returns>
         public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true)
         {
             var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
@@ -103,6 +92,18 @@ namespace QRCoder.Core.Renderers
             return bmp;
         }
 
+        /// <summary>
+        /// Returns the graphic representation of the QR code.
+        /// </summary>
+        /// <param name="pixelsPerModule">The pixels per module.</param>
+        /// <param name="darkSKColor">The dark sk color.</param>
+        /// <param name="lightSKColor">The light sk color.</param>
+        /// <param name="icon">The icon.</param>
+        /// <param name="iconSizePercent">The icon size percent.</param>
+        /// <param name="iconBorderWidth">The icon border width.</param>
+        /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <param name="iconBackgroundSKColor">The icon background sk color.</param>
+        /// <returns>The sk bitmap result.</returns>
         public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true, SKColor? iconBackgroundSKColor = null)
         {
             var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
@@ -171,6 +172,39 @@ namespace QRCoder.Core.Renderers
             roundedRect.Close();
             return roundedRect;
         }
+        // SkiaSharp-only HTML color parser
+        private static SKColor ParseHtmlColor(string htmlColor)
+        {
+            if (string.IsNullOrWhiteSpace(htmlColor))
+                throw new ArgumentException("Color string is null or empty.");
+
+            string color = htmlColor.TrimStart('#');
+            if (color.Length == 6)
+            {
+                // RRGGBB
+                return new SKColor(
+                    Convert.ToByte(color.Substring(0, 2), 16),
+                    Convert.ToByte(color.Substring(2, 2), 16),
+                    Convert.ToByte(color.Substring(4, 2), 16),
+                    255
+                );
+            }
+            else if (color.Length == 8)
+            {
+                // AARRGGBB
+                return new SKColor(
+                    Convert.ToByte(color.Substring(2, 2), 16),
+                    Convert.ToByte(color.Substring(4, 2), 16),
+                    Convert.ToByte(color.Substring(6, 2), 16),
+                    Convert.ToByte(color.Substring(0, 2), 16)
+                );
+            }
+            else
+            {
+                throw new ArgumentException("Invalid HTML color format. Use #RRGGBB or #AARRGGBB.");
+            }
+        }
+
     }
 
     /// <summary>

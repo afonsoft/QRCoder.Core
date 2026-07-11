@@ -29,6 +29,10 @@ namespace QRCoder.Core.Renderers
         public PdfByteQRCode()
         { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PdfByteQRCode"/> class.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public PdfByteQRCode(QRCodeData data) : base(data)
         {
         }
@@ -43,20 +47,7 @@ namespace QRCoder.Core.Renderers
             return GetGraphic(pixelsPerModule, "#000000", "#ffffff");
         }
 
-        /// <summary>
-        /// Takes hexadecimal color string #000000 and returns byte[]{ 0, 0, 0 }
-        /// </summary>
-        /// <param name="colorString">SKColor in HEX format like #ffffff</param>
-        /// <returns></returns>
-        private byte[] HexSKColorToByteArray(string colorString)
-        {
-            if (colorString.StartsWith("#"))
-                colorString = colorString.Substring(1);
-            byte[] byteSKColor = new byte[colorString.Length / 2];
-            for (int i = 0; i < byteSKColor.Length; i++)
-                byteSKColor[i] = byte.Parse(colorString.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
-            return byteSKColor;
-        }
+
 
         /// <summary>
         /// Creates a PDF document with given colors DPI and quality
@@ -71,7 +62,7 @@ namespace QRCoder.Core.Renderers
         {
             byte[] jpgArray = null, pngArray = null;
             var imgSize = QrCodeData.ModuleMatrix.Count * pixelsPerModule;
-            var pdfMediaSize = (imgSize * 72 / dpi).ToString(CultureInfo.InvariantCulture);
+            var pdfMediaSize = ((double)imgSize * 72 / dpi).ToString(CultureInfo.InvariantCulture);
 
             //Get QR code image
             using (var qrCode = new PngByteQRCode(QrCodeData))
@@ -215,10 +206,31 @@ namespace QRCoder.Core.Renderers
                 return stream.ToArray();
             }
         }
+        /// <summary>
+        /// Takes hexadecimal color string #000000 and returns byte[]{ 0, 0, 0 }
+        /// </summary>
+        /// <param name="colorString">SKColor in HEX format like #ffffff</param>
+        /// <returns></returns>
+        private byte[] HexSKColorToByteArray(string colorString)
+        {
+            if (colorString.StartsWith("#"))
+                colorString = colorString.Substring(1);
+            byte[] byteSKColor = new byte[colorString.Length / 2];
+            for (int i = 0; i < byteSKColor.Length; i++)
+                byteSKColor[i] = byte.Parse(colorString.Substring(i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+            return byteSKColor;
+        }
+
     }
 
+    /// <summary>
+    /// Represents a pdf byte qr code helper.
+    /// </summary>
     public static class PdfByteQRCodeHelper
     {
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex,
             string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
             EciMode eciMode = EciMode.Default, int requestedVersion = -1)
@@ -231,6 +243,13 @@ namespace QRCoder.Core.Renderers
                 return qrCode.GetGraphic(pixelsPerModule, darkSKColorHtmlHex, lightSKColorHtmlHex);
         }
 
+        /// <summary>
+        /// Generates a QR code from the given data and returns the rendered output.
+        /// </summary>
+        /// <param name="txt">The txt.</param>
+        /// <param name="eccLevel">The ecc level.</param>
+        /// <param name="size">The size.</param>
+        /// <returns>The byte[] result.</returns>
         public static byte[] GetQRCode(string txt, ECCLevel eccLevel, int size)
         {
             using (var qrGen = new QRCodeGenerator())
