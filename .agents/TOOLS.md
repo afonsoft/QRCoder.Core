@@ -25,7 +25,8 @@
 | `publish-all.yml` | tag release | Publicação NuGet |
 | `code-quality.yml` | PR | SonarCloud + Qodana |
 | `security-scan.yml` | schedule/PR | Scan de segurança |
-| `openhands-resolver.yml` | issue label | Auto-fix via OpenHands |
+| `opencode.yml` | issue_comment / pull_request_review_comment | OpenCode com OmniRoute (chat) |
+| `opencode-auto-fix.yml` | issue label | OpenCode com OmniRoute (fix-me) |
 | `auto-pr-from-main.yml` | push main | Sync automático |
 
 ## APIs Externas
