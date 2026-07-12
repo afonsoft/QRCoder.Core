@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using SkiaSharp;
 
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -135,8 +136,20 @@ namespace QRCoder.Core.Renderers
         /// <param name="pixelsPerModule">The pixels per module.</param>
         /// <param name="darkSKColor">The dark sk color.</param>
         /// <param name="lightSKColor">The light sk color.</param>
+        /// <param name="icon">The icon.</param>
+        /// <param name="iconSizePercent">The icon size percent.</param>
+        /// <param name="iconBorderWidth">The icon border width.</param>
         /// <param name="drawQuietZones">The draw quiet zones.</param>
+        /// <param name="iconBackgroundSKColor">The icon background sk color.</param>
         /// <returns>The sk bitmap result.</returns>
+        [Obsolete("Use GetGraphic(QRCodeGraphicOptions) instead.")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy public API overload")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
+        public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true, SKColor? iconBackgroundSKColor = null)
+        {
+            return RenderGraphic(pixelsPerModule, darkSKColor, lightSKColor, icon, iconSizePercent, iconBorderWidth, drawQuietZones, iconBackgroundSKColor);
+        }
+
         private SKBitmap RenderGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, bool drawQuietZones = true)
         {
             var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
@@ -164,6 +177,7 @@ namespace QRCoder.Core.Renderers
             return bmp;
         }
 
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Internal rendering helper with closely related parameters")]
         private SKBitmap RenderGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon, int iconSizePercent, int iconBorderWidth, bool drawQuietZones, SKColor? iconBackgroundSKColor)
         {
             var size = (this.QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8)) * pixelsPerModule;
@@ -191,24 +205,7 @@ namespace QRCoder.Core.Renderers
 
                 if (drawIconFlag)
                 {
-                    float iconDestWidth = iconSizePercent * bmp.Width / 100f;
-                    float iconDestHeight = drawIconFlag ? iconDestWidth * icon.Height / icon.Width : 0;
-                    float iconX = (bmp.Width - iconDestWidth) / 2;
-                    float iconY = (bmp.Height - iconDestHeight) / 2;
-                    var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2);
-                    var iconDestRect = new SKRect(iconX, iconY, iconX + iconDestWidth, iconY + iconDestHeight);
-                    var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : lightBrush;
-                    if (iconBorderWidth > 0)
-                    {
-                        using (var iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
-                        {
-                            gfx.DrawPath(iconPath, iconBgBrush);
-                        }
-                    }
-                    using (var iconImage = SKImage.FromBitmap(icon))
-                    {
-                        gfx.DrawImage(iconImage, iconDestRect, new SKRect(0, 0, icon.Width, icon.Height));
-                    }
+                    DrawIcon(gfx, bmp, icon, iconSizePercent, iconBorderWidth, iconBackgroundSKColor, lightBrush);
                 }
 
                 gfx.Save();
@@ -217,25 +214,29 @@ namespace QRCoder.Core.Renderers
             return bmp;
         }
 
-        /// <summary>
-        /// Returns the graphic representation of the QR code.
-        /// </summary>
-        /// <param name="pixelsPerModule">The pixels per module.</param>
-        /// <param name="darkSKColor">The dark sk color.</param>
-        /// <param name="lightSKColor">The light sk color.</param>
-        /// <param name="icon">The icon.</param>
-        /// <param name="iconSizePercent">The icon size percent.</param>
-        /// <param name="iconBorderWidth">The icon border width.</param>
-        /// <param name="drawQuietZones">The draw quiet zones.</param>
-        /// <param name="iconBackgroundSKColor">The icon background sk color.</param>
-        /// <returns>The sk bitmap result.</returns>
-        [Obsolete("Use GetGraphic(QRCodeGraphicOptions) instead.")]
-        public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true, SKColor? iconBackgroundSKColor = null)
+        private static void DrawIcon(SKCanvas gfx, SKBitmap bmp, SKBitmap icon, int iconSizePercent, int iconBorderWidth, SKColor? iconBackgroundSKColor, SKPaint lightBrush)
         {
-            return RenderGraphic(pixelsPerModule, darkSKColor, lightSKColor, icon, iconSizePercent, iconBorderWidth, drawQuietZones, iconBackgroundSKColor);
+            float iconDestWidth = iconSizePercent * bmp.Width / 100f;
+            float iconDestHeight = iconDestWidth * icon.Height / icon.Width;
+            float iconX = (bmp.Width - iconDestWidth) / 2;
+            float iconY = (bmp.Height - iconDestHeight) / 2;
+            var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2);
+            var iconDestRect = new SKRect(iconX, iconY, iconX + iconDestWidth, iconY + iconDestHeight);
+            var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : lightBrush;
+            if (iconBorderWidth > 0)
+            {
+                using (var iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
+                {
+                    gfx.DrawPath(iconPath, iconBgBrush);
+                }
+            }
+            using (var iconImage = SKImage.FromBitmap(icon))
+            {
+                gfx.DrawImage(iconImage, iconDestRect, new SKRect(0, 0, icon.Width, icon.Height));
+            }
         }
 
-        internal SKPath CreateRoundedSKRectIPath(SKRect rect, int cornerRadius)
+        internal static SKPath CreateRoundedSKRectIPath(SKRect rect, int cornerRadius)
         {
             var roundedRect = new SKPath();
             roundedRect.AddArc(new SKRect(rect.Left, rect.Top, rect.Left + cornerRadius * 2, rect.Top + cornerRadius * 2), 180, 90);
@@ -292,6 +293,7 @@ namespace QRCoder.Core.Renderers
         /// <summary>
         /// GetQRCode
         /// </summary>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static SKBitmap GetQRCode(string plainText, int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, SKBitmap icon = null, int iconSizePercent = 15, int iconBorderWidth = 0, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())
