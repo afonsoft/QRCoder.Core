@@ -734,9 +734,9 @@ namespace QRCoder.Core.Generators
                         }
                     }
 
-                    for (var x = 0; x < size; x++)
+                    for (var x = 0; x < size - 10; x++)
                     {
-                        for (var y = 0; y < size - 10; y++)
+                        for (var y = 0; y < size; y++)
                         {
                             if (MatchesFinderPattern(qrCode, x, y, vertical: true))
                                 score += 40;
