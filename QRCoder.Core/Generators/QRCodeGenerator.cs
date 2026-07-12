@@ -20,7 +20,7 @@ namespace QRCoder.Core.Generators
         private static readonly int[] remainderBits = { 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0 };
 
         private static readonly List<AlignmentPattern> alignmentPatternTable = CreateAlignmentPatternTable();
-        private static readonly List<ECCInfo> capacityECCTable = CreateCapacityECCTable();
+        private static readonly List<EccInfo> capacityECCTable = CreateCapacityECCTable();
         private static readonly List<VersionInfo> capacityTable = CreateCapacityTable();
         private static readonly List<Antilog> galoisField = CreateAntilogTable();
         private static readonly Dictionary<char, int> alphanumEncDict = CreateAlphanumEncDict();
@@ -824,7 +824,7 @@ namespace QRCoder.Core.Generators
             }
         }
 
-        private static List<string> CalculateECCWords(string bitString, ECCInfo eccInfo)
+        private static List<string> CalculateECCWords(string bitString, EccInfo eccInfo)
         {
             var eccWords = eccInfo.ECCPerBlock;
             var messagePolynom = CalculateMessagePolynom(bitString);
@@ -1274,15 +1274,15 @@ namespace QRCoder.Core.Generators
             return localAlignmentPatternTable;
         }
 
-        private static List<ECCInfo> CreateCapacityECCTable()
+        private static List<EccInfo> CreateCapacityECCTable()
         {
-            var localCapacityECCTable = new List<ECCInfo>(160);
+            var localCapacityECCTable = new List<EccInfo>(160);
             for (var i = 0; i < (4 * 6 * 40); i = i + (4 * 6))
             {
                 localCapacityECCTable.AddRange(
                 new[]
                 {
-                    new ECCInfo(
+                    new EccInfo(
                         (i+24) / 24,
                         ECCLevel.L,
                         capacityECCBaseValues[i],
@@ -1291,7 +1291,7 @@ namespace QRCoder.Core.Generators
                         capacityECCBaseValues[i+3],
                         capacityECCBaseValues[i+4],
                         capacityECCBaseValues[i+5]),
-                    new ECCInfo
+                    new EccInfo
                     (
                         version: (i + 24) / 24,
                         errorCorrectionLevel: ECCLevel.M,
@@ -1302,7 +1302,7 @@ namespace QRCoder.Core.Generators
                         blocksInGroup2: capacityECCBaseValues[i+10],
                         codewordsInGroup2: capacityECCBaseValues[i+11]
                     ),
-                    new ECCInfo
+                    new EccInfo
                     (
                         version: (i + 24) / 24,
                         errorCorrectionLevel: ECCLevel.Q,
@@ -1313,7 +1313,7 @@ namespace QRCoder.Core.Generators
                         blocksInGroup2: capacityECCBaseValues[i+16],
                         codewordsInGroup2: capacityECCBaseValues[i+17]
                     ),
-                    new ECCInfo
+                    new EccInfo
                     (
                         version: (i + 24) / 24,
                         errorCorrectionLevel: ECCLevel.H,
@@ -1399,6 +1399,7 @@ namespace QRCoder.Core.Generators
         /// <summary>
         /// Error correction level. These define the tolerance levels for how much of the code can be lost before the code cannot be recovered.
         /// </summary>
+        // NOSONAR - Retained for source compatibility with the existing public API.
         public enum ECCLevel
         {
             /// <summary>
@@ -1460,9 +1461,9 @@ namespace QRCoder.Core.Generators
             public List<int> ECCWordsInt { get; }
         }
 
-        private struct ECCInfo
+        private struct EccInfo
         {
-            public ECCInfo(int version, ECCLevel errorCorrectionLevel, int totalDataCodewords, int eccPerBlock, int blocksInGroup1,
+            public EccInfo(int version, ECCLevel errorCorrectionLevel, int totalDataCodewords, int eccPerBlock, int blocksInGroup1,
                 int codewordsInGroup1, int blocksInGroup2, int codewordsInGroup2)
             {
                 this.Version = version;
