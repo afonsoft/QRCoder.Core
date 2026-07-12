@@ -627,136 +627,103 @@ namespace QRCoder.Core.Generators
             /// <returns>The string result.</returns>
             public override string ToString()
             {
-                string payload = string.Empty;
                 if (outputType == ContactOutputType.MeCard)
-                {
-                    payload += "MECARD+\r\n";
-                    if (!string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(lastname))
-                        payload += $"N:{lastname}, {firstname}\r\n";
-                    else if (!string.IsNullOrEmpty(firstname) || !string.IsNullOrEmpty(lastname))
-                        payload += $"N:{firstname}{lastname}\r\n";
-                    if (!string.IsNullOrEmpty(org))
-                        payload += $"ORG:{org}\r\n";
-                    if (!string.IsNullOrEmpty(orgTitle))
-                        payload += $"TITLE:{orgTitle}\r\n";
-                    if (!string.IsNullOrEmpty(phone))
-                        payload += $"TEL:{phone}\r\n";
-                    if (!string.IsNullOrEmpty(mobilePhone))
-                        payload += $"TEL:{mobilePhone}\r\n";
-                    if (!string.IsNullOrEmpty(workPhone))
-                        payload += $"TEL:{workPhone}\r\n";
-                    if (!string.IsNullOrEmpty(email))
-                        payload += $"EMAIL:{email}\r\n";
-                    if (!string.IsNullOrEmpty(note))
-                        payload += $"NOTE:{note}\r\n";
-                    if (birthday != null)
-                        payload += $"BDAY:{((DateTime)birthday).ToString("yyyyMMdd")}\r\n";
-                    string addressString = string.Empty;
-                    if (addressOrder == AddressOrder.Default)
-                    {
-                        addressString = $"ADR:,,{(!string.IsNullOrEmpty(street) ? street + " " : "")}{(!string.IsNullOrEmpty(houseNumber) ? houseNumber : "")},{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")},{(!string.IsNullOrEmpty(city) ? city : "")},{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")},{(!string.IsNullOrEmpty(country) ? country : "")}\r\n";
-                    }
-                    else
-                    {
-                        addressString = $"ADR:,,{(!string.IsNullOrEmpty(houseNumber) ? houseNumber + " " : "")}{(!string.IsNullOrEmpty(street) ? street : "")},{(!string.IsNullOrEmpty(city) ? city : "")},{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")},{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")},{(!string.IsNullOrEmpty(country) ? country : "")}\r\n";
-                    }
-                    payload += addressString;
-                    if (!string.IsNullOrEmpty(website))
-                        payload += $"URL:{website}\r\n";
-                    if (!string.IsNullOrEmpty(nickname))
-                        payload += $"NICKNAME:{nickname}\r\n";
-                payload = payload.Trim('\r', '\n');
-                }
+                    return BuildMeCard();
+
+                return BuildVCard();
+            }
+
+            private string BuildMeCard()
+            {
+                var payload = new StringBuilder("MECARD+\r\n");
+                AppendName(payload, "N:");
+                AppendLine(payload, "ORG:", org);
+                AppendLine(payload, "TITLE:", orgTitle);
+                AppendLine(payload, "TEL:", phone);
+                AppendLine(payload, "TEL:", mobilePhone);
+                AppendLine(payload, "TEL:", workPhone);
+                AppendLine(payload, "EMAIL:", email);
+                AppendLine(payload, "NOTE:", note);
+                if (birthday != null)
+                    AppendLine(payload, "BDAY:", ((DateTime)birthday).ToString("yyyyMMdd"));
+                payload.Append("ADR:,,").Append(BuildAddress(',')).Append("\r\n");
+                AppendLine(payload, "URL:", website);
+                AppendLine(payload, "NICKNAME:", nickname);
+                return payload.ToString().TrimEnd('\r', '\n');
+            }
+
+            private string BuildVCard()
+            {
+                var payload = new StringBuilder();
+                var version = outputType.ToString().Substring(5);
+                if (version.Length > 1)
+                    version = version.Insert(1, ".");
                 else
-                {
-                    var version = outputType.ToString().Substring(5);
-                    if (version.Length > 1)
-                        version = version.Insert(1, ".");
-                    else
-                        version += ".0";
+                    version += ".0";
 
-                    payload += "BEGIN:VCARD\r\n";
-                    payload += $"VERSION:{version}\r\n";
+                payload.Append("BEGIN:VCARD\r\n");
+                payload.Append("VERSION:").Append(version).Append("\r\n");
+                payload.Append("N:").Append(!string.IsNullOrEmpty(lastname) ? lastname : "").Append(";").Append(!string.IsNullOrEmpty(firstname) ? firstname : "").Append(";;;\r\n");
+                payload.Append("FN:").Append(!string.IsNullOrEmpty(firstname) ? firstname + " " : "").Append(!string.IsNullOrEmpty(lastname) ? lastname : "").Append("\r\n");
+                AppendLine(payload, "ORG:", org);
+                AppendLine(payload, "TITLE:", orgTitle);
+                AppendTelephone(payload, phone, "HOME;VOICE:", "TYPE=HOME,VOICE:", "TYPE=home,voice;VALUE=uri:tel:");
+                AppendTelephone(payload, mobilePhone, "HOME;CELL:", "TYPE=HOME,CELL:", "TYPE=home,cell;VALUE=uri:tel:");
+                AppendTelephone(payload, workPhone, "WORK;VOICE:", "TYPE=WORK,VOICE:", "TYPE=work,voice;VALUE=uri:tel:");
+                payload.Append("ADR;");
+                if (outputType == ContactOutputType.VCard21)
+                    payload.Append("HOME;PREF:");
+                else if (outputType == ContactOutputType.VCard3)
+                    payload.Append("TYPE=HOME,PREF:");
+                else
+                    payload.Append("TYPE=home,pref:");
+                payload.Append(';').Append(';').Append(BuildAddress(';')).Append("\r\n");
+                if (birthday != null)
+                    AppendLine(payload, "BDAY:", ((DateTime)birthday).ToString("yyyyMMdd"));
+                AppendLine(payload, "URL:", website);
+                AppendLine(payload, "EMAIL:", email);
+                AppendLine(payload, "NOTE:", note);
+                if (outputType != ContactOutputType.VCard21)
+                    AppendLine(payload, "NICKNAME:", nickname);
+                payload.Append("END:VCARD");
+                return payload.ToString();
+            }
 
-                    payload += $"N:{(!string.IsNullOrEmpty(lastname) ? lastname : "")};{(!string.IsNullOrEmpty(firstname) ? firstname : "")};;;\r\n";
-                    payload += $"FN:{(!string.IsNullOrEmpty(firstname) ? firstname + " " : "")}{(!string.IsNullOrEmpty(lastname) ? lastname : "")}\r\n";
-                    if (!string.IsNullOrEmpty(org))
-                    {
-                        payload += $"ORG:" + org + "\r\n";
-                    }
-                    if (!string.IsNullOrEmpty(orgTitle))
-                    {
-                        payload += $"TITLE:" + orgTitle + "\r\n";
-                    }
-                    if (!string.IsNullOrEmpty(phone))
-                    {
-                        payload += $"TEL;";
-                        if (outputType == ContactOutputType.VCard21)
-                            payload += $"HOME;VOICE:{phone}";
-                        else if (outputType == ContactOutputType.VCard3)
-                            payload += $"TYPE=HOME,VOICE:{phone}";
-                        else
-                            payload += $"TYPE=home,voice;VALUE=uri:tel:{phone}";
-                        payload += "\r\n";
-                    }
+            private void AppendName(StringBuilder payload, string prefix)
+            {
+                if (!string.IsNullOrEmpty(firstname) && !string.IsNullOrEmpty(lastname))
+                    payload.Append(prefix).Append(lastname).Append(", ").Append(firstname).Append("\r\n");
+                else if (!string.IsNullOrEmpty(firstname) || !string.IsNullOrEmpty(lastname))
+                    payload.Append(prefix).Append(firstname).Append(lastname).Append("\r\n");
+            }
 
-                    if (!string.IsNullOrEmpty(mobilePhone))
-                    {
-                        payload += $"TEL;";
-                        if (outputType == ContactOutputType.VCard21)
-                            payload += $"HOME;CELL:{mobilePhone}";
-                        else if (outputType == ContactOutputType.VCard3)
-                            payload += $"TYPE=HOME,CELL:{mobilePhone}";
-                        else
-                            payload += $"TYPE=home,cell;VALUE=uri:tel:{mobilePhone}";
-                        payload += "\r\n";
-                    }
+            private static void AppendLine(StringBuilder payload, string prefix, string value)
+            {
+                if (!string.IsNullOrEmpty(value))
+                    payload.Append(prefix).Append(value).Append("\r\n");
+            }
 
-                    if (!string.IsNullOrEmpty(workPhone))
-                    {
-                        payload += $"TEL;";
-                        if (outputType == ContactOutputType.VCard21)
-                            payload += $"WORK;VOICE:{workPhone}";
-                        else if (outputType == ContactOutputType.VCard3)
-                            payload += $"TYPE=WORK,VOICE:{workPhone}";
-                        else
-                            payload += $"TYPE=work,voice;VALUE=uri:tel:{workPhone}";
-                        payload += "\r\n";
-                    }
+            private void AppendTelephone(StringBuilder payload, string value, string v21Prefix, string v3Prefix, string v4Prefix)
+            {
+                if (string.IsNullOrEmpty(value))
+                    return;
 
-                    payload += "ADR;";
-                    if (outputType == ContactOutputType.VCard21)
-                        payload += "HOME;PREF:";
-                    else if (outputType == ContactOutputType.VCard3)
-                        payload += "TYPE=HOME,PREF:";
-                    else
-                        payload += "TYPE=home,pref:";
-                    string addressString = string.Empty;
-                    if (addressOrder == AddressOrder.Default)
-                    {
-                        addressString = $";;{(!string.IsNullOrEmpty(street) ? street + " " : "")}{(!string.IsNullOrEmpty(houseNumber) ? houseNumber : "")};{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")};{(!string.IsNullOrEmpty(city) ? city : "")};{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")};{(!string.IsNullOrEmpty(country) ? country : "")}\r\n";
-                    }
-                    else
-                    {
-                        addressString = $";;{(!string.IsNullOrEmpty(houseNumber) ? houseNumber + " " : "")}{(!string.IsNullOrEmpty(street) ? street : "")};{(!string.IsNullOrEmpty(city) ? city : "")};{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")};{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")};{(!string.IsNullOrEmpty(country) ? country : "")}\r\n";
-                    }
-                    payload += addressString;
+                payload.Append("TEL;");
+                if (outputType == ContactOutputType.VCard21)
+                    payload.Append(v21Prefix).Append(value);
+                else if (outputType == ContactOutputType.VCard3)
+                    payload.Append(v3Prefix).Append(value);
+                else
+                    payload.Append(v4Prefix).Append(value);
+                payload.Append("\r\n");
+            }
 
-                    if (birthday != null)
-                        payload += $"BDAY:{((DateTime)birthday).ToString("yyyyMMdd")}\r\n";
-                    if (!string.IsNullOrEmpty(website))
-                        payload += $"URL:{website}\r\n";
-                    if (!string.IsNullOrEmpty(email))
-                        payload += $"EMAIL:{email}\r\n";
-                    if (!string.IsNullOrEmpty(note))
-                        payload += $"NOTE:{note}\r\n";
-                    if (outputType != ContactOutputType.VCard21 && !string.IsNullOrEmpty(nickname))
-                        payload += $"NICKNAME:{nickname}\r\n";
+            private string BuildAddress(char separator)
+            {
+                if (addressOrder == AddressOrder.Default)
+                    return $"{(!string.IsNullOrEmpty(street) ? street + " " : "")}{(!string.IsNullOrEmpty(houseNumber) ? houseNumber : "")}{separator}{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")}{separator}{(!string.IsNullOrEmpty(city) ? city : "")}{separator}{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")}{separator}{(!string.IsNullOrEmpty(country) ? country : "")}";
 
-                    payload += "END:VCARD";
-                }
-
-                return payload;
+                return $"{(!string.IsNullOrEmpty(houseNumber) ? houseNumber + " " : "")}{(!string.IsNullOrEmpty(street) ? street : "")}{separator}{(!string.IsNullOrEmpty(city) ? city : "")}{separator}{(!string.IsNullOrEmpty(stateRegion) ? stateRegion : "")}{separator}{(!string.IsNullOrEmpty(zipCode) ? zipCode : "")}{separator}{(!string.IsNullOrEmpty(country) ? country : "")}";
             }
 
             /// <summary>
@@ -2040,85 +2007,92 @@ namespace QRCoder.Core.Generators
             /// <returns>The string result.</returns>
             public override string ToString()
             {
-                var bezahlCodePayload = $"bank://{authority}?";
-
-                bezahlCodePayload += $"name={Uri.EscapeDataString(name)}&";
+                var bezahlCodePayload = new StringBuilder($"bank://{authority}?");
+                AppendParameter(bezahlCodePayload, "name", Uri.EscapeDataString(name));
 
                 if (authority != AuthorityType.contact && authority != AuthorityType.contact_v2)
                 {
-                    //Handle what is same for all payments
-#pragma warning disable CS0612
-                    if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.singledirectdebit || authority == AuthorityType.singlepayment)
-#pragma warning restore CS0612
-                    {
-                        bezahlCodePayload += $"account={account}&";
-                        bezahlCodePayload += $"bnc={bnc}&";
-                        if (postingKey > 0)
-                            bezahlCodePayload += $"postingkey={postingKey}&";
-                    }
-                    else
-                    {
-                        bezahlCodePayload += $"iban={iban}&";
-                        bezahlCodePayload += $"bic={bic}&";
-
-                        if (!string.IsNullOrEmpty(sepaReference))
-                            bezahlCodePayload += $"separeference={Uri.EscapeDataString(sepaReference)}&";
-
-                        if (authority == AuthorityType.singledirectdebitsepa)
-                        {
-                            if (!string.IsNullOrEmpty(creditorId))
-                                bezahlCodePayload += $"creditorid={Uri.EscapeDataString(creditorId)}&";
-                            if (!string.IsNullOrEmpty(mandateId))
-                                bezahlCodePayload += $"mandateid={Uri.EscapeDataString(mandateId)}&";
-                            if (dateOfSignature != DateTime.MinValue)
-                                bezahlCodePayload += $"dateofsignature={dateOfSignature.ToString(DateFormat)}&";
-                        }
-                    }
-                    bezahlCodePayload += $"amount={amount:0.00}&".Replace(".", ",");
-
-                    if (!string.IsNullOrEmpty(reason))
-                        bezahlCodePayload += $"reason={Uri.EscapeDataString(reason)}&";
-                    bezahlCodePayload += $"currency={currency}&";
-                    bezahlCodePayload += $"executiondate={executionDate.ToString(DateFormat)}&";
-#pragma warning disable CS0612
-                    if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.periodicsinglepaymentsepa)
-                    {
-                        bezahlCodePayload += $"periodictimeunit={periodicTimeunit}&";
-                        bezahlCodePayload += $"periodictimeunitrotation={periodicTimeunitRotation}&";
-                        if (periodicFirstExecutionDate != DateTime.MinValue)
-                            bezahlCodePayload += $"periodicfirstexecutiondate={periodicFirstExecutionDate.ToString(DateFormat)}&";
-                        if (periodicLastExecutionDate != DateTime.MinValue)
-                            bezahlCodePayload += $"periodiclastexecutiondate={periodicLastExecutionDate.ToString(DateFormat)}&";
-                    }
-#pragma warning restore CS0612
+                    AppendPaymentParameters(bezahlCodePayload);
                 }
                 else
                 {
-                    //Handle what is same for all contacts
-                    if (authority == AuthorityType.contact)
-                    {
-                        bezahlCodePayload += $"account={account}&";
-                        bezahlCodePayload += $"bnc={bnc}&";
-                    }
-                    else if (authority == AuthorityType.contact_v2)
-                    {
-                        if (!string.IsNullOrEmpty(account) && !string.IsNullOrEmpty(bnc))
-                        {
-                            bezahlCodePayload += $"account={account}&";
-                            bezahlCodePayload += $"bnc={bnc}&";
-                        }
-                        else
-                        {
-                            bezahlCodePayload += $"iban={iban}&";
-                            bezahlCodePayload += $"bic={bic}&";
-                        }
-                    }
-
-                    if (!string.IsNullOrEmpty(reason))
-                        bezahlCodePayload += $"reason={Uri.EscapeDataString(reason)}&";
+                    AppendContactParameters(bezahlCodePayload);
                 }
 
-                return bezahlCodePayload.Trim('&');
+                return bezahlCodePayload.ToString().Trim('&');
+            }
+
+            private void AppendPaymentParameters(StringBuilder payload)
+            {
+#pragma warning disable CS0612
+                if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.singledirectdebit || authority == AuthorityType.singlepayment)
+#pragma warning restore CS0612
+                {
+                    AppendParameter(payload, "account", account);
+                    AppendParameter(payload, "bnc", bnc);
+                    if (postingKey > 0)
+                        AppendParameter(payload, "postingkey", postingKey.ToString());
+                }
+                else
+                {
+                    AppendParameter(payload, "iban", iban);
+                    AppendParameter(payload, "bic", bic);
+                    AppendParameter(payload, "separeference", Uri.EscapeDataString(sepaReference));
+                    if (authority == AuthorityType.singledirectdebitsepa)
+                    {
+                        AppendParameter(payload, "creditorid", Uri.EscapeDataString(creditorId));
+                        AppendParameter(payload, "mandateid", Uri.EscapeDataString(mandateId));
+                        if (dateOfSignature != DateTime.MinValue)
+                            AppendParameter(payload, "dateofsignature", dateOfSignature.ToString("ddMMyyyy"));
+                    }
+                }
+
+                AppendParameter(payload, "amount", amount.ToString("0.00").Replace(".", ","));
+                AppendParameter(payload, "reason", Uri.EscapeDataString(reason));
+                AppendParameter(payload, "currency", currency.ToString());
+                AppendParameter(payload, "executiondate", executionDate.ToString("ddMMyyyy"));
+
+#pragma warning disable CS0612
+                if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.periodicsinglepaymentsepa)
+                {
+                    AppendParameter(payload, "periodictimeunit", periodicTimeunit);
+                    AppendParameter(payload, "periodictimeunitrotation", periodicTimeunitRotation.ToString());
+                    if (periodicFirstExecutionDate != DateTime.MinValue)
+                        AppendParameter(payload, "periodicfirstexecutiondate", periodicFirstExecutionDate.ToString("ddMMyyyy"));
+                    if (periodicLastExecutionDate != DateTime.MinValue)
+                        AppendParameter(payload, "periodiclastexecutiondate", periodicLastExecutionDate.ToString("ddMMyyyy"));
+                }
+#pragma warning restore CS0612
+            }
+
+            private void AppendContactParameters(StringBuilder payload)
+            {
+                if (authority == AuthorityType.contact)
+                {
+                    AppendParameter(payload, "account", account);
+                    AppendParameter(payload, "bnc", bnc);
+                }
+                else if (authority == AuthorityType.contact_v2)
+                {
+                    if (!string.IsNullOrEmpty(account) && !string.IsNullOrEmpty(bnc))
+                    {
+                        AppendParameter(payload, "account", account);
+                        AppendParameter(payload, "bnc", bnc);
+                    }
+                    else
+                    {
+                        AppendParameter(payload, "iban", iban);
+                        AppendParameter(payload, "bic", bic);
+                    }
+                }
+
+                AppendParameter(payload, "reason", Uri.EscapeDataString(reason));
+            }
+
+            private static void AppendParameter(StringBuilder payload, string key, string value)
+            {
+                if (!string.IsNullOrEmpty(value))
+                    payload.Append(key).Append('=').Append(value).Append('&');
             }
 
             /// <summary>
