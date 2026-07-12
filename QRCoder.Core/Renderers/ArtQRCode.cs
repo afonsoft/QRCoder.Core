@@ -337,23 +337,25 @@ namespace QRCoder.Core.Renderers
                 return null;
 
             float scale = Math.Min((float)newSize / image.Width, (float)newSize / image.Height);
-            var scaledWidth = (int)(image.Width * scale);
-            var scaledHeight = (int)(image.Height * scale);
+            var scaledWidth = Math.Max(1, (int)(image.Width * scale));
+            var scaledHeight = Math.Max(1, (int)(image.Height * scale));
             var offsetX = (newSize - scaledWidth) / 2;
             var offsetY = (newSize - scaledHeight) / 2;
 
-            var bm = new SKBitmap(newSize, newSize);
-            using (var graphics = new SKCanvas(bm))
+            using (var scaledImage = image.Resize(new SKSizeI(scaledWidth, scaledHeight), new SKSamplingOptions(SKFilterMode.Linear)))
             {
-                graphics.Clear(SKColors.Transparent);
-                using (var scaledImage = image.Resize(new SKSizeI(scaledWidth, scaledHeight), new SKSamplingOptions(SKFilterMode.Linear)))
+                if (scaledImage == null)
+                    return null;
+
+                var bm = new SKBitmap(newSize, newSize);
+                using (var graphics = new SKCanvas(bm))
                 {
-                    if (scaledImage != null)
-                        graphics.DrawBitmap(scaledImage, offsetX, offsetY);
+                    graphics.Clear(SKColors.Transparent);
+                    graphics.DrawBitmap(scaledImage, offsetX, offsetY);
                     graphics.Flush();
                 }
+                return bm;
             }
-            return bm;
         }
 
         /// <summary>
