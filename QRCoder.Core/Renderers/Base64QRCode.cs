@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using SkiaSharp;
 
 using System.IO;
@@ -63,7 +64,7 @@ namespace QRCoder.Core.Renderers
     /// </summary>
     public class Base64QRCode : AbstractQRCode
     {
-        private QRCode qr;
+        private readonly QRCode qr;
 
         /// <summary>
         /// Constructor without params to be used in COM Objects connections
@@ -130,25 +131,6 @@ namespace QRCoder.Core.Renderers
                 : RenderGraphic(options, options.ImageType);
         }
 
-        private string RenderGraphic(Base64QRCodeGraphicOptions options, ImageType imgType)
-        {
-            var base64 = string.Empty;
-            using (SKBitmap bmp = qr.GetGraphic(new QRCodeGraphicOptions
-                {
-                    PixelsPerModule = options.PixelsPerModule,
-                    DarkSKColor = options.DarkSKColor,
-                    LightSKColor = options.LightSKColor,
-                    DrawQuietZones = options.DrawQuietZones,
-                    Icon = options.Icon,
-                    IconSizePercent = options.IconSizePercent,
-                    IconBorderWidth = options.IconBorderWidth
-                }))
-            {
-                base64 = SKBitmapToBase64(bmp, imgType);
-            }
-            return base64;
-        }
-
         /// <summary>
         /// Returns the graphic representation of the QR code.
         /// </summary>
@@ -181,6 +163,8 @@ namespace QRCoder.Core.Renderers
         /// <param name="imgType">The img type.</param>
         /// <returns>The string result.</returns>
         [Obsolete("Use GetGraphic(Base64QRCodeGraphicOptions) instead.")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy public API overload")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
         public string GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon, int iconSizePercent = 15, int iconBorderWidth = 6, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
         {
             var base64 = string.Empty;
@@ -200,7 +184,26 @@ namespace QRCoder.Core.Renderers
             return base64;
         }
 
-        private string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
+        private string RenderGraphic(Base64QRCodeGraphicOptions options, ImageType imgType)
+        {
+            var base64 = string.Empty;
+            using (SKBitmap bmp = qr.GetGraphic(new QRCodeGraphicOptions
+            {
+                PixelsPerModule = options.PixelsPerModule,
+                DarkSKColor = options.DarkSKColor,
+                LightSKColor = options.LightSKColor,
+                DrawQuietZones = options.DrawQuietZones,
+                Icon = options.Icon,
+                IconSizePercent = options.IconSizePercent,
+                IconBorderWidth = options.IconBorderWidth
+            }))
+            {
+                base64 = SKBitmapToBase64(bmp, imgType);
+            }
+            return base64;
+        }
+
+        private static string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
         {
             var base64 = string.Empty;
             SKEncodedImageFormat encodedFormat = imgType switch
@@ -258,6 +261,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="drawQuietZones">The draw quiet zones.</param>
         /// <param name="imgType">The img type.</param>
         /// <returns>The string result.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static string GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
         {
             using (var qrGenerator = new QRCodeGenerator())
