@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -344,6 +345,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="requestedVersion">The requested version.</param>
         /// <param name="drawQuietZones">The draw quiet zones.</param>
         /// <returns>The byte[] result.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, byte[] darkSKColorRgba, byte[] lightSKColorRgba, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())

@@ -1,6 +1,7 @@
 ﻿using QRCoder.Core.Extensions;
 using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using SkiaSharp;
 using System.Text;
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -116,6 +117,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="sizingMode">Defines if width/height or viewbox should be used for size definition</param>
         /// <param name="logo">A (optional) logo to be rendered on the code (either SKBitmap or SVG)</param>
         /// <returns>SVG as string</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "SVG rendering is inherently sequential")]
         public string GetGraphic(Size viewBox, string darkSKColorHex, string lightSKColorHex, bool drawQuietZones = true, SizingMode sizingMode = SizingMode.WidthHeightAttribute, SvgLogo logo = null)
         {
             int offset = drawQuietZones ? 0 : 4;
@@ -222,12 +224,15 @@ namespace QRCoder.Core.Renderers
             return svgFile.ToString();
         }
 
-        private bool IsBlockedByLogo(double x, double y, ImageAttributes? attr, double pixelPerModule)
+        private static bool IsBlockedByLogo(double x, double y, ImageAttributes? attr, double pixelPerModule)
         {
+            if (!attr.HasValue)
+                return false;
+
             return x + pixelPerModule >= attr.Value.X && x <= attr.Value.X + attr.Value.Width && y + pixelPerModule >= attr.Value.Y && y <= attr.Value.Y + attr.Value.Height;
         }
 
-        private ImageAttributes GetLogoAttributes(SvgLogo logo, Size viewBox)
+        private static ImageAttributes GetLogoAttributes(SvgLogo logo, Size viewBox)
         {
             var imgWidth = logo.GetIconSizePercent() / 100d * viewBox.Width;
             var imgHeight = logo.GetIconSizePercent() / 100d * viewBox.Height;
@@ -250,7 +255,7 @@ namespace QRCoder.Core.Renderers
             public double Y;
         }
 
-        private string CleanSvgVal(double input)
+        private static string CleanSvgVal(double input)
         {
             //Clean double values for international use/formats
             //We use explicitly "G15" to avoid differences between .NET full and Core platforms
@@ -278,12 +283,12 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         public class SvgLogo
         {
-            private string _logoData;
-            private MediaType _mediaType;
-            private int _iconSizePercent;
-            private bool _fillLogoBackground;
-            private object _logoRaw;
-            private bool _isEmbedded;
+            private readonly string _logoData;
+            private readonly MediaType _mediaType;
+            private readonly int _iconSizePercent;
+            private readonly bool _fillLogoBackground;
+            private readonly object _logoRaw;
+            private readonly bool _isEmbedded;
 
             /// <summary>
             /// Create a logo object to be used in SvgQRCode renderer
@@ -383,7 +388,7 @@ namespace QRCoder.Core.Renderers
             /// <summary>
             /// Media types for SvgLogos
             /// </summary>
-            public enum MediaType : int
+            public enum MediaType
             {
                 /// <summary>
                 /// png.
@@ -421,6 +426,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="sizingMode">The sizing mode.</param>
         /// <param name="logo">The logo.</param>
         /// <returns>The string result.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static string GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHex, string lightSKColorHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true, SizingMode sizingMode = SizingMode.WidthHeightAttribute, SvgLogo logo = null)
         {
             using (var qrGenerator = new QRCodeGenerator())

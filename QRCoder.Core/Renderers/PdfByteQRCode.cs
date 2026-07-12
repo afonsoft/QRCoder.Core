@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using System.Globalization;
 using System.IO;
@@ -58,6 +59,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="dpi"></param>
         /// <param name="jpgQuality"></param>
         /// <returns></returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S1192", Justification = "PDF literal fragments reused in PDF generation")]
         public byte[] GetGraphic(int pixelsPerModule, string darkSKColorHtmlHex, string lightSKColorHtmlHex, int dpi = 150, long jpgQuality = 85)
         {
             byte[] jpgArray = null, pngArray = null;
@@ -211,9 +213,11 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         /// <param name="colorString">SKColor in HEX format like #ffffff</param>
         /// <returns></returns>
-        private byte[] HexSKColorToByteArray(string colorString)
+        private static byte[] HexSKColorToByteArray(string colorString)
         {
-            if (colorString.StartsWith("#"))
+            if (string.IsNullOrEmpty(colorString))
+                throw new ArgumentException("Color string cannot be null or empty.", nameof(colorString));
+            if (colorString[0] == '#')
                 colorString = colorString.Substring(1);
             byte[] byteSKColor = new byte[colorString.Length / 2];
             for (int i = 0; i < byteSKColor.Length; i++)
@@ -231,6 +235,7 @@ namespace QRCoder.Core.Renderers
         /// <summary>
         /// Generates a QR code from the given data and returns the rendered output.
         /// </summary>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex,
             string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
             EciMode eciMode = EciMode.Default, int requestedVersion = -1)

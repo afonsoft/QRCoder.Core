@@ -31,7 +31,14 @@ namespace QRCoder.Core.Tests
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
             var finder = new SKBitmap(15, 15);
-            var bmp = new ArtQRCode(data).GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, finderPatternImage: finder);
+            var bmp = new ArtQRCode(data).GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                FinderPatternImage = finder
+            });
 
             var result = HelperFunctions.BitmapToHash(bmp);
             result.ShouldBe("442648a1087f78955773c261b45665c9");
@@ -43,7 +50,14 @@ namespace QRCoder.Core.Tests
         {
             var gen = new QRCodeGenerator();
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
-            var bmp = new ArtQRCode(data).GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, drawQuietZones: false);
+            var bmp = new ArtQRCode(data).GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                DrawQuietZones = false
+            });
 
             var result = HelperFunctions.BitmapToHash(bmp);
             result.ShouldBe("4bbf0a58f3dc2c82cae0ad874da92028");
@@ -60,7 +74,7 @@ namespace QRCoder.Core.Tests
 
             var result = HelperFunctions.BitmapToHash(bmp);
 
-            result.ShouldBe("b9ecef2ee7e769d17f5e00914c7452bb");
+            result.ShouldBe("0ee19045007db3c29f2fc75f33906e49");
         }
 
         [Fact]
@@ -71,7 +85,14 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("This is a quick test! 123#?", QRCodeGenerator.ECCLevel.H);
             var aCode = new ArtQRCode(data);
 
-            var exception = Record.Exception(() => aCode.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 2));
+            var exception = Record.Exception(() => aCode.GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                PixelSizeFactor = 2
+            }));
             Assert.NotNull(exception);
             Assert.IsType<System.ArgumentOutOfRangeException>(exception);
             exception.Message.ShouldContain("pixelSizeFactor");

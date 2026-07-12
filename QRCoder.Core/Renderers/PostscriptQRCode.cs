@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 using QRCoder.Core.Extensions;
@@ -153,7 +154,7 @@ namespace QRCoder.Core.Renderers
             return sb.ToString();
         }
 
-        private string CleanSvgVal(double input)
+        private static string CleanSvgVal(double input)
         {
             return input.ToString("G7", CultureInfo.InvariantCulture);
         }
@@ -295,6 +296,7 @@ end
         /// <param name="drawQuietZones">Draw quiet zones.</param>
         /// <param name="epsFormat">Return EPS format instead of plain PostScript.</param>
         /// <returns>PostScript or EPS string.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static string GetQRCode(string plainText, int pointsPerModule, string darkSKColorHex, string lightSKColorHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, bool drawQuietZones = true, bool epsFormat = false)
         {
             using (var qrGenerator = new QRCodeGenerator())
