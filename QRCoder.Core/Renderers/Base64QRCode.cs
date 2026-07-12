@@ -12,6 +12,52 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
+    /// Options for rendering a QR code as a base64 string.
+    /// </summary>
+    public sealed class Base64QRCodeGraphicOptions
+    {
+        /// <summary>
+        /// Gets or sets the pixels per module.
+        /// </summary>
+        public int PixelsPerModule { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dark module color.
+        /// </summary>
+        public SKColor DarkSKColor { get; set; } = SKColors.Black;
+
+        /// <summary>
+        /// Gets or sets the light module color.
+        /// </summary>
+        public SKColor LightSKColor { get; set; } = SKColors.White;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether quiet zones are drawn.
+        /// </summary>
+        public bool DrawQuietZones { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the image type.
+        /// </summary>
+        public ImageType ImageType { get; set; } = ImageType.Png;
+
+        /// <summary>
+        /// Gets or sets the icon to render.
+        /// </summary>
+        public SKBitmap Icon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the icon size percentage.
+        /// </summary>
+        public int IconSizePercent { get; set; } = 15;
+
+        /// <summary>
+        /// Gets or sets the icon border width.
+        /// </summary>
+        public int IconBorderWidth { get; set; } = 6;
+    }
+
+    /// <summary>
     /// Renders a QR code as a Base64-encoded image string. Useful for embedding QR codes
     /// directly in HTML img tags or CSS without requiring a separate file.
     /// </summary>
@@ -70,6 +116,40 @@ namespace QRCoder.Core.Renderers
         }
 
         /// <summary>
+        /// Returns the graphic representation of the QR code using the specified options.
+        /// </summary>
+        /// <param name="options">Rendering options.</param>
+        /// <returns>The string result.</returns>
+        public string GetGraphic(Base64QRCodeGraphicOptions options)
+        {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return options.Icon == null
+                ? GetGraphic(options.PixelsPerModule, options.DarkSKColor, options.LightSKColor, options.DrawQuietZones, options.ImageType)
+                : RenderGraphic(options, options.ImageType);
+        }
+
+        private string RenderGraphic(Base64QRCodeGraphicOptions options, ImageType imgType)
+        {
+            var base64 = string.Empty;
+            using (SKBitmap bmp = qr.GetGraphic(new QRCodeGraphicOptions
+                {
+                    PixelsPerModule = options.PixelsPerModule,
+                    DarkSKColor = options.DarkSKColor,
+                    LightSKColor = options.LightSKColor,
+                    DrawQuietZones = options.DrawQuietZones,
+                    Icon = options.Icon,
+                    IconSizePercent = options.IconSizePercent,
+                    IconBorderWidth = options.IconBorderWidth
+                }))
+            {
+                base64 = SKBitmapToBase64(bmp, imgType);
+            }
+            return base64;
+        }
+
+        /// <summary>
         /// Returns the graphic representation of the QR code.
         /// </summary>
         /// <param name="pixelsPerModule">The pixels per module.</param>
@@ -100,10 +180,20 @@ namespace QRCoder.Core.Renderers
         /// <param name="drawQuietZones">The draw quiet zones.</param>
         /// <param name="imgType">The img type.</param>
         /// <returns>The string result.</returns>
+        [Obsolete("Use GetGraphic(Base64QRCodeGraphicOptions) instead.")]
         public string GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKBitmap icon, int iconSizePercent = 15, int iconBorderWidth = 6, bool drawQuietZones = true, ImageType imgType = ImageType.Png)
         {
             var base64 = string.Empty;
-            using (SKBitmap bmp = qr.GetGraphic(pixelsPerModule, darkSKColor, lightSKColor, icon, iconSizePercent, iconBorderWidth, drawQuietZones))
+            using (SKBitmap bmp = qr.GetGraphic(new QRCodeGraphicOptions
+            {
+                PixelsPerModule = pixelsPerModule,
+                DarkSKColor = darkSKColor,
+                LightSKColor = lightSKColor,
+                DrawQuietZones = drawQuietZones,
+                Icon = icon,
+                IconSizePercent = iconSizePercent,
+                IconBorderWidth = iconBorderWidth
+            }))
             {
                 base64 = SKBitmapToBase64(bmp, imgType);
             }
