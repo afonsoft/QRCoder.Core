@@ -138,7 +138,7 @@ namespace QRCoder.Core.Tests.Generators
         public void dispose_works_without_exception()
         {
             var gen = new QRCodeGenerator();
-            gen.Dispose();
+            Should.NotThrow(() => gen.Dispose());
         }
 
         [Fact]
