@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using static QRCoder.Core.Generators.QRCodeGenerator;
 
@@ -99,6 +100,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="endOfLine">The end of line.</param>
         /// <param name="drawQuietZones">The draw quiet zones.</param>
         /// <returns>The string result.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static string GetQRCode(string plainText, int pixelsPerModule, string darkSKColorString, string whiteSpaceString, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, string endOfLine = "\n", bool drawQuietZones = true)
         {
             using (var qrGenerator = new QRCodeGenerator())
