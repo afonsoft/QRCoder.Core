@@ -112,7 +112,9 @@ namespace QRCoder.Core.Renderers
 
         private static byte[] HexSKColorToByteArray(string colorString)
         {
-            if (!string.IsNullOrEmpty(colorString) && colorString[0] == '#')
+            if (string.IsNullOrEmpty(colorString))
+                throw new ArgumentException("Color string cannot be null or empty.", nameof(colorString));
+            if (colorString[0] == '#')
                 colorString = colorString.Substring(1);
             byte[] byteSKColor = new byte[colorString.Length / 2];
             for (int i = 0; i < byteSKColor.Length; i++)
