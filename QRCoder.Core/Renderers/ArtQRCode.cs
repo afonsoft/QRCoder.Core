@@ -243,7 +243,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="pixelSize">Size of the dots</param>
         /// <param name="brush">SKColor of the pixels</param>
         /// <returns></returns>
-        private SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
+        private static SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
         {
             // draw a dot
             var bitmap = new SKBitmap(pixelSize, pixelSize);
@@ -275,7 +275,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="y">Y position</param>
         /// <param name="numModules">Total number of modules per row</param>
         /// <returns>true, if position is part of quiet zone</returns>
-        private bool IsPartOfQuietZone(int x, int y, int numModules)
+        private static bool IsPartOfQuietZone(int x, int y, int numModules)
         {
             return
                 x < 4 || //left
@@ -292,7 +292,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="numModules">Total number of modules per row</param>
         /// <param name="offset">Offset in modules (usually depending on drawQuietZones parameter)</param>
         /// <returns>true, if position is part of any finder pattern</returns>
-        private bool IsPartOfFinderPattern(int x, int y, int numModules, int offset)
+        private static bool IsPartOfFinderPattern(int x, int y, int numModules, int offset)
         {
             var cornerSize = 11 - offset;
             var outerLimitLow = (numModules - cornerSize - 1);
@@ -310,7 +310,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="image"></param>
         /// <param name="newSize"></param>
         /// <returns>Resized image as bitmap</returns>
-        private SKBitmap Resize(SKBitmap image, int newSize)
+        private static SKBitmap Resize(SKBitmap image, int newSize)
         {
             if (image == null) return null;
 

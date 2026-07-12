@@ -153,7 +153,7 @@ namespace QRCoder.Core.Renderers
             return sb.ToString();
         }
 
-        private string CleanSvgVal(double input)
+        private static string CleanSvgVal(double input)
         {
             return input.ToString("G7", CultureInfo.InvariantCulture);
         }

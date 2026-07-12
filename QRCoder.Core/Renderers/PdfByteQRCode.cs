@@ -211,7 +211,7 @@ namespace QRCoder.Core.Renderers
         /// </summary>
         /// <param name="colorString">SKColor in HEX format like #ffffff</param>
         /// <returns></returns>
-        private byte[] HexSKColorToByteArray(string colorString)
+        private static byte[] HexSKColorToByteArray(string colorString)
         {
             if (colorString.StartsWith("#"))
                 colorString = colorString.Substring(1);

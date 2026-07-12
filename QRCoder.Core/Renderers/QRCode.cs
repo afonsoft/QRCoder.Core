@@ -235,7 +235,7 @@ namespace QRCoder.Core.Renderers
             return RenderGraphic(pixelsPerModule, darkSKColor, lightSKColor, icon, iconSizePercent, iconBorderWidth, drawQuietZones, iconBackgroundSKColor);
         }
 
-        internal SKPath CreateRoundedSKRectIPath(SKRect rect, int cornerRadius)
+        internal static SKPath CreateRoundedSKRectIPath(SKRect rect, int cornerRadius)
         {
             var roundedRect = new SKPath();
             roundedRect.AddArc(new SKRect(rect.Left, rect.Top, rect.Left + cornerRadius * 2, rect.Top + cornerRadius * 2), 180, 90);

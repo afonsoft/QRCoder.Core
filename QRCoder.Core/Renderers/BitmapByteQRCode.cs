@@ -108,7 +108,7 @@ namespace QRCoder.Core.Renderers
             return bmp.ToArray();
         }
 
-        private byte[] HexSKColorToByteArray(string colorString)
+        private static byte[] HexSKColorToByteArray(string colorString)
         {
             if (colorString.StartsWith("#"))
                 colorString = colorString.Substring(1);
@@ -118,7 +118,7 @@ namespace QRCoder.Core.Renderers
             return byteSKColor;
         }
 
-        private byte[] IntTo4Byte(int inp)
+        private static byte[] IntTo4Byte(int inp)
         {
             byte[] bytes = new byte[2];
             unchecked

@@ -63,7 +63,7 @@ namespace QRCoder.Core.Renderers
     /// </summary>
     public class Base64QRCode : AbstractQRCode
     {
-        private QRCode qr;
+        private readonly QRCode qr;
 
         /// <summary>
         /// Constructor without params to be used in COM Objects connections
@@ -200,7 +200,7 @@ namespace QRCoder.Core.Renderers
             return base64;
         }
 
-        private string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
+        private static string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
         {
             var base64 = string.Empty;
             SKEncodedImageFormat encodedFormat = imgType switch

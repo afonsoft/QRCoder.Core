@@ -222,12 +222,12 @@ namespace QRCoder.Core.Renderers
             return svgFile.ToString();
         }
 
-        private bool IsBlockedByLogo(double x, double y, ImageAttributes? attr, double pixelPerModule)
+        private static bool IsBlockedByLogo(double x, double y, ImageAttributes? attr, double pixelPerModule)
         {
             return x + pixelPerModule >= attr.Value.X && x <= attr.Value.X + attr.Value.Width && y + pixelPerModule >= attr.Value.Y && y <= attr.Value.Y + attr.Value.Height;
         }
 
-        private ImageAttributes GetLogoAttributes(SvgLogo logo, Size viewBox)
+        private static ImageAttributes GetLogoAttributes(SvgLogo logo, Size viewBox)
         {
             var imgWidth = logo.GetIconSizePercent() / 100d * viewBox.Width;
             var imgHeight = logo.GetIconSizePercent() / 100d * viewBox.Height;
@@ -250,7 +250,7 @@ namespace QRCoder.Core.Renderers
             public double Y;
         }
 
-        private string CleanSvgVal(double input)
+        private static string CleanSvgVal(double input)
         {
             //Clean double values for international use/formats
             //We use explicitly "G15" to avoid differences between .NET full and Core platforms
