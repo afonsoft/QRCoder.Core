@@ -197,11 +197,23 @@ namespace QRCoder.Core.Renderers
                         if (backgroundImage != null)
                         {
                             if (backgroundImageStyle == BackgroundImageStyle.Fill)
-                                graphics.DrawBitmap(Resize(backgroundImage, size), 0, 0);
+                            {
+                                using (var resizedImage = Resize(backgroundImage, size))
+                                {
+                                    if (resizedImage != null)
+                                        graphics.DrawBitmap(resizedImage, 0, 0);
+                                    graphics.Flush();
+                                }
+                            }
                             else if (backgroundImageStyle == BackgroundImageStyle.DataAreaOnly)
                             {
                                 var bgOffset = 4 - offset;
-                                graphics.DrawBitmap(Resize(backgroundImage, size - (2 * bgOffset * pixelsPerModule)), 0 + (bgOffset * pixelsPerModule), (bgOffset * pixelsPerModule));
+                                using (var resizedImage = Resize(backgroundImage, size - (2 * bgOffset * pixelsPerModule)))
+                                {
+                                    if (resizedImage != null)
+                                        graphics.DrawBitmap(resizedImage, 0 + (bgOffset * pixelsPerModule), (bgOffset * pixelsPerModule));
+                                    graphics.Flush();
+                                }
                             }
                         }
 
@@ -316,34 +328,34 @@ namespace QRCoder.Core.Renderers
         /// <summary>
         /// Resize to a square bitmap, but maintain the aspect ratio by padding transparently.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="newSize"></param>
-        /// <returns>Resized image as bitmap</returns>
-        private SKBitmap Resize(SKBitmap image, int newSize)
+        /// <param name="image">Source image to resize.</param>
+        /// <param name="newSize">Target side length of the square output.</param>
+        /// <returns>Resized image as bitmap, or null if the source image is invalid.</returns>
+        private static SKBitmap Resize(SKBitmap image, int newSize)
         {
-            if (image == null) return null;
+            if (image == null || image.Width == 0 || image.Height == 0 || newSize <= 0)
+                return null;
 
             float scale = Math.Min((float)newSize / image.Width, (float)newSize / image.Height);
-            var scaledWidth = (int)(image.Width * scale);
-            var scaledHeight = (int)(image.Height * scale);
+            var scaledWidth = Math.Max(1, (int)(image.Width * scale));
+            var scaledHeight = Math.Max(1, (int)(image.Height * scale));
             var offsetX = (newSize - scaledWidth) / 2;
             var offsetY = (newSize - scaledHeight) / 2;
 
-            var scaledImage = new SKBitmap(scaledWidth, scaledHeight);
-
-            var bm = new SKBitmap(newSize, newSize);
-
-            using (var graphics = new SKCanvas(bm))
+            using (var scaledImage = image.Resize(new SKSizeI(scaledWidth, scaledHeight), new SKSamplingOptions(SKFilterMode.Linear)))
             {
-                using (var brush = new SKPaint { Color = SKColors.Transparent, })
-                {
-                    graphics.DrawRect(new SKRect(0, 0, newSize, newSize), brush);
-                    brush.IsAntialias = true;
+                if (scaledImage == null)
+                    return null;
 
-                    graphics.DrawBitmap(scaledImage, new SKRect(offsetX, offsetY, offsetX + scaledWidth, offsetY + scaledHeight));
+                var bm = new SKBitmap(newSize, newSize);
+                using (var graphics = new SKCanvas(bm))
+                {
+                    graphics.Clear(SKColors.Transparent);
+                    graphics.DrawBitmap(scaledImage, offsetX, offsetY);
+                    graphics.Flush();
                 }
+                return bm;
             }
-            return bm;
         }
 
         /// <summary>
