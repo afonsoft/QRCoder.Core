@@ -12,11 +12,16 @@ jobs:
   check-dependencies:
     name: 🔍 Check Dependency Updates
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      AUTHOR_NAME: ${{ github.event.head_commit.author.name || github.actor }}
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +32,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: 🗄️ Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
           dotnet-version: "10.0.x"
 
@@ -37,7 +42,7 @@ jobs:
 
           # Create update branch
           BRANCH_NAME="dependency-update-$(date +%Y%m%d-%H%M%S)"
-          git checkout -b $BRANCH_NAME
+          git checkout -b "$BRANCH_NAME"
 
           # List outdated packages
           dotnet list QRCoder.Core.sln package --outdated 
@@ -70,7 +75,7 @@ jobs:
           🤖 This commit was automatically created."
 
           # Push branch
-          git push origin $BRANCH_NAME
+          git push origin "$BRANCH_NAME"
 
           # Create PR
           PR_TITLE="🔄 Auto-update Dependencies"
@@ -78,7 +83,7 @@ jobs:
 
           **Triggered by:** ${{ github.event_name }}
           **Commit:** [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-          **Author:** ${{ github.event.head_commit.author.name }}
+          **Author:** $AUTHOR_NAME
 
           ---
 
@@ -110,7 +115,7 @@ jobs:
             --title "$PR_TITLE" \
             --body "$PR_BODY" \
             --base main \
-            --head $BRANCH_NAME \
+            --head "$BRANCH_NAME" \
             --label "dependencies,auto-update" \
             --assignee afonsoft || echo "PR already exists or creation failed"
 
@@ -122,7 +127,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Triggered by:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "**Commit:** [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})" >> $GITHUB_STEP_SUMMARY
-          echo "**Author:** ${{ github.event.head_commit.author.name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Author:** $AUTHOR_NAME" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Status:** ✅ Dependency update process completed" >> $GITHUB_STEP_SUMMARY
 
@@ -130,11 +135,14 @@ jobs:
   security-update:
     name: 🔒 Security Update Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     if: github.event_name == 'schedule'
 
     steps:
       - name: 📥 Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -145,7 +153,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: �️ Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
           dotnet-version: "10.0.x"
 
@@ -161,7 +169,7 @@ jobs:
             echo "🚨 Security vulnerabilities detected, creating update PR..."
             
             BRANCH_NAME="security-update-$(date +%Y%m%d-%H%M%S)"
-            git checkout -b $BRANCH_NAME
+            git checkout -b "$BRANCH_NAME"
             
             # Update vulnerable packages
             echo "🔒 Updating vulnerable packages..."
@@ -182,7 +190,7 @@ jobs:
             � This commit addresses security vulnerabilities."
             
             # Push branch
-            git push origin $BRANCH_NAME
+            git push origin "$BRANCH_NAME"
             
             # Create urgent PR
             PR_TITLE="🚨 Security Update - Fix Vulnerable Dependencies"
@@ -225,9 +233,9 @@ jobs:
               --title "$PR_TITLE" \
               --body "$PR_BODY" \
               --base main \
-              --head $BRANCH_NAME \
+              --head "$BRANCH_NAME" \
               --label "security,urgent,vulnerability" \
-              --assignee ${{ github.event.head_commit.author.username }} || echo "Security PR already exists"
+              --assignee afonsoft || echo "Security PR already exists"
             
             echo "🚨 Security update PR created successfully"
           else
