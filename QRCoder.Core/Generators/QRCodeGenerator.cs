@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using QRCoder.Core.Exceptions;
@@ -261,7 +262,7 @@ namespace QRCoder.Core.Generators
                         interleavedWordsSb.Append(codeBlock.CodeWords[i]);
             }
 
-            for (var i = 0; i < eccInfo.ECCPerBlock; i++)
+            for (var i = 0; i < eccInfo.EccPerBlock; i++)
             {
                 foreach (var codeBlock in codeWordWithECC)
                     if (codeBlock.ECCWords.Count > i)
@@ -826,7 +827,7 @@ namespace QRCoder.Core.Generators
 
         private static List<string> CalculateECCWords(string bitString, EccInfo eccInfo)
         {
-            var eccWords = eccInfo.ECCPerBlock;
+            var eccWords = eccInfo.EccPerBlock;
             var messagePolynom = CalculateMessagePolynom(bitString);
             var generatorPolynom = CalculateGeneratorPolynom(eccWords);
 
@@ -1399,7 +1400,7 @@ namespace QRCoder.Core.Generators
         /// <summary>
         /// Error correction level. These define the tolerance levels for how much of the code can be lost before the code cannot be recovered.
         /// </summary>
-        // NOSONAR - Retained for source compatibility with the existing public API.
+        [SuppressMessage("SonarAnalyzer.CSharp", "S2342", Justification = "Retained for source compatibility with the existing public API.")]
         public enum ECCLevel
         {
             /// <summary>
@@ -1469,7 +1470,7 @@ namespace QRCoder.Core.Generators
                 this.Version = version;
                 this.ErrorCorrectionLevel = errorCorrectionLevel;
                 this.TotalDataCodewords = totalDataCodewords;
-                this.ECCPerBlock = eccPerBlock;
+                this.EccPerBlock = eccPerBlock;
                 this.BlocksInGroup1 = blocksInGroup1;
                 this.CodewordsInGroup1 = codewordsInGroup1;
                 this.BlocksInGroup2 = blocksInGroup2;
@@ -1479,7 +1480,7 @@ namespace QRCoder.Core.Generators
             public int Version { get; }
             public ECCLevel ErrorCorrectionLevel { get; }
             public int TotalDataCodewords { get; }
-            public int ECCPerBlock { get; }
+            public int EccPerBlock { get; }
             public int BlocksInGroup1 { get; }
             public int CodewordsInGroup1 { get; }
             public int BlocksInGroup2 { get; }
