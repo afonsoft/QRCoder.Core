@@ -895,17 +895,6 @@ namespace QRCoder.Core.Generators
             return codeText;
         }
 
-        private string PlainTextToBinaryECI(string plainText)
-        {
-            var codeText = string.Empty;
-            byte[] _bytes = Encoding.GetEncoding("ascii").GetBytes(plainText);
-            foreach (byte _byte in _bytes)
-            {
-                codeText += DecToBin(_byte, 8);
-            }
-            return codeText;
-        }
-
         private static string ConvertToIso8859(string value, string Iso = "ISO-8859-2")
         {
             Encoding iso = Encoding.GetEncoding(Iso);

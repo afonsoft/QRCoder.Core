@@ -915,9 +915,8 @@ namespace QRCoder.Core.Generators
             private readonly string alternativeProcedure1, alternativeProcedure2;
             private readonly Iban iban;
             private readonly decimal? amount;
-            private readonly Contact creditor, ultimateCreditor, debitor;
+            private readonly Contact creditor, debitor;
             private readonly Currency currency;
-            private readonly DateTime? requestedDateOfPayment;
             private readonly Reference reference;
             private readonly AdditionalInformation additionalInformation;
 
@@ -940,7 +939,6 @@ namespace QRCoder.Core.Generators
                 this.iban = iban;
 
                 this.creditor = creditor;
-                this.ultimateCreditor = ultimateCreditor;
 
                 this.additionalInformation = additionalInformation != null ? additionalInformation : new AdditionalInformation();
 
@@ -949,7 +947,6 @@ namespace QRCoder.Core.Generators
                 this.amount = amount;
 
                 this.currency = currency;
-                this.requestedDateOfPayment = requestedDateOfPayment;
                 this.debitor = debitor;
 
                 if (iban.IsQrIban && reference.RefType != Reference.ReferenceType.QRR)
@@ -1051,7 +1048,6 @@ namespace QRCoder.Core.Generators
             {
                 private readonly ReferenceType referenceType;
                 private readonly string reference;
-                private readonly ReferenceTextType? referenceTextType;
 
                 /// <summary>
                 /// Creates a reference object which must be passed to the SwissQrCode instance
@@ -1062,7 +1058,6 @@ namespace QRCoder.Core.Generators
                 public Reference(ReferenceType referenceType, string reference = null, ReferenceTextType? referenceTextType = null)
                 {
                     this.referenceType = referenceType;
-                    this.referenceTextType = referenceTextType;
 
                     if (referenceType == ReferenceType.NON && reference != null)
                         throw new SwissQrCodeReferenceException("Reference is only allowed when referenceType not equals \"NON\"");
@@ -1259,9 +1254,9 @@ namespace QRCoder.Core.Generators
             public class Contact
             {
                 private static readonly HashSet<string> twoLetterCodes = ValidTwoLetterCodes();
-                private string br = "\r\n";
-                private string name, streetOrAddressline1, houseNumberOrAddressline2, zipCode, city, country;
-                private AddressType adrType;
+            private readonly string br = "\r\n";
+            private readonly string name, streetOrAddressline1, houseNumberOrAddressline2, zipCode, city, country;
+            private readonly AddressType adrType;
 
                 /// <summary>
                 /// Contact type. Can be used for payee, ultimate payee, etc. with address in structured mode (S).
@@ -1569,12 +1564,12 @@ namespace QRCoder.Core.Generators
         /// <summary>
         /// Represents a girocode.
         /// </summary>
-        public class Girocode : Payload
-        {
+            public class Girocode : Payload
+            {
             //Keep in mind, that the ECC level has to be set to "M" when generating a Girocode!
             //Girocode specification: http://www.europeanpaymentscouncil.eu/index.cfm/knowledge-bank/epc-documents/quick-response-code-guidelines-to-enable-data-capture-for-the-initiation-of-a-sepa-credit-transfer/epc069-12-quick-response-code-guidelines-to-enable-data-capture-for-the-initiation-of-a-sepa-credit-transfer1/
 
-            private string br = "\n";
+            private readonly string br = "\n";
             private readonly string iban, bic, name, purposeOfCreditTransfer, remittanceInformation, messageToGirocodeUser;
             private readonly decimal amount;
             private readonly GirocodeVersion version;
@@ -1632,9 +1627,9 @@ namespace QRCoder.Core.Generators
             /// Returns the string representation of the current object.
             /// </summary>
             /// <returns>The string result.</returns>
-            public override string ToString()
-            {
-                var girocodePayload = "BCD" + br;
+                public override string ToString()
+                {
+                    var girocodePayload = "BCD" + br;
                 girocodePayload += ((version == GirocodeVersion.Version1) ? "001" : "002") + br;
                 girocodePayload += (int)encoding + 1 + br;
                 girocodePayload += "SCT" + br;
@@ -1652,7 +1647,16 @@ namespace QRCoder.Core.Generators
                 girocodePayload += messageToGirocodeUser;
 
                 return ConvertStringToEncoding(girocodePayload, encoding.ToString().Replace("_", "-"));
-            }
+                }
+
+                private static string ConvertStringToEncoding(string message, string encoding)
+                {
+                    Encoding iso = Encoding.GetEncoding(encoding);
+                    Encoding utf8 = Encoding.UTF8;
+                    byte[] utfBytes = utf8.GetBytes(message);
+                    byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
+                    return iso.GetString(isoBytes, 0, isoBytes.Length);
+                }
 
             /// <summary>
             /// Defines the girocode version values.
@@ -1762,6 +1766,8 @@ namespace QRCoder.Core.Generators
         public class BezahlCode : Payload
         {
             //BezahlCode specification: http://www.bezahlcode.de/wp-content/uploads/BezahlCode_TechDok.pdf
+
+            private const string DateFormat = "ddMMyyyy";
 
             private readonly string name, iban, bic, account, bnc, sepaReference, reason, creditorId, mandateId, periodicTimeunit;
             private readonly decimal amount;
@@ -3616,19 +3622,19 @@ namespace QRCoder.Core.Generators
             //Keep in mind, that the ECC level has to be set to "M", version to 15 and ECI to EciMode.Iso8859_2 when generating a SlovenianUpnQr!
             //SlovenianUpnQr specification: https://www.upn-qr.si/uploads/files/NavodilaZaProgramerjeUPNQR.pdf
 
-            private string _payerName = "";
-            private string _payerAddress = "";
-            private string _payerPlace = "";
-            private string _amount = "";
-            private string _code = "";
-            private string _purpose = "";
-            private string _deadLine = "";
-            private string _recipientIban = "";
-            private string _recipientName = "";
-            private string _recipientAddress = "";
-            private string _recipientPlace = "";
-            private string _recipientSiModel = "";
-            private string _recipientSiReference = "";
+            private readonly string _payerName = "";
+            private readonly string _payerAddress = "";
+            private readonly string _payerPlace = "";
+            private readonly string _amount = "";
+            private readonly string _code = "";
+            private readonly string _purpose = "";
+            private readonly string _deadLine = "";
+            private readonly string _recipientIban = "";
+            private readonly string _recipientName = "";
+            private readonly string _recipientAddress = "";
+            private readonly string _recipientPlace = "";
+            private readonly string _recipientSiModel = "";
+            private readonly string _recipientSiReference = "";
 
             /// <summary>
             /// The version value.
@@ -3696,7 +3702,7 @@ namespace QRCoder.Core.Generators
                 _amount = FormatAmount(amount);
                 _code = LimitLength(code.Trim().ToUpper(), 4);
                 _purpose = LimitLength(description.Trim(), 42);
-                _deadLine = deadline == null ? string.Empty : deadline.Value.ToString("dd.MM.yyyy");
+                _deadLine = deadline?.ToString("dd.MM.yyyy") ?? "";
                 _recipientIban = LimitLength(recipientIban.Trim(), 34);
                 _recipientName = LimitLength(recipientName.Trim(), 33);
                 _recipientAddress = LimitLength(recipientAddress.Trim(), 33);
@@ -3705,7 +3711,7 @@ namespace QRCoder.Core.Generators
                 _recipientSiReference = LimitLength(recipientSiReference.Trim(), 22);
             }
 
-            private string FormatAmount(double amount)
+            private static string FormatAmount(double amount)
             {
                 int _amt = (int)Math.Round(amount * 100.0);
                 return String.Format("{0:00000000000}", _amt);
@@ -3773,11 +3779,10 @@ namespace QRCoder.Core.Generators
             // https://www.sbqr.ru/validator/index.html
 
             //base
-            private CharacterSets characterSet;
+            private readonly CharacterSets characterSet;
 
-            private MandatoryFields mFields;
-            private OptionalFields oFields;
-            private string separator = "|";
+            private readonly MandatoryFields mFields;
+            private readonly OptionalFields oFields;
 
             private RussiaPaymentOrder()
             {
@@ -3829,8 +3834,8 @@ namespace QRCoder.Core.Generators
 
             public byte[] ToBytes()
             {
-                //Calculate the seperator
-                separator = DetermineSeparator();
+                //Calculate the separator
+                var separator = DetermineSeparator();
 
                 //Create the payload string
                 string ret = $"ST0001" + ((int)characterSet).ToString() + //(separator != "|" ? separator : "") +
@@ -3843,7 +3848,7 @@ namespace QRCoder.Core.Generators
                 //Add optional fields, if filled
                 var optionalFieldsList = GetOptionalFieldsAsList();
                 if (optionalFieldsList.Count > 0)
-                    ret += $"|{string.Join("|", optionalFieldsList.ToArray())}";
+                    ret += $"|{string.Join("|", optionalFieldsList)}";
                 ret += separator;
 
                 //Encode return string as byte[] with correct CharacterSet
@@ -3866,12 +3871,10 @@ namespace QRCoder.Core.Generators
                 var optionalValues = GetOptionalFieldsAsList();
 
                 // Possible candidates for field separation
-                var separatorCandidates = new string[] { "|", "#", ";", ":", "^", "_", "~", "{", "}", "!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "/", "@" };
-                foreach (var sepCandidate in separatorCandidates)
-                {
-                    if (!mandatoryValues.Any(x => x.Contains(sepCandidate)) && !optionalValues.Any(x => x.Contains(sepCandidate)))
-                        return sepCandidate;
-                }
+                var separatorCandidate = new[] { "|", "#", ";", ":", "^", "_", "~", "{", "}", "!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "/", "@" }
+                    .FirstOrDefault(sep => !mandatoryValues.Any(x => x.Contains(sep)) && !optionalValues.Any(x => x.Contains(sep)));
+                if (!string.IsNullOrEmpty(separatorCandidate))
+                    return separatorCandidate;
                 throw new RussiaPaymentOrderException("No valid separator found.");
             }
 
@@ -3919,7 +3922,7 @@ namespace QRCoder.Core.Generators
             /// <returns>Input value (in case it is valid)</returns>
             private static string ValidateInput(string input, string fieldname, string pattern, string errorText = null)
             {
-                return ValidateInput(input, fieldname, new string[] { pattern }, errorText);
+                return ValidateInput(input, fieldname, new[] { pattern }, errorText);
             }
 
             /// <summary>
@@ -3934,15 +3937,13 @@ namespace QRCoder.Core.Generators
             {
                 if (input == null)
                     throw new RussiaPaymentOrderException($"The input for '{fieldname}' must not be null.");
-                foreach (var pattern in patterns)
-                {
-                    if (!Regex.IsMatch(input, pattern))
-                        throw new RussiaPaymentOrderException(errorText ?? $"The input for '{fieldname}' ({input}) doesn't match the pattern {pattern}");
-                }
+                var invalidPattern = patterns.FirstOrDefault(pattern => !Regex.IsMatch(input, pattern));
+                if (invalidPattern != null)
+                    throw new RussiaPaymentOrderException(errorText ?? $"The input for '{fieldname}' ({input}) doesn't match the pattern {invalidPattern}");
                 return input;
             }
 
-            private class MandatoryFields
+            private sealed class MandatoryFields
             {
                 public string Name;
                 public string PersonalAcc;
@@ -4433,31 +4434,26 @@ namespace QRCoder.Core.Generators
             return structurallyValid && checksumValid;
         }
 
-        private static bool IsValidQRIban(string iban)
+        private static bool IsValidQRIban(string value) // NOSONAR
         {
             var foundQrIid = false;
             try
             {
-                var ibanCleared = iban.ToUpper().Replace(" ", "").Replace("-", "");
+                var ibanCleared = value.ToUpper().Replace(" ", "").Replace("-", "");
                 var possibleQrIid = Convert.ToInt32(ibanCleared.Substring(4, 5));
                 foundQrIid = possibleQrIid >= 30000 && possibleQrIid <= 31999;
             }
-            catch { }
-            return IsValidIban(iban) && foundQrIid;
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return IsValidIban(value) && foundQrIid;
         }
 
         private static bool IsValidBic(string bic)
         {
             return Regex.IsMatch(bic.Replace(" ", ""), @"^([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)$");
-        }
-
-        private static string ConvertStringToEncoding(string message, string encoding)
-        {
-            Encoding iso = Encoding.GetEncoding(encoding);
-            Encoding utf8 = Encoding.UTF8;
-            byte[] utfBytes = utf8.GetBytes(message);
-            byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
-            return iso.GetString(isoBytes, 0, isoBytes.Length);
         }
 
         private static string EscapeInput(string inp, bool simple = false)
