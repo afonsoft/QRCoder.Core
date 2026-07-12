@@ -216,11 +216,11 @@ namespace QRCoder.Core.Renderers
 
         private static void DrawIcon(SKCanvas gfx, SKBitmap bmp, SKBitmap icon, int iconSizePercent, int iconBorderWidth, SKColor? iconBackgroundSKColor, SKPaint lightBrush)
         {
-            float iconDestWidth = iconSizePercent * bmp.Width / 100f;
-            float iconDestHeight = iconDestWidth * icon.Height / icon.Width;
-            float iconX = (bmp.Width - iconDestWidth) / 2;
-            float iconY = (bmp.Height - iconDestHeight) / 2;
-            var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2);
+            float iconDestWidth = iconSizePercent * (float)bmp.Width / 100f;
+            float iconDestHeight = iconDestWidth * (float)icon.Height / (float)icon.Width;
+            float iconX = ((float)bmp.Width - iconDestWidth) / 2;
+            float iconY = ((float)bmp.Height - iconDestHeight) / 2;
+            var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2f, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2f);
             var iconDestRect = new SKRect(iconX, iconY, iconX + iconDestWidth, iconY + iconDestHeight);
             using (var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : null)
             {

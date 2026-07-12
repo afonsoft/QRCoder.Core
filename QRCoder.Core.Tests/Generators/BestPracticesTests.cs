@@ -593,7 +593,15 @@ namespace QRCoder.Core.Tests
             var b64 = new Base64QRCode(data);
 
             var icon = new SKBitmap(10, 10);
-            var result = b64.GetGraphic(5, SKColors.Black, SKColors.White, icon, 15, 2);
+            var result = b64.GetGraphic(new Base64QRCodeGraphicOptions
+            {
+                PixelsPerModule = 5,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                Icon = icon,
+                IconSizePercent = 15,
+                IconBorderWidth = 2
+            });
             result.ShouldNotBeNullOrEmpty();
         }
 
@@ -746,7 +754,14 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("Art pixel", QRCodeGenerator.ECCLevel.H);
             var art = new ArtQRCode(data);
 
-            var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 0.5);
+            var bmp = art.GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                PixelSizeFactor = 0.5
+            });
             bmp.ShouldNotBeNull();
         }
 
@@ -758,8 +773,14 @@ namespace QRCoder.Core.Tests
             var data = gen.CreateQrCode("Art flat QZ", QRCodeGenerator.ECCLevel.H);
             var art = new ArtQRCode(data);
 
-            var bmp = art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent,
-                quietZoneRenderingStyle: ArtQRCode.QuietZoneStyle.Flat);
+            var bmp = art.GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                QuietZoneRenderingStyle = ArtQRCode.QuietZoneStyle.Flat
+            });
             bmp.ShouldNotBeNull();
         }
 
@@ -772,7 +793,14 @@ namespace QRCoder.Core.Tests
             var art = new ArtQRCode(data);
 
             Should.Throw<ArgumentOutOfRangeException>(() =>
-                art.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, pixelSizeFactor: 1.5));
+                art.GetGraphic(new ArtQRCodeGraphicOptions
+                {
+                    PixelsPerModule = 10,
+                    DarkSKColor = SKColors.Black,
+                    LightSKColor = SKColors.White,
+                    BackgroundSKColor = SKColors.Transparent,
+                    PixelSizeFactor = 1.5
+                }));
         }
 
         #endregion
