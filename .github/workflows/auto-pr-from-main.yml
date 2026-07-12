@@ -40,12 +40,42 @@ jobs:
           git checkout -b $BRANCH_NAME
 
           # List outdated packages
-          dotnet list QRCoder.Core.sln package --outdated 
+          dotnet list QRCoder.Core.sln package --outdated --format json > outdated-packages.json
 
-          # Update packages (this is a simplified approach)
+          # Update packages using the latest available versions
           echo "📦 Updating NuGet packages..."
-          dotnet add src/Metar.Decoder package --version latest || echo "No updates needed for Metar.Decoder"
-          dotnet add src/Taf.Decoder package --version latest || echo "No updates needed for Taf.Decoder"
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          data = json.loads(pathlib.Path("outdated-packages.json").read_text())
+          updates = {}
+
+          for project in data.get("projects", []):
+              project_path = pathlib.Path(project["path"]).resolve()
+              for framework in project.get("frameworks", []):
+                  for package in framework.get("topLevelPackages", []):
+                      latest = package.get("latestVersion")
+                      requested = package.get("requestedVersion")
+                      if latest and latest != requested:
+                          updates.setdefault(project_path, {})[package["id"]] = latest
+
+          for project_path, packages in updates.items():
+              for package_name, latest_version in sorted(packages.items()):
+                  subprocess.run(
+                      [
+                          "dotnet",
+                          "add",
+                          str(project_path),
+                          "package",
+                          package_name,
+                          "--version",
+                          latest_version,
+                      ],
+                      check=True,
+                  )
+          PY
 
           # Check if there are any changes
           if git diff --quiet; then
