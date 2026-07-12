@@ -10,6 +10,62 @@ using QRCoder.Core.Models;
 namespace QRCoder.Core.Renderers
 {
     /// <summary>
+    /// Options for rendering an art-style QR code.
+    /// </summary>
+    public sealed class ArtQRCodeGraphicOptions
+    {
+        /// <summary>
+        /// Gets or sets the pixels per module.
+        /// </summary>
+        public int PixelsPerModule { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dark module color.
+        /// </summary>
+        public SKColor DarkSKColor { get; set; } = SKColors.Black;
+
+        /// <summary>
+        /// Gets or sets the light module color.
+        /// </summary>
+        public SKColor LightSKColor { get; set; } = SKColors.White;
+
+        /// <summary>
+        /// Gets or sets the background color.
+        /// </summary>
+        public SKColor BackgroundSKColor { get; set; } = SKColors.Transparent;
+
+        /// <summary>
+        /// Gets or sets the background image.
+        /// </summary>
+        public SKBitmap BackgroundImage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the pixel size factor.
+        /// </summary>
+        public double PixelSizeFactor { get; set; } = 0.8;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether quiet zones are drawn.
+        /// </summary>
+        public bool DrawQuietZones { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the quiet zone rendering style.
+        /// </summary>
+        public QuietZoneStyle QuietZoneRenderingStyle { get; set; } = QuietZoneStyle.Dotted;
+
+        /// <summary>
+        /// Gets or sets the background image style.
+        /// </summary>
+        public BackgroundImageStyle BackgroundImageStyle { get; set; } = BackgroundImageStyle.DataAreaOnly;
+
+        /// <summary>
+        /// Gets or sets the finder pattern image.
+        /// </summary>
+        public SKBitmap FinderPatternImage { get; set; }
+    }
+
+    /// <summary>
     /// Renders a QR code with artistic styling using rounded dots instead of square modules.
     /// Supports custom dot colors, background images, and quiet zone control.
     /// </summary>
@@ -34,7 +90,13 @@ namespace QRCoder.Core.Renderers
         /// <returns>QRCode graphic as bitmap</returns>
         public SKBitmap GetGraphic(int pixelsPerModule)
         {
-            return this.GetGraphic(pixelsPerModule, SKColors.Black, SKColors.White, SKColors.Transparent);
+            return this.GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = pixelsPerModule,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent
+            });
         }
 
         /// <summary>
@@ -44,7 +106,14 @@ namespace QRCoder.Core.Renderers
         /// <returns>QRCode graphic as bitmap</returns>
         public SKBitmap GetGraphic(SKBitmap backgroundImage = null)
         {
-            return this.GetGraphic(10, SKColors.Black, SKColors.White, SKColors.Transparent, backgroundImage: backgroundImage);
+            return this.GetGraphic(new ArtQRCodeGraphicOptions
+            {
+                PixelsPerModule = 10,
+                DarkSKColor = SKColors.Black,
+                LightSKColor = SKColors.White,
+                BackgroundSKColor = SKColors.Transparent,
+                BackgroundImage = backgroundImage
+            });
         }
 
         /// <summary>
@@ -61,7 +130,42 @@ namespace QRCoder.Core.Renderers
         /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
+        [Obsolete("Use GetGraphic(ArtQRCodeGraphicOptions) instead.")]
         public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
+                                 bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Dotted,
+                                 BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
+        {
+            return RenderGraphicCore(pixelsPerModule, darkSKColor, lightSKColor, backgroundSKColor, backgroundImage, pixelSizeFactor, drawQuietZones, quietZoneRenderingStyle, backgroundImageStyle, finderPatternImage);
+        }
+
+        /// <summary>
+        /// Renders an art-style QR code using the specified options.
+        /// </summary>
+        /// <param name="options">Rendering options.</param>
+        /// <returns>QRCode graphic as bitmap.</returns>
+        public SKBitmap GetGraphic(ArtQRCodeGraphicOptions options)
+        {
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
+
+            return RenderGraphicCore(options.PixelsPerModule, options.DarkSKColor, options.LightSKColor, options.BackgroundSKColor, options.BackgroundImage, options.PixelSizeFactor, options.DrawQuietZones, options.QuietZoneRenderingStyle, options.BackgroundImageStyle, options.FinderPatternImage);
+        }
+
+        /// <summary>
+        /// Renders an art-style QR code with dots as modules and various user settings
+        /// </summary>
+        /// <param name="pixelsPerModule">Amount of px each dark/light module of the QR code shall take place in the final QR code image</param>
+        /// <param name="darkSKColor">SKColor of the dark modules</param>
+        /// <param name="lightSKColor">SKColor of the light modules</param>
+        /// <param name="backgroundSKColor">SKColor of the background</param>
+        /// <param name="backgroundImage">A bitmap object that will be used as background picture</param>
+        /// <param name="pixelSizeFactor">Value between 0.0 to 1.0 that defines how big the module dots are. The bigger the value, the less round the dots will be.</param>
+        /// <param name="drawQuietZones">If true a white border is drawn around the whole QR Code</param>
+        /// <param name="quietZoneRenderingStyle">Style of the quiet zones</param>
+        /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
+        /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
+        /// <returns>QRCode graphic as bitmap</returns>
+        private SKBitmap RenderGraphicCore(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                  bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Dotted,
                                  BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
         {
@@ -297,7 +401,19 @@ namespace QRCoder.Core.Renderers
             using (var qrGenerator = new QRCodeGenerator())
             using (var qrCodeData = qrGenerator.CreateQrCode(plainText, eccLevel, forceUtf8, utf8BOM, eciMode, requestedVersion))
             using (var qrCode = new ArtQRCode(qrCodeData))
-                return qrCode.GetGraphic(pixelsPerModule, darkSKColor, lightSKColor, backgroundSKColor, backgroundImage, pixelSizeFactor, drawQuietZones, quietZoneRenderingStyle, backgroundImageStyle, finderPatternImage);
+                return qrCode.GetGraphic(new ArtQRCodeGraphicOptions
+                {
+                    PixelsPerModule = pixelsPerModule,
+                    DarkSKColor = darkSKColor,
+                    LightSKColor = lightSKColor,
+                    BackgroundSKColor = backgroundSKColor,
+                    BackgroundImage = backgroundImage,
+                    PixelSizeFactor = pixelSizeFactor,
+                    DrawQuietZones = drawQuietZones,
+                    QuietZoneRenderingStyle = quietZoneRenderingStyle,
+                    BackgroundImageStyle = backgroundImageStyle,
+                    FinderPatternImage = finderPatternImage
+                });
         }
     }
 }
