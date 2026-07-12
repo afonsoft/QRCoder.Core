@@ -3092,6 +3092,8 @@ namespace QRCoder.Core.Generators
             /// Returns the string representation of the current object.
             /// </summary>
             /// <returns>The string result.</returns>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S3877", Justification = "Fail-fast for invalid enum value in ToString")]
+            [SuppressMessage("SonarAnalyzer.CSharp", "S3928", Justification = "InvalidOperationException is thrown without a paramName")]
             public override string ToString()
             {
                 if (Type == OneTimePasswordAuthType.TOTP)
@@ -3104,7 +3106,7 @@ namespace QRCoder.Core.Generators
                     return HMACToString();
                 }
 
-                return string.Empty;
+                throw new InvalidOperationException("Unsupported one-time password auth type.");
             }
 
             // Note: Issuer:Label must only contain 1 : if either of the Issuer or the Label has a : then it is invalid.
