@@ -672,44 +672,43 @@ namespace QRCoder.Core.Generators
 
                 public static int Score(ref QRCodeData qrCode)
                 {
-                    int score1 = 0,
-                        score2 = 0,
-                        score3 = 0,
-                        score4 = 0;
                     var size = qrCode.ModuleMatrix.Count;
+                    return ScoreLines(qrCode, size) + ScoreBlocks(qrCode, size) + ScoreFinderPatterns(qrCode, size) + ScoreBalance(qrCode, size);
+                }
 
-                    //Penalty 1
+                private static int ScoreLines(QRCodeData qrCode, int size)
+                {
+                    var score = 0;
                     for (var y = 0; y < size; y++)
                     {
-                        var modInRow = 0;
-                        var modInColumn = 0;
-                        var lastValRow = qrCode.ModuleMatrix[y][0];
-                        var lastValColumn = qrCode.ModuleMatrix[0][y];
-                        for (var x = 0; x < size; x++)
-                        {
-                            if (qrCode.ModuleMatrix[y][x] == lastValRow)
-                                modInRow++;
-                            else
-                                modInRow = 1;
-                            if (modInRow == 5)
-                                score1 += 3;
-                            else if (modInRow > 5)
-                                score1++;
-                            lastValRow = qrCode.ModuleMatrix[y][x];
-
-                            if (qrCode.ModuleMatrix[x][y] == lastValColumn)
-                                modInColumn++;
-                            else
-                                modInColumn = 1;
-                            if (modInColumn == 5)
-                                score1 += 3;
-                            else if (modInColumn > 5)
-                                score1++;
-                            lastValColumn = qrCode.ModuleMatrix[x][y];
-                        }
+                        score += ScoreLine(qrCode.ModuleMatrix[y].Cast<bool>().ToList());
+                        score += ScoreLine(qrCode.ModuleMatrix.Select(row => row[y]).ToList());
                     }
+                    return score;
+                }
 
-                    //Penalty 2
+                private static int ScoreLine(IReadOnlyList<bool> line)
+                {
+                    var score = 0;
+                    var runLength = 1;
+                    for (var i = 1; i < line.Count; i++)
+                    {
+                        if (line[i] == line[i - 1])
+                            runLength++;
+                        else
+                            runLength = 1;
+
+                        if (runLength == 5)
+                            score += 3;
+                        else if (runLength > 5)
+                            score++;
+                    }
+                    return score;
+                }
+
+                private static int ScoreBlocks(QRCodeData qrCode, int size)
+                {
+                    var score = 0;
                     for (var y = 0; y < size - 1; y++)
                     {
                         for (var x = 0; x < size - 1; x++)
@@ -717,181 +716,100 @@ namespace QRCoder.Core.Generators
                             if (qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y][x + 1] &&
                                 qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x] &&
                                 qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x + 1])
-                                score2 += 3;
+                                score += 3;
                         }
                     }
+                    return score;
+                }
 
-                    //Penalty 3
+                private static int ScoreFinderPatterns(QRCodeData qrCode, int size)
+                {
+                    var score = 0;
                     for (var y = 0; y < size; y++)
                     {
                         for (var x = 0; x < size - 10; x++)
                         {
-                            if ((qrCode.ModuleMatrix[y][x] &&
-                                !qrCode.ModuleMatrix[y][x + 1] &&
-                                qrCode.ModuleMatrix[y][x + 2] &&
-                                qrCode.ModuleMatrix[y][x + 3] &&
-                                qrCode.ModuleMatrix[y][x + 4] &&
-                                !qrCode.ModuleMatrix[y][x + 5] &&
-                                qrCode.ModuleMatrix[y][x + 6] &&
-                                !qrCode.ModuleMatrix[y][x + 7] &&
-                                !qrCode.ModuleMatrix[y][x + 8] &&
-                                !qrCode.ModuleMatrix[y][x + 9] &&
-                                !qrCode.ModuleMatrix[y][x + 10]) ||
-                                (!qrCode.ModuleMatrix[y][x] &&
-                                !qrCode.ModuleMatrix[y][x + 1] &&
-                                !qrCode.ModuleMatrix[y][x + 2] &&
-                                !qrCode.ModuleMatrix[y][x + 3] &&
-                                qrCode.ModuleMatrix[y][x + 4] &&
-                                !qrCode.ModuleMatrix[y][x + 5] &&
-                                qrCode.ModuleMatrix[y][x + 6] &&
-                                qrCode.ModuleMatrix[y][x + 7] &&
-                                qrCode.ModuleMatrix[y][x + 8] &&
-                                !qrCode.ModuleMatrix[y][x + 9] &&
-                                qrCode.ModuleMatrix[y][x + 10]))
-                            {
-                                score3 += 40;
-                            }
-
-                            if ((qrCode.ModuleMatrix[x][y] &&
-                                !qrCode.ModuleMatrix[x + 1][y] &&
-                                qrCode.ModuleMatrix[x + 2][y] &&
-                                qrCode.ModuleMatrix[x + 3][y] &&
-                                qrCode.ModuleMatrix[x + 4][y] &&
-                                !qrCode.ModuleMatrix[x + 5][y] &&
-                                qrCode.ModuleMatrix[x + 6][y] &&
-                                !qrCode.ModuleMatrix[x + 7][y] &&
-                                !qrCode.ModuleMatrix[x + 8][y] &&
-                                !qrCode.ModuleMatrix[x + 9][y] &&
-                                !qrCode.ModuleMatrix[x + 10][y]) ||
-                                (!qrCode.ModuleMatrix[x][y] &&
-                                !qrCode.ModuleMatrix[x + 1][y] &&
-                                !qrCode.ModuleMatrix[x + 2][y] &&
-                                !qrCode.ModuleMatrix[x + 3][y] &&
-                                qrCode.ModuleMatrix[x + 4][y] &&
-                                !qrCode.ModuleMatrix[x + 5][y] &&
-                                qrCode.ModuleMatrix[x + 6][y] &&
-                                qrCode.ModuleMatrix[x + 7][y] &&
-                                qrCode.ModuleMatrix[x + 8][y] &&
-                                !qrCode.ModuleMatrix[x + 9][y] &&
-                                qrCode.ModuleMatrix[x + 10][y]))
-                            {
-                                score3 += 40;
-                            }
+                            if (MatchesFinderPattern(qrCode, x, y))
+                                score += 40;
                         }
                     }
 
-                    //Penalty 4
-                    double blackModules = 0;
-                    foreach (var row in qrCode.ModuleMatrix)
-                        foreach (bool bit in row)
-                            if (bit)
-                                blackModules++;
-
-                    var percent = (blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count)) * 100;
-                    var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 50) / 5;
-                    var nextMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 45) / 5;
-                    score4 = Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
-
-                    return score1 + score2 + score3 + score4;
-                }
-
-            private static int ScoreLines(QRCodeData qrCode, int size)
-            {
-                var score = 0;
-                for (var y = 0; y < size; y++)
-                {
-                    score += ScoreLine(qrCode.ModuleMatrix[y].Cast<bool>().ToList());
-                    score += ScoreLine(qrCode.ModuleMatrix.Select(row => row[y]).ToList());
-                }
-                return score;
-            }
-
-            private static int ScoreLine(IReadOnlyList<bool> line)
-            {
-                var score = 0;
-                var runLength = 1;
-                for (var i = 1; i < line.Count; i++)
-                {
-                    if (line[i] == line[i - 1])
-                        runLength++;
-                    else
-                        runLength = 1;
-
-                    if (runLength == 5)
-                        score += 3;
-                    else if (runLength > 5)
-                        score++;
-                }
-                return score;
-            }
-
-            private static int ScoreBlocks(QRCodeData qrCode, int size)
-            {
-                var score = 0;
-                for (var y = 0; y < size - 1; y++)
-                {
-                    for (var x = 0; x < size - 1; x++)
+                    for (var x = 0; x < size; x++)
                     {
-                        if (qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y][x + 1] &&
-                            qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x] &&
-                            qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x + 1])
-                            score += 3;
+                        for (var y = 0; y < size - 10; y++)
+                        {
+                            if (MatchesFinderPattern(qrCode, x, y, vertical: true))
+                                score += 40;
+                        }
                     }
-                }
-                return score;
-            }
 
-            private static int ScoreFinderPatterns(QRCodeData qrCode, int size)
-            {
-                var score = 0;
-                for (var y = 0; y < size; y++)
+                    return score;
+                }
+
+                private static bool MatchesFinderPattern(QRCodeData qrCode, int x, int y, bool vertical = false)
                 {
-                    for (var x = 0; x < size - 10; x++)
+                    if (vertical)
                     {
-                        if (MatchesFinderPattern(qrCode, x, y))
-                            score += 40;
+                        return (qrCode.ModuleMatrix[x][y] &&
+                            !qrCode.ModuleMatrix[x + 1][y] &&
+                            qrCode.ModuleMatrix[x + 2][y] &&
+                            qrCode.ModuleMatrix[x + 3][y] &&
+                            qrCode.ModuleMatrix[x + 4][y] &&
+                            !qrCode.ModuleMatrix[x + 5][y] &&
+                            qrCode.ModuleMatrix[x + 6][y] &&
+                            !qrCode.ModuleMatrix[x + 7][y] &&
+                            !qrCode.ModuleMatrix[x + 8][y] &&
+                            !qrCode.ModuleMatrix[x + 9][y] &&
+                            !qrCode.ModuleMatrix[x + 10][y]) ||
+                            (!qrCode.ModuleMatrix[x][y] &&
+                            !qrCode.ModuleMatrix[x + 1][y] &&
+                            !qrCode.ModuleMatrix[x + 2][y] &&
+                            !qrCode.ModuleMatrix[x + 3][y] &&
+                            qrCode.ModuleMatrix[x + 4][y] &&
+                            !qrCode.ModuleMatrix[x + 5][y] &&
+                            qrCode.ModuleMatrix[x + 6][y] &&
+                            qrCode.ModuleMatrix[x + 7][y] &&
+                            qrCode.ModuleMatrix[x + 8][y] &&
+                            qrCode.ModuleMatrix[x + 9][y] &&
+                            !qrCode.ModuleMatrix[x + 10][y]);
                     }
+
+                    return (qrCode.ModuleMatrix[y][x] &&
+                        !qrCode.ModuleMatrix[y][x + 1] &&
+                        qrCode.ModuleMatrix[y][x + 2] &&
+                        qrCode.ModuleMatrix[y][x + 3] &&
+                        qrCode.ModuleMatrix[y][x + 4] &&
+                        !qrCode.ModuleMatrix[y][x + 5] &&
+                        qrCode.ModuleMatrix[y][x + 6] &&
+                        !qrCode.ModuleMatrix[y][x + 7] &&
+                        !qrCode.ModuleMatrix[y][x + 8] &&
+                        !qrCode.ModuleMatrix[y][x + 9] &&
+                        !qrCode.ModuleMatrix[y][x + 10]) ||
+                        (!qrCode.ModuleMatrix[y][x] &&
+                        !qrCode.ModuleMatrix[y][x + 1] &&
+                        !qrCode.ModuleMatrix[y][x + 2] &&
+                        !qrCode.ModuleMatrix[y][x + 3] &&
+                        qrCode.ModuleMatrix[y][x + 4] &&
+                        !qrCode.ModuleMatrix[y][x + 5] &&
+                        qrCode.ModuleMatrix[y][x + 6] &&
+                        qrCode.ModuleMatrix[y][x + 7] &&
+                        qrCode.ModuleMatrix[y][x + 8] &&
+                        qrCode.ModuleMatrix[y][x + 9] &&
+                        !qrCode.ModuleMatrix[y][x + 10]);
                 }
-                return score;
-            }
 
-            private static bool MatchesFinderPattern(QRCodeData qrCode, int x, int y)
-            {
-                return (qrCode.ModuleMatrix[y][x] &&
-                    !qrCode.ModuleMatrix[y][x + 1] &&
-                    qrCode.ModuleMatrix[y][x + 2] &&
-                    qrCode.ModuleMatrix[y][x + 3] &&
-                    qrCode.ModuleMatrix[y][x + 4] &&
-                    !qrCode.ModuleMatrix[y][x + 5] &&
-                    qrCode.ModuleMatrix[y][x + 6] &&
-                    !qrCode.ModuleMatrix[y][x + 7] &&
-                    !qrCode.ModuleMatrix[y][x + 8] &&
-                    !qrCode.ModuleMatrix[y][x + 9] &&
-                    !qrCode.ModuleMatrix[y][x + 10]) ||
-                    (!qrCode.ModuleMatrix[y][x] &&
-                    !qrCode.ModuleMatrix[y][x + 1] &&
-                    !qrCode.ModuleMatrix[y][x + 2] &&
-                    !qrCode.ModuleMatrix[y][x + 3] &&
-                    qrCode.ModuleMatrix[y][x + 4] &&
-                    !qrCode.ModuleMatrix[y][x + 5] &&
-                    qrCode.ModuleMatrix[y][x + 6] &&
-                    qrCode.ModuleMatrix[y][x + 7] &&
-                    qrCode.ModuleMatrix[y][x + 8] &&
-                    qrCode.ModuleMatrix[y][x + 9] &&
-                    !qrCode.ModuleMatrix[y][x + 10]);
-            }
+                private static int ScoreBalance(QRCodeData qrCode, int size)
+                {
+                    var blackModules = qrCode.ModuleMatrix.Sum(row => row.Cast<bool>().Count(x => x));
+                    var percent = ((double)blackModules / (size * size)) * 100;
+                    var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5d) * 5 - 50) / 5;
+                    var nextMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5d) * 5 - 45) / 5;
+                    return Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
+                }
 
-            private static int ScoreBalance(QRCodeData qrCode, int size)
-            {
-                var darkCount = qrCode.ModuleMatrix.Sum(row => row.Cast<bool>().Count(x => x));
-                var totalCount = size * size;
-                var k = Math.Abs(darkCount * 100 / totalCount - 50) / 5;
-                return k * 10;
             }
-
         }
 
-        }
 
         private static int GetCountIndicatorLength(int version, EncodingMode encMode)
         {
