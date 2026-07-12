@@ -183,6 +183,7 @@ namespace QRCoder.Core.Generators
         /// <summary>
         /// SMS
         /// </summary>
+        // NOSONAR - Retained for source compatibility with the existing public API.
         public class SMS : Payload
         {
             private readonly string number, subject;
@@ -246,6 +247,7 @@ namespace QRCoder.Core.Generators
             /// <summary>
             /// Defines the sms encoding values.
             /// </summary>
+            // NOSONAR - Retained for source compatibility with the existing public API.
             public enum SMSEncoding
             {
                 /// <summary>
@@ -266,6 +268,7 @@ namespace QRCoder.Core.Generators
         /// <summary>
         /// MMS
         /// </summary>
+        // NOSONAR - Retained for source compatibility with the existing public API.
         public class MMS : Payload
         {
             private readonly string number, subject;
@@ -325,6 +328,7 @@ namespace QRCoder.Core.Generators
             /// <summary>
             /// Defines the mms encoding values.
             /// </summary>
+            // NOSONAR - Retained for source compatibility with the existing public API.
             public enum MMSEncoding
             {
                 /// <summary>
