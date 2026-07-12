@@ -205,36 +205,37 @@ namespace QRCoder.Core.Renderers
                             }
                         }
 
-                        var darkModulePixel = MakeDotPixel(pixelsPerModule, pixelSize, darkBrush);
-                        var lightModulePixel = MakeDotPixel(pixelsPerModule, pixelSize, lightBrush);
-
-                        for (var x = 0; x < numModules; x += 1)
+                        using (var darkModulePixel = MakeDotPixel(pixelsPerModule, pixelSize, darkBrush))
+                        using (var lightModulePixel = MakeDotPixel(pixelsPerModule, pixelSize, lightBrush))
                         {
-                            for (var y = 0; y < numModules; y += 1)
+                            for (var x = 0; x < numModules; x += 1)
                             {
-                                var rectangleF = new SKRect(x * pixelsPerModule, y * pixelsPerModule, (x + 1) * pixelsPerModule, (y + 1) * pixelsPerModule);
+                                for (var y = 0; y < numModules; y += 1)
+                                {
+                                    var rectangleF = new SKRect(x * pixelsPerModule, y * pixelsPerModule, (x + 1) * pixelsPerModule, (y + 1) * pixelsPerModule);
 
-                                var pixelIsDark = this.QrCodeData.ModuleMatrix[offset + y][offset + x];
-                                var solidBrush = pixelIsDark ? darkBrush : lightBrush;
-                                var pixelImage = pixelIsDark ? darkModulePixel : lightModulePixel;
+                                    var pixelIsDark = this.QrCodeData.ModuleMatrix[offset + y][offset + x];
+                                    var solidBrush = pixelIsDark ? darkBrush : lightBrush;
+                                    var pixelImage = pixelIsDark ? darkModulePixel : lightModulePixel;
 
-                                if (!IsPartOfFinderPattern(x, y, numModules, offset))
-                                    if (drawQuietZones && quietZoneRenderingStyle == QuietZoneStyle.Flat && IsPartOfQuietZone(x, y, numModules))
+                                    if (!IsPartOfFinderPattern(x, y, numModules, offset))
+                                        if (drawQuietZones && quietZoneRenderingStyle == QuietZoneStyle.Flat && IsPartOfQuietZone(x, y, numModules))
+                                            graphics.DrawRect(rectangleF, solidBrush);
+                                        else
+                                            graphics.DrawBitmap(pixelImage, rectangleF.Left, rectangleF.Top);
+                                    else if (finderPatternImage == null)
                                         graphics.DrawRect(rectangleF, solidBrush);
-                                    else
-                                        graphics.DrawBitmap(pixelImage, rectangleF.Left, rectangleF.Top);
-                                else if (finderPatternImage == null)
-                                    graphics.DrawRect(rectangleF, solidBrush);
+                                }
                             }
+                            if (finderPatternImage != null)
+                            {
+                                var finderPatternSize = 7 * pixelsPerModule;
+                                graphics.DrawBitmap(finderPatternImage, new SKRect(0, 0, finderPatternSize, finderPatternSize));
+                                graphics.DrawBitmap(finderPatternImage, new SKRect(size - finderPatternSize, 0, size, finderPatternSize));
+                                graphics.DrawBitmap(finderPatternImage, new SKRect(0, size - finderPatternSize, finderPatternSize, size));
+                            }
+                            graphics.Flush();
                         }
-                        if (finderPatternImage != null)
-                        {
-                            var finderPatternSize = 7 * pixelsPerModule;
-                            graphics.DrawBitmap(finderPatternImage, new SKRect(0, 0, finderPatternSize, finderPatternSize));
-                            graphics.DrawBitmap(finderPatternImage, new SKRect(size - finderPatternSize, 0, size, finderPatternSize));
-                            graphics.DrawBitmap(finderPatternImage, new SKRect(0, size - finderPatternSize, finderPatternSize, size));
-                        }
-                        graphics.Flush();
                     }
                 }
             }
@@ -250,24 +251,27 @@ namespace QRCoder.Core.Renderers
         /// <returns></returns>
         private static SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
         {
+            SKBitmap cropped;
             // draw a dot
-            var bitmap = new SKBitmap(pixelSize, pixelSize);
-            using (var graphics = new SKCanvas(bitmap))
+            using (var bitmap = new SKBitmap(pixelSize, pixelSize))
             {
-                graphics.DrawCircle(pixelSize / 2f, pixelSize / 2f, pixelSize / 2f, brush);
-                graphics.Flush();
-            }
+                using (var graphics = new SKCanvas(bitmap))
+                {
+                    graphics.DrawCircle(pixelSize / 2f, pixelSize / 2f, pixelSize / 2f, brush);
+                    graphics.Flush();
+                }
 
-            var pixelWidth = Math.Min(pixelsPerModule, pixelSize);
-            var margin = Math.Max((pixelsPerModule - pixelWidth) / 2, 0);
+                var pixelWidth = Math.Min(pixelsPerModule, pixelSize);
+                var margin = Math.Max((pixelsPerModule - pixelWidth) / 2, 0);
 
-            // center the dot in the module and crop to stay the right size.
-            var cropped = new SKBitmap(pixelsPerModule, pixelsPerModule);
-            using (var graphics = new SKCanvas(cropped))
-            {
-                graphics.DrawBitmap(bitmap, new SKRect(margin, margin, margin + pixelWidth, margin + pixelWidth),
-                    new SKRect(((float)pixelSize - pixelWidth) / 2, ((float)pixelSize - pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2));
-                graphics.Flush();
+                // center the dot in the module and crop to stay the right size.
+                cropped = new SKBitmap(pixelsPerModule, pixelsPerModule);
+                using (var graphics = new SKCanvas(cropped))
+                {
+                    graphics.DrawBitmap(bitmap, new SKRect(margin, margin, margin + pixelWidth, margin + pixelWidth),
+                        new SKRect(((float)pixelSize - pixelWidth) / 2, ((float)pixelSize - pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2, ((float)pixelSize + pixelWidth) / 2));
+                    graphics.Flush();
+                }
             }
 
             return cropped;

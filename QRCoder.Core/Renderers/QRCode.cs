@@ -222,17 +222,19 @@ namespace QRCoder.Core.Renderers
             float iconY = (bmp.Height - iconDestHeight) / 2;
             var centerDest = new SKRect(iconX - iconBorderWidth, iconY - iconBorderWidth, iconX - iconBorderWidth + iconDestWidth + iconBorderWidth * 2, iconY - iconBorderWidth + iconDestHeight + iconBorderWidth * 2);
             var iconDestRect = new SKRect(iconX, iconY, iconX + iconDestWidth, iconY + iconDestHeight);
-            var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : lightBrush;
-            if (iconBorderWidth > 0)
+            using (var iconBgBrush = iconBackgroundSKColor != null ? new SKPaint { Color = (SKColor)iconBackgroundSKColor } : null)
             {
-                using (var iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
+                if (iconBorderWidth > 0)
                 {
-                    gfx.DrawPath(iconPath, iconBgBrush);
+                    using (var iconPath = CreateRoundedSKRectIPath(centerDest, iconBorderWidth * 2))
+                    {
+                        gfx.DrawPath(iconPath, iconBgBrush ?? lightBrush);
+                    }
                 }
-            }
-            using (var iconImage = SKImage.FromBitmap(icon))
-            {
-                gfx.DrawImage(iconImage, iconDestRect, new SKRect(0, 0, icon.Width, icon.Height));
+                using (var iconImage = SKImage.FromBitmap(icon))
+                {
+                    gfx.DrawImage(iconImage, iconDestRect, new SKRect(0, 0, icon.Width, icon.Height));
+                }
             }
         }
 
