@@ -1273,9 +1273,9 @@ namespace QRCoder.Core.Generators
                     /// Initializes a new instance of the <see cref="PayloadGenerator.SwissQrCode.Iban.SwissQrCodeIbanException"/> class.
                     /// </summary>
                     /// <param name="message">The message.</param>
-                    /// <param name="inner">The inner.</param>
-                    public SwissQrCodeIbanException(string message, Exception inner)
-                        : base(message, inner)
+                    /// <param name="innerException">The inner exception.</param>
+                    public SwissQrCodeIbanException(string message, Exception innerException)
+                        : base(message, innerException)
                     {
                     }
                 }
@@ -1292,6 +1292,31 @@ namespace QRCoder.Core.Generators
             private readonly AddressType adrType;
 
                 /// <summary>
+                /// Contact type. Can be used for payee, ultimate payee, etc. with address in combined mode (K).
+                /// </summary>
+                /// <param name="name">Last name or company (optional first name)</param>
+                /// <param name="country">Two-letter country code as defined in ISO 3166-1</param>
+                /// <param name="addressLine1">Adress line 1</param>
+                /// <param name="addressLine2">Adress line 2</param>
+                [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
+                public Contact(string name, string country, string addressLine1, string addressLine2) : this(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress)
+                {
+                }
+
+                /// <summary>
+                /// Contact type. Can be used for payee, ultimate payee, etc. with address in structured mode (S).
+                /// </summary>
+                /// <param name="name">Last name or company (optional first name)</param>
+                /// <param name="zipCode">Zip-/Postcode</param>
+                /// <param name="city">City name</param>
+                /// <param name="country">Two-letter country code as defined in ISO 3166-1</param>
+                /// <param name="street">Streetname without house number</param>
+                [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
+                public Contact(string name, string zipCode, string city, string country, string street) : this(name, zipCode, city, country, street, null, AddressType.StructuredAddress)
+                {
+                }
+
+                /// <summary>
                 /// Contact type. Can be used for payee, ultimate payee, etc. with address in structured mode (S).
                 /// </summary>
                 /// <param name="name">Last name or company (optional first name)</param>
@@ -1301,19 +1326,7 @@ namespace QRCoder.Core.Generators
                 /// <param name="street">Streetname without house number</param>
                 /// <param name="houseNumber">House number</param>
                 [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
-                public Contact(string name, string zipCode, string city, string country, string street = null, string houseNumber = null) : this(name, zipCode, city, country, street, houseNumber, AddressType.StructuredAddress)
-                {
-                }
-
-                /// <summary>
-                /// Contact type. Can be used for payee, ultimate payee, etc. with address in combined mode (K).
-                /// </summary>
-                /// <param name="name">Last name or company (optional first name)</param>
-                /// <param name="country">Two-letter country code as defined in ISO 3166-1</param>
-                /// <param name="addressLine1">Adress line 1</param>
-                /// <param name="addressLine2">Adress line 2</param>
-                [Obsolete("This constructor is deprecated. Use WithCombinedAddress instead.")]
-                public Contact(string name, string country, string addressLine1, string addressLine2) : this(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress)
+                public Contact(string name, string zipCode, string city, string country, string street, string houseNumber) : this(name, zipCode, city, country, street, houseNumber, AddressType.StructuredAddress)
                 {
                 }
 
@@ -3086,12 +3099,17 @@ namespace QRCoder.Core.Generators
             /// <returns>The string result.</returns>
             public override string ToString()
             {
-                return Type switch
+                if (Type == OneTimePasswordAuthType.TOTP)
                 {
-                    OneTimePasswordAuthType.TOTP => TimeToString(),
-                    OneTimePasswordAuthType.HOTP => HMACToString(),
-                    _ => throw new ArgumentOutOfRangeException(),
-                };
+                    return TimeToString();
+                }
+
+                if (Type == OneTimePasswordAuthType.HOTP)
+                {
+                    return HMACToString();
+                }
+
+                throw new ArgumentOutOfRangeException(nameof(Type), Type, "Unsupported one-time password auth type.");
             }
 
             // Note: Issuer:Label must only contain 1 : if either of the Issuer or the Label has a : then it is invalid.
@@ -3109,7 +3127,7 @@ namespace QRCoder.Core.Generators
             {
                 if (Period == null)
                 {
-                    throw new Exception("Period must be set when using OneTimePasswordAuthType.TOTP");
+                    throw new InvalidOperationException("Period must be set when using OneTimePasswordAuthType.TOTP");
                 }
 
                 var sb = new StringBuilder("otpauth://totp/");
@@ -3128,7 +3146,7 @@ namespace QRCoder.Core.Generators
             {
                 if (string.IsNullOrWhiteSpace(Secret))
                 {
-                    throw new Exception("Secret must be a filled out base32 encoded string");
+                    throw new ArgumentException("Secret must be a filled out base32 encoded string", nameof(Secret));
                 }
                 string strippedSecret = Secret.Replace(" ", "");
                 string escapedIssuer = null;
@@ -3138,14 +3156,14 @@ namespace QRCoder.Core.Generators
                 {
                     if (Issuer.Contains(":"))
                     {
-                        throw new Exception("Issuer must not have a ':'");
+                        throw new ArgumentException("Issuer must not have a ':'", nameof(Issuer));
                     }
                     escapedIssuer = Uri.EscapeDataString(Issuer);
                 }
 
                 if (!string.IsNullOrWhiteSpace(Label) && Label.Contains(":"))
                 {
-                    throw new Exception("Label must not have a ':'");
+                    throw new ArgumentException("Label must not have a ':'", nameof(Label));
                 }
 
                 if (Label != null && Issuer != null)
@@ -3264,6 +3282,36 @@ namespace QRCoder.Core.Generators
                 }, tag)
             { }
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig"/> class.
+            /// </summary>
+            /// <param name="hostname">The hostname.</param>
+            /// <param name="port">The port.</param>
+            /// <param name="password">The password.</param>
+            /// <param name="method">The method.</param>
+            /// <param name="parameters">The parameters.</param>
+            /// <param name="tag">The tag.</param>
+            public ShadowSocksConfig(string hostname, int port, string password, Method method, Dictionary<string, string> parameters, string tag = null)
+            {
+                this.hostname = Uri.CheckHostName(hostname) == UriHostNameType.IPv6
+                    ? $"[{hostname}]"
+                    : hostname;
+                if (port < 1 || port > 65535)
+                    throw new ShadowSocksConfigException("Value of 'port' must be within 0 and 65535.");
+                this.port = port;
+                this.password = password;
+                this.method = method;
+                this.methodStr = encryptionTexts[method.ToString()];
+                this.tag = tag;
+
+                if (parameters != null)
+                    this.parameter =
+                        string.Join("&",
+                        parameters.Select(
+                            kv => $"{UrlEncode(kv.Key)}={UrlEncode(kv.Value)}"
+                        ).ToArray());
+            }
+
             private Dictionary<string, string> UrlEncodeTable = new Dictionary<string, string>
             {
                 [" "] = "+",
@@ -3306,36 +3354,6 @@ namespace QRCoder.Core.Generators
                     j = j.Replace(kv.Key, kv.Value);
                 }
                 return j;
-            }
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="PayloadGenerator.ShadowSocksConfig"/> class.
-            /// </summary>
-            /// <param name="hostname">The hostname.</param>
-            /// <param name="port">The port.</param>
-            /// <param name="password">The password.</param>
-            /// <param name="method">The method.</param>
-            /// <param name="parameters">The parameters.</param>
-            /// <param name="tag">The tag.</param>
-            public ShadowSocksConfig(string hostname, int port, string password, Method method, Dictionary<string, string> parameters, string tag = null)
-            {
-                this.hostname = Uri.CheckHostName(hostname) == UriHostNameType.IPv6
-                    ? $"[{hostname}]"
-                    : hostname;
-                if (port < 1 || port > 65535)
-                    throw new ShadowSocksConfigException("Value of 'port' must be within 0 and 65535.");
-                this.port = port;
-                this.password = password;
-                this.method = method;
-                this.methodStr = encryptionTexts[method.ToString()];
-                this.tag = tag;
-
-                if (parameters != null)
-                    this.parameter =
-                        string.Join("&",
-                        parameters.Select(
-                            kv => $"{UrlEncode(kv.Key)}={UrlEncode(kv.Value)}"
-                        ).ToArray());
             }
 
             /// <summary>

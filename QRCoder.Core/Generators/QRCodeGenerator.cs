@@ -25,6 +25,7 @@ namespace QRCoder.Core.Generators
         private static readonly List<VersionInfo> capacityTable = CreateCapacityTable();
         private static readonly List<Antilog> galoisField = CreateAntilogTable();
         private static readonly Dictionary<char, int> alphanumEncDict = CreateAlphanumEncDict();
+        private bool disposed;
 
         /// <summary>
         /// Specifies the ECI (Extended Channel Interpretation) mode for character encoding.
@@ -300,7 +301,22 @@ namespace QRCoder.Core.Generators
             var generator = "10100110111";
             var fStrMask = "101010000010010";
 
-            var fStr = (level == ECCLevel.L) ? "01" : (level == ECCLevel.M) ? "00" : (level == ECCLevel.Q) ? "11" : "10";
+            var fStr = string.Empty;
+            switch (level)
+            {
+                case ECCLevel.L:
+                    fStr = "01";
+                    break;
+                case ECCLevel.M:
+                    fStr = "00";
+                    break;
+                case ECCLevel.Q:
+                    fStr = "11";
+                    break;
+                default:
+                    fStr = "10";
+                    break;
+            }
             fStr += DecToBin(maskVersion, 3);
             var fStrEcc = fStr.PadRight(15, '0').TrimStart('0');
             while (fStrEcc.Length > 10)
@@ -506,31 +522,32 @@ namespace QRCoder.Core.Generators
                 {
                     datawords.Enqueue(data[i] != '0');
                 }
-                for (var x = size - 1; x >= 0; x = x - 2)
+                var x = size - 1;
+                while (x >= 0)
                 {
-                    if (x == 6)
-                        x = 5;
+                    var currentX = x == 6 ? 5 : x;
                     for (var yMod = 1; yMod <= size; yMod++)
                     {
                         int y;
                         if (up)
                         {
                             y = size - yMod;
-                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
+                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(currentX, y, 1, 1), blockedModules))
+                                qrCode.ModuleMatrix[y][currentX] = datawords.Dequeue();
+                            if (datawords.Count > 0 && currentX > 0 && !IsBlocked(new SKRectI(currentX - 1, y, 1, 1), blockedModules))
+                                qrCode.ModuleMatrix[y][currentX - 1] = datawords.Dequeue();
                         }
                         else
                         {
                             y = yMod - 1;
-                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
+                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(currentX, y, 1, 1), blockedModules))
+                                qrCode.ModuleMatrix[y][currentX] = datawords.Dequeue();
+                            if (datawords.Count > 0 && currentX > 0 && !IsBlocked(new SKRectI(currentX - 1, y, 1, 1), blockedModules))
+                                qrCode.ModuleMatrix[y][currentX - 1] = datawords.Dequeue();
                         }
                     }
                     up = !up;
+                    x = currentX - 2;
                 }
             }
 
@@ -831,16 +848,17 @@ namespace QRCoder.Core.Generators
             var messagePolynom = CalculateMessagePolynom(bitString);
             var generatorPolynom = CalculateGeneratorPolynom(eccWords);
 
-            for (var i = 0; i < messagePolynom.PolyItems.Count; i++)
-                messagePolynom.PolyItems[i] = new PolynomItem(messagePolynom.PolyItems[i].Coefficient,
-                    messagePolynom.PolyItems[i].Exponent + eccWords);
+            for (var index = 0; index < messagePolynom.PolyItems.Count; index++)
+                messagePolynom.PolyItems[index] = new PolynomItem(messagePolynom.PolyItems[index].Coefficient,
+                    messagePolynom.PolyItems[index].Exponent + eccWords);
 
-            for (var i = 0; i < generatorPolynom.PolyItems.Count; i++)
-                generatorPolynom.PolyItems[i] = new PolynomItem(generatorPolynom.PolyItems[i].Coefficient,
-                    generatorPolynom.PolyItems[i].Exponent + (messagePolynom.PolyItems.Count - 1));
+            for (var index = 0; index < generatorPolynom.PolyItems.Count; index++)
+                generatorPolynom.PolyItems[index] = new PolynomItem(generatorPolynom.PolyItems[index].Coefficient,
+                    generatorPolynom.PolyItems[index].Exponent + (messagePolynom.PolyItems.Count - 1));
 
             var leadTermSource = messagePolynom;
-            for (var i = 0; (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0); i++)
+            var i = 0;
+            while (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0)
             {
                 if (leadTermSource.PolyItems[0].Coefficient == 0)
                 {
@@ -854,6 +872,7 @@ namespace QRCoder.Core.Generators
                     resPoly = XORPolynoms(leadTermSource, resPoly);
                     leadTermSource = resPoly;
                 }
+                i++;
             }
             return leadTermSource.PolyItems.Select(x => DecToBin(x.Coefficient, 8)).ToList();
         }
@@ -1580,7 +1599,12 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public void Dispose()
         {
-            GC.SuppressFinalize(this);
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
         }
     }
 }
