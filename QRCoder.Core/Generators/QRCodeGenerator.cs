@@ -25,6 +25,9 @@ namespace QRCoder.Core.Generators
         private static readonly List<VersionInfo> capacityTable = CreateCapacityTable();
         private static readonly List<Antilog> galoisField = CreateAntilogTable();
         private static readonly Dictionary<char, int> alphanumEncDict = CreateAlphanumEncDict();
+        private const string Iso8859_1 = "ISO-8859-1";
+
+        private bool _disposedValue;
 
         /// <summary>
         /// Specifies the ECI (Extended Channel Interpretation) mode for character encoding.
@@ -63,6 +66,7 @@ namespace QRCoder.Core.Generators
         /// <param name="payload">The payload object containing the data to encode.</param>
         /// <exception cref="DataTooLongException">Thrown when the payload is too large to be encoded in a QR code.</exception>
         /// <returns>The raw QR code data.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S2325", Justification = "Instance method kept for backward compatibility")]
         public QRCodeData CreateQrCode(PayloadGenerator.Payload payload)
         {
             return GenerateQrCode(payload);
@@ -75,6 +79,7 @@ namespace QRCoder.Core.Generators
         /// <param name="eccLevel">The error correction level.</param>
         /// <exception cref="DataTooLongException">Thrown when the payload is too large to be encoded in a QR code.</exception>
         /// <returns>The raw QR code data.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S2325", Justification = "Instance method kept for backward compatibility")]
         public QRCodeData CreateQrCode(PayloadGenerator.Payload payload, ECCLevel eccLevel)
         {
             return GenerateQrCode(payload, eccLevel);
@@ -91,6 +96,7 @@ namespace QRCoder.Core.Generators
         /// <param name="requestedVersion">Specifies a fixed QR code version.</param>
         /// <exception cref="DataTooLongException">Thrown when the payload is too large to be encoded in a QR code.</exception>
         /// <returns>The raw QR code data.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S2325", Justification = "Instance method kept for backward compatibility")]
         public QRCodeData CreateQrCode(string plainText, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
         {
             return GenerateQrCode(plainText, eccLevel, forceUtf8, utf8BOM, eciMode, requestedVersion);
@@ -103,6 +109,7 @@ namespace QRCoder.Core.Generators
         /// <param name="eccLevel">The error correction level.</param>
         /// <exception cref="DataTooLongException">Thrown when the payload is too large to be encoded in a QR code.</exception>
         /// <returns>The raw QR code data.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S2325", Justification = "Instance method kept for backward compatibility")]
         public QRCodeData CreateQrCode(byte[] binaryData, ECCLevel eccLevel)
         {
             return GenerateQrCode(binaryData, eccLevel);
@@ -289,7 +296,13 @@ namespace QRCoder.Core.Generators
             var generator = "10100110111";
             var fStrMask = "101010000010010";
 
-            var fStr = (level == ECCLevel.L) ? "01" : (level == ECCLevel.M) ? "00" : (level == ECCLevel.Q) ? "11" : "10";
+            var fStr = level switch
+            {
+                ECCLevel.L => "01",
+                ECCLevel.M => "00",
+                ECCLevel.Q => "11",
+                _ => "10"
+            };
             fStr += DecToBin(maskVersion, 3);
             var fStrEcc = fStr.PadRight(15, '0').TrimStart('0');
             while (fStrEcc.Length > 10)
@@ -405,82 +418,79 @@ namespace QRCoder.Core.Generators
 
             public static int MaskCode(ref QRCodeData qrCode, int version, ref List<SKRectI> blockedModules, ECCLevel eccLevel)
             {
-                int? selectedPattern = null;
-                var patternScore = 0;
+                var methods = new Dictionary<int, Func<int, int, bool>>(8) {
+                    { 1, MaskPattern.Pattern1 }, { 2, MaskPattern.Pattern2 }, { 3, MaskPattern.Pattern3 }, { 4, MaskPattern.Pattern4 },
+                    { 5, MaskPattern.Pattern5 }, { 6, MaskPattern.Pattern6 }, { 7, MaskPattern.Pattern7 }, { 8, MaskPattern.Pattern8 }
+                };
 
                 var size = qrCode.ModuleMatrix.Count;
-
-                var methods = new Dictionary<int, Func<int, int, bool>>(8) {
-                    { 1, MaskPattern.Pattern1 }, {2, MaskPattern.Pattern2 }, {3, MaskPattern.Pattern3 }, {4, MaskPattern.Pattern4 },
-                    {5,  MaskPattern.Pattern5 }, {6, MaskPattern.Pattern6 }, {7, MaskPattern.Pattern7 }, {8, MaskPattern.Pattern8 }
-                };
+                var selectedPattern = 0;
+                var patternScore = 0;
+                var first = true;
 
                 foreach (var pattern in methods)
                 {
-                    var qrTemp = new QRCodeData(version);
-                    for (var y = 0; y < size; y++)
-                    {
-                        for (var x = 0; x < size; x++)
-                        {
-                            qrTemp.ModuleMatrix[y][x] = qrCode.ModuleMatrix[y][x];
-                        }
-                    }
-
+                    var qrTemp = CopyMatrix(qrCode, size);
                     var formatStr = GetFormatString(eccLevel, pattern.Key - 1);
-                    ModulePlacer.PlaceFormat(ref qrTemp, formatStr);
+                    PlaceFormat(ref qrTemp, formatStr);
+
                     if (version >= 7)
                     {
                         var versionString = GetVersionString(version);
-                        ModulePlacer.PlaceVersion(ref qrTemp, versionString);
+                        PlaceVersion(ref qrTemp, versionString);
                     }
 
-                    for (var x = 0; x < size; x++)
-                    {
-                        for (var y = 0; y < x; y++)
-                        {
-                            if (!IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                            {
-                                qrTemp.ModuleMatrix[y][x] ^= pattern.Value(x, y);
-                                qrTemp.ModuleMatrix[x][y] ^= pattern.Value(y, x);
-                            }
-                        }
-
-                        if (!IsBlocked(new SKRectI(x, x, 1, 1), blockedModules))
-                        {
-                            qrTemp.ModuleMatrix[x][x] ^= pattern.Value(x, x);
-                        }
-                    }
+                    ApplyMask(qrTemp, pattern.Value, blockedModules, size);
 
                     var score = MaskPattern.Score(ref qrTemp);
-                    if (!selectedPattern.HasValue || patternScore > score)
+                    if (first || patternScore > score)
                     {
                         selectedPattern = pattern.Key;
                         patternScore = score;
+                        first = false;
                     }
                 }
 
+                if (!first)
+                {
+                    ApplyMask(qrCode, methods[selectedPattern], blockedModules, size);
+                    return selectedPattern - 1;
+                }
+
+                return 0;
+            }
+
+            private static QRCodeData CopyMatrix(QRCodeData source, int size)
+            {
+                var copy = new QRCodeData(source.Version);
+                for (var y = 0; y < size; y++)
+                {
+                    for (var x = 0; x < size; x++)
+                    {
+                        copy.ModuleMatrix[y][x] = source.ModuleMatrix[y][x];
+                    }
+                }
+                return copy;
+            }
+
+            private static void ApplyMask(QRCodeData qrCode, Func<int, int, bool> pattern, List<SKRectI> blockedModules, int size)
+            {
                 for (var x = 0; x < size; x++)
                 {
-                    if (selectedPattern.HasValue)
+                    for (var y = 0; y < x; y++)
                     {
-                        for (var y = 0; y < x; y++)
+                        if (!IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
                         {
-                            if (!IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                            {
-                                qrCode.ModuleMatrix[y][x] ^= methods[selectedPattern.Value](x, y);
-                                qrCode.ModuleMatrix[x][y] ^= methods[selectedPattern.Value](y, x);
-                            }
-                        }
-
-                        if (!IsBlocked(new SKRectI(x, x, 1, 1), blockedModules))
-                        {
-                            qrCode.ModuleMatrix[x][x] ^= methods[selectedPattern.Value](x, x);
+                            qrCode.ModuleMatrix[y][x] ^= pattern(x, y);
+                            qrCode.ModuleMatrix[x][y] ^= pattern(y, x);
                         }
                     }
+
+                    if (!IsBlocked(new SKRectI(x, x, 1, 1), blockedModules))
+                    {
+                        qrCode.ModuleMatrix[x][x] ^= pattern(x, x);
+                    }
                 }
-                if (selectedPattern.HasValue)
-                    return selectedPattern.Value - 1;
-                return 0;
             }
 
             public static void PlaceDataWords(ref QRCodeData qrCode, string data, ref List<SKRectI> blockedModules)
@@ -492,31 +502,36 @@ namespace QRCoder.Core.Generators
                 {
                     datawords.Enqueue(data[i] != '0');
                 }
-                for (var x = size - 1; x >= 0; x = x - 2)
+
+                var x = size - 1;
+                while (x >= 0)
                 {
                     if (x == 6)
                         x = 5;
-                    for (var yMod = 1; yMod <= size; yMod++)
+
+                    var yStart = up ? size - 1 : 0;
+                    var yEnd = up ? -1 : size;
+                    var yStep = up ? -1 : 1;
+
+                    for (var y = yStart; y != yEnd && datawords.Count > 0; y += yStep)
                     {
-                        int y;
-                        if (up)
+                        TryPlaceDataWord(qrCode, x, y, datawords, blockedModules);
+                        if (x > 0)
                         {
-                            y = size - yMod;
-                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
-                        }
-                        else
-                        {
-                            y = yMod - 1;
-                            if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
-                            if (datawords.Count > 0 && x > 0 && !IsBlocked(new SKRectI(x - 1, y, 1, 1), blockedModules))
-                                qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
+                            TryPlaceDataWord(qrCode, x - 1, y, datawords, blockedModules);
                         }
                     }
+
                     up = !up;
+                    x -= 2;
+                }
+            }
+
+            private static void TryPlaceDataWord(QRCodeData qrCode, int x, int y, Queue<bool> datawords, List<SKRectI> blockedModules)
+            {
+                if (datawords.Count > 0 && !IsBlocked(new SKRectI(x, y, 1, 1), blockedModules))
+                {
+                    qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
                 }
             }
 
@@ -585,21 +600,23 @@ namespace QRCoder.Core.Generators
             {
                 var alignmentPatternRect = new SKRectI(loc.X, loc.Y, 5, 5);
                 if (blockedModules.Any(blockedRect => Intersects(alignmentPatternRect, blockedRect)))
+                {
                     continue;
+                }
 
-                    for (var x = 0; x < 5; x++)
+                for (var x = 0; x < 5; x++)
+                {
+                    for (var y = 0; y < 5; y++)
                     {
-                        for (var y = 0; y < 5; y++)
+                        if (y == 0 || y == 4 || x == 0 || x == 4 || (x == 2 && y == 2))
                         {
-                            if (y == 0 || y == 4 || x == 0 || x == 4 || (x == 2 && y == 2))
-                            {
-                                qrCode.ModuleMatrix[loc.Y + y][loc.X + x] = true;
-                            }
+                            qrCode.ModuleMatrix[loc.Y + y][loc.X + x] = true;
                         }
                     }
-                    blockedModules.Add(new SKRectI(loc.X, loc.Y, 5, 5));
                 }
+                blockedModules.Add(new SKRectI(loc.X, loc.Y, 5, 5));
             }
+        }
 
             public static void PlaceTimingPatterns(ref QRCodeData qrCode, ref List<SKRectI> blockedModules)
             {
@@ -635,11 +652,13 @@ namespace QRCoder.Core.Generators
                     return (x + y) % 2 == 0;
                 }
 
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1172", Justification = "Parameter kept for Func<int,int,bool> delegate signature")]
                 public static bool Pattern2(int x, int y)
                 {
                     return y % 2 == 0;
                 }
 
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1172", Justification = "Parameter kept for Func<int,int,bool> delegate signature")]
                 public static bool Pattern3(int x, int y)
                 {
                     return x % 3 == 0;
@@ -813,7 +832,14 @@ namespace QRCoder.Core.Generators
 
         private static int GetCountIndicatorLength(int version, EncodingMode encMode)
         {
-            var versionGroup = version < 10 ? 0 : version < 27 ? 1 : 2;
+            int versionGroup;
+            if (version < 10)
+                versionGroup = 0;
+            else if (version < 27)
+                versionGroup = 1;
+            else
+                versionGroup = 2;
+
             switch (encMode)
             {
                 case EncodingMode.Numeric:
@@ -839,8 +865,8 @@ namespace QRCoder.Core.Generators
 
         private static bool IsValidISO(string input)
         {
-            var bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
-            var result = Encoding.GetEncoding("ISO-8859-1").GetString(bytes);
+            var bytes = Encoding.GetEncoding(Iso8859_1).GetBytes(input);
+            var result = Encoding.GetEncoding(Iso8859_1).GetString(bytes);
             return String.Equals(input, result);
         }
 
@@ -858,41 +884,41 @@ namespace QRCoder.Core.Generators
 
         private static string PlainTextToBinaryNumeric(string plainText)
         {
-            var codeText = string.Empty;
+            var codeText = new StringBuilder();
             while (plainText.Length >= 3)
             {
                 var dec = Convert.ToInt32(plainText.Substring(0, 3));
-                codeText += DecToBin(dec, 10);
+                codeText.Append(DecToBin(dec, 10));
                 plainText = plainText.Substring(3);
             }
             if (plainText.Length == 2)
             {
                 var dec = Convert.ToInt32(plainText);
-                codeText += DecToBin(dec, 7);
+                codeText.Append(DecToBin(dec, 7));
             }
             else if (plainText.Length == 1)
             {
                 var dec = Convert.ToInt32(plainText);
-                codeText += DecToBin(dec, 4);
+                codeText.Append(DecToBin(dec, 4));
             }
-            return codeText;
+            return codeText.ToString();
         }
 
         private static string PlainTextToBinaryAlphanumeric(string plainText)
         {
-            var codeText = string.Empty;
+            var codeText = new StringBuilder();
             while (plainText.Length >= 2)
             {
                 var token = plainText.Substring(0, 2);
                 var dec = alphanumEncDict[token[0]] * 45 + alphanumEncDict[token[1]];
-                codeText += DecToBin(dec, 11);
+                codeText.Append(DecToBin(dec, 11));
                 plainText = plainText.Substring(2);
             }
             if (plainText.Length > 0)
             {
-                codeText += DecToBin(alphanumEncDict[plainText[0]], 6);
+                codeText.Append(DecToBin(alphanumEncDict[plainText[0]], 6));
             }
-            return codeText;
+            return codeText.ToString();
         }
 
         private static string ConvertToIso8859(string value, string Iso = "ISO-8859-2")
@@ -907,24 +933,24 @@ namespace QRCoder.Core.Generators
         private static string PlainTextToBinaryByte(string plainText, EciMode eciMode, bool utf8BOM, bool forceUtf8)
         {
             byte[] codeBytes;
-            var codeText = string.Empty;
+            var codeText = new StringBuilder();
 
             if (IsValidISO(plainText) && !forceUtf8)
-                codeBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(plainText);
+                codeBytes = Encoding.GetEncoding(Iso8859_1).GetBytes(plainText);
             else
             {
                 codeBytes = eciMode switch
                 {
-                    EciMode.Iso8859_1 => Encoding.GetEncoding("ISO-8859-1").GetBytes(ConvertToIso8859(plainText, "ISO-8859-1")),
+                    EciMode.Iso8859_1 => Encoding.GetEncoding(Iso8859_1).GetBytes(ConvertToIso8859(plainText, Iso8859_1)),
                     EciMode.Iso8859_2 => Encoding.GetEncoding("ISO-8859-2").GetBytes(ConvertToIso8859(plainText, "ISO-8859-2")),
                     _ => utf8BOM ? Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(plainText)).ToArray() : Encoding.UTF8.GetBytes(plainText),
                 };
             }
 
             foreach (var b in codeBytes)
-                codeText += DecToBin(b, 8);
+                codeText.Append(DecToBin(b, 8));
 
-            return codeText;
+            return codeText.ToString();
         }
 
         private static Polynom ConvertToAlphaNotation(Polynom poly)
@@ -1014,7 +1040,8 @@ namespace QRCoder.Core.Generators
                     generatorPolynom.PolyItems[i].Exponent + (messagePolynom.PolyItems.Count - 1));
 
             var leadTermSource = messagePolynom;
-            for (var i = 0; (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0); i++)
+            var iteration = 0;
+            while (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0)
             {
                 if (leadTermSource.PolyItems[0].Coefficient == 0)
                 {
@@ -1023,11 +1050,13 @@ namespace QRCoder.Core.Generators
                 }
                 else
                 {
-                    var resPoly = MultiplyGeneratorPolynomByLeadterm(generatorPolynom, ConvertToAlphaNotation(leadTermSource).PolyItems[0], i);
+                    var resPoly = MultiplyGeneratorPolynomByLeadterm(generatorPolynom, ConvertToAlphaNotation(leadTermSource).PolyItems[0], iteration);
                     resPoly = ConvertToDecNotation(resPoly);
                     resPoly = XORPolynoms(leadTermSource, resPoly);
                     leadTermSource = resPoly;
                 }
+
+                iteration++;
             }
             return leadTermSource.PolyItems.Select(x => DecToBin(x.Coefficient, 8)).ToList();
         }
@@ -1422,6 +1451,7 @@ namespace QRCoder.Core.Generators
 
         private struct EccInfo
         {
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Internal data struct with closely related parameters")]
             public EccInfo(int version, ECCLevel errorCorrectionLevel, int totalDataCodewords, int eccPerBlock, int blocksInGroup1,
                 int codewordsInGroup1, int blocksInGroup2, int codewordsInGroup2)
             {
@@ -1505,13 +1535,12 @@ namespace QRCoder.Core.Generators
             public override string ToString()
             {
                 var sb = new StringBuilder();
-                //this.PolyItems.ForEach(x => sb.Append("a^" + x.Coefficient + "*x^" + x.Exponent + " + "));
                 foreach (var polyItem in this.PolyItems)
                 {
                     sb.Append("a^" + polyItem.Coefficient + "*x^" + polyItem.Exponent + " + ");
                 }
 
-                return sb.ToString().TrimEnd(new[] { ' ', '+' });
+                return sb.ToString().TrimEnd(' ', '+');
             }
         }
 
@@ -1549,7 +1578,22 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public void Dispose()
         {
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by this instance and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposedValue)
+            {
+                return;
+            }
+
+            _disposedValue = true;
         }
     }
 }
