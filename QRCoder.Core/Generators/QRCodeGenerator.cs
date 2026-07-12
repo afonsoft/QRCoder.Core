@@ -1608,30 +1608,12 @@ namespace QRCoder.Core.Generators
         /// </summary>
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Releases the unmanaged resources and optionally releases the managed resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
             if (this.disposed)
             {
                 return;
             }
 
             this.disposed = true;
-        }
-
-        /// <summary>
-        /// Finalizer.
-        /// </summary>
-        ~QRCodeGenerator()
-        {
-            Dispose(false);
         }
     }
 }

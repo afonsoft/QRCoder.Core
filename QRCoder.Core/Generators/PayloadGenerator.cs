@@ -1292,14 +1292,14 @@ namespace QRCoder.Core.Generators
                 private AddressType adrType;
 
                 /// <summary>
-                /// Contact type. Can be used for payee, ultimate payee, etc. with address in structured mode (S).
+                /// Contact type. Can be used for payee, ultimate payee, etc. with address in combined mode (K).
                 /// </summary>
                 /// <param name="name">Last name or company (optional first name)</param>
-                /// <param name="zipCode">Zip-/Postcode</param>
-                /// <param name="city">City name</param>
                 /// <param name="country">Two-letter country code as defined in ISO 3166-1</param>
+                /// <param name="addressLine1">Adress line 1</param>
+                /// <param name="addressLine2">Adress line 2</param>
                 [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
-                public Contact(string name, string zipCode, string city, string country) : this(name, zipCode, city, country, null, null, AddressType.StructuredAddress)
+                public Contact(string name, string country, string addressLine1, string addressLine2) : this(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress)
                 {
                 }
 
