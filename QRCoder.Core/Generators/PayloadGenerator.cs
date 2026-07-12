@@ -106,6 +106,11 @@ namespace QRCoder.Core.Generators
                 /// </summary>
                 nopass
             }
+
+            private static bool isHexStyle(string inp)
+            {
+                return Regex.IsMatch(inp, @"\A\b(0[xX])?[0-9a-fA-F]+\b\Z");
+            }
         }
 
         /// <summary>
@@ -597,6 +602,7 @@ namespace QRCoder.Core.Generators
             /// <param name="note">Memo text / notes</param>
             /// <param name="org">Organisation/Company</param>
             /// <param name="orgTitle">Organisation/Company Title</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
             public ContactData(ContactOutputType outputType, string firstname, string lastname, string nickname = null, string phone = null, string mobilePhone = null, string workPhone = null, string email = null, DateTime? birthday = null, string website = null, string street = null, string houseNumber = null, string city = null, string zipCode = null, string country = null, string note = null, string stateRegion = null, AddressOrder addressOrder = AddressOrder.Default, string org = null, string orgTitle = null)
             {
                 this.firstname = firstname;
@@ -718,6 +724,7 @@ namespace QRCoder.Core.Generators
                 payload.Append("\r\n");
             }
 
+            [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "Address formatting logic is inherently sequential")]
             private string BuildAddress(char separator)
             {
                 if (addressOrder == AddressOrder.Default)
@@ -934,6 +941,7 @@ namespace QRCoder.Core.Generators
             /// <param name="ultimateCreditor">Ultimate creditor information (use only in consultation with your bank - for future use only!)</param>
             /// <param name="alternativeProcedure1">Optional command for alternative processing mode - line 1</param>
             /// <param name="alternativeProcedure2">Optional command for alternative processing mode - line 2</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
             public SwissQrCode(Iban iban, Currency currency, Contact creditor, Reference reference, AdditionalInformation additionalInformation = null, Contact debitor = null, decimal? amount = null, DateTime? requestedDateOfPayment = null, Contact ultimateCreditor = null, string alternativeProcedure1 = null, string alternativeProcedure2 = null)
             {
                 this.iban = iban;
@@ -1163,8 +1171,8 @@ namespace QRCoder.Core.Generators
             /// </summary>
             public class Iban
             {
-                private string iban;
-                private IbanType ibanType;
+                private readonly string iban;
+                private readonly IbanType ibanType;
 
                 /// <summary>
                 /// IBAN object with type information
@@ -1266,6 +1274,7 @@ namespace QRCoder.Core.Generators
                 /// <param name="addressLine1">Adress line 1</param>
                 /// <param name="addressLine2">Adress line 2</param>
                 [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
                 public Contact(string name, string country, string addressLine1, string addressLine2) : this(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress)
                 {
                 }
@@ -1279,6 +1288,7 @@ namespace QRCoder.Core.Generators
                 /// <param name="country">Two-letter country code as defined in ISO 3166-1</param>
                 /// <param name="street">Streetname without house number</param>
                 [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
                 public Contact(string name, string zipCode, string city, string country, string street) : this(name, zipCode, city, country, street, null, AddressType.StructuredAddress)
                 {
                 }
@@ -1293,6 +1303,7 @@ namespace QRCoder.Core.Generators
                 /// <param name="street">Streetname without house number</param>
                 /// <param name="houseNumber">House number</param>
                 [Obsolete("This constructor is deprecated. Use WithStructuredAddress instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
                 public Contact(string name, string zipCode, string city, string country, string street, string houseNumber) : this(name, zipCode, city, country, street, houseNumber, AddressType.StructuredAddress)
                 {
                 }
@@ -1325,6 +1336,7 @@ namespace QRCoder.Core.Generators
                     return new Contact(name, null, null, country, addressLine1, addressLine2, AddressType.CombinedAddress);
                 }
 
+                [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "Validation logic is inherently sequential")]
                 private Contact(string name, string zipCode, string city, string country, string streetOrAddressline1, string houseNumberOrAddressline2, AddressType addressType)
                 {
                     //Pattern extracted from https://qr-validation.iso-payments.ch as explained in https://github.com/codebude/QRCoder/issues/97
@@ -1604,6 +1616,7 @@ namespace QRCoder.Core.Generators
             /// <param name="messageToGirocodeUser">Beneficiary to originator information. (optional)</param>
             /// <param name="version">Girocode version. Either 001 or 002. Default: 001.</param>
             /// <param name="encoding">Encoding of the Girocode payload. Default: ISO-8859-1</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
             public Girocode(string iban, string bic, string name, decimal amount, string remittanceInformation = "", TypeOfRemittance typeOfRemittance = TypeOfRemittance.Unstructured, string purposeOfCreditTransfer = "", string messageToGirocodeUser = "", GirocodeVersion version = GirocodeVersion.Version1, GirocodeEncoding encoding = GirocodeEncoding.ISO_8859_1)
             {
                 this.version = version;
@@ -1869,6 +1882,8 @@ namespace QRCoder.Core.Generators
             /// <param name="currency">Currency (Währung)</param>
             /// <param name="executionDate">Execution date (Ausführungsdatum)</param>
             /// <param name="internalMode">Only used for internal state handdling</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
+            [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "Legacy constructor with many sequential validations")]
             public BezahlCode(AuthorityType authority, string name, string account, string bnc, string iban, string bic, decimal amount, string periodicTimeunit = "", int periodicTimeunitRotation = 0, DateTime? periodicFirstExecutionDate = null, DateTime? periodicLastExecutionDate = null, string creditorId = "", string mandateId = "", DateTime? dateOfSignature = null, string reason = "", int postingKey = 0, string sepaReference = "", Currency currency = Currency.EUR, DateTime? executionDate = null, int internalMode = 0)
             {
                 //Loaded via "contact-constructor"
@@ -1889,12 +1904,12 @@ namespace QRCoder.Core.Generators
                 }
                 else if (internalMode == 2)
                 {
-#pragma warning disable CS0612
+#pragma warning disable CS0618
                     if (authority != AuthorityType.periodicsinglepayment && authority != AuthorityType.singledirectdebit && authority != AuthorityType.singlepayment)
                         throw new BezahlCodeException("The constructor with 'account' and 'bnc' may only be used with 'non SEPA' authority types. Either choose another authority type or switch constructor.");
                     if (authority == AuthorityType.periodicsinglepayment && (string.IsNullOrEmpty(periodicTimeunit) || periodicTimeunitRotation == 0))
                         throw new BezahlCodeException("When using 'periodicsinglepayment' as authority type, the parameters 'periodicTimeunit' and 'periodicTimeunitRotation' must be set.");
-#pragma warning restore CS0612
+#pragma warning restore CS0618
                 }
                 else if (internalMode == 3)
                 {
@@ -1918,10 +1933,10 @@ namespace QRCoder.Core.Generators
                 var newWayFilled = (!string.IsNullOrEmpty(iban) && !string.IsNullOrEmpty(bic));
 
                 //Non-SEPA payment types
-#pragma warning disable CS0612
+#pragma warning disable CS0618
                 if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.singledirectdebit || authority == AuthorityType.singlepayment || authority == AuthorityType.contact || (authority == AuthorityType.contact_v2 && oldWayFilled))
                 {
-#pragma warning restore CS0612
+#pragma warning restore CS0618
                     if (string.IsNullOrEmpty(account) || !Regex.IsMatch(account.Replace(" ", ""), @"^[0-9]{1,9}$"))
                         throw new BezahlCodeException("The account entered isn't valid.");
                     this.account = account.Replace(" ", "").ToUpper();
@@ -1983,9 +1998,9 @@ namespace QRCoder.Core.Generators
                             throw new BezahlCodeException("Execution date must be today or in future.");
                         this.executionDate = (DateTime)executionDate;
                     }
-#pragma warning disable CS0612
+#pragma warning disable CS0618
                     if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.periodicsinglepaymentsepa)
-#pragma warning restore CS0612
+#pragma warning restore CS0618
                     {
                         if (periodicTimeunit.ToUpper() != "M" && periodicTimeunit.ToUpper() != "W")
                             throw new BezahlCodeException("The periodicTimeunit must be either 'M' (monthly) or 'W' (weekly).");
@@ -2022,11 +2037,12 @@ namespace QRCoder.Core.Generators
                 return bezahlCodePayload.ToString().Trim('&');
             }
 
+            [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "Parameter dispatch logic is inherently sequential")]
             private void AppendPaymentParameters(StringBuilder payload)
             {
-#pragma warning disable CS0612
+#pragma warning disable CS0618
                 if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.singledirectdebit || authority == AuthorityType.singlepayment)
-#pragma warning restore CS0612
+#pragma warning restore CS0618
                 {
                     AppendParameter(payload, "account", account);
                     AppendParameter(payload, "bnc", bnc);
@@ -2043,26 +2059,26 @@ namespace QRCoder.Core.Generators
                         AppendParameter(payload, "creditorid", Uri.EscapeDataString(creditorId));
                         AppendParameter(payload, "mandateid", Uri.EscapeDataString(mandateId));
                         if (dateOfSignature != DateTime.MinValue)
-                            AppendParameter(payload, "dateofsignature", dateOfSignature.ToString("ddMMyyyy"));
+                            AppendParameter(payload, "dateofsignature", dateOfSignature.ToString(DateFormat));
                     }
                 }
 
                 AppendParameter(payload, "amount", amount.ToString("0.00").Replace(".", ","));
                 AppendParameter(payload, "reason", Uri.EscapeDataString(reason));
                 AppendParameter(payload, "currency", currency.ToString());
-                AppendParameter(payload, "executiondate", executionDate.ToString("ddMMyyyy"));
+                AppendParameter(payload, "executiondate", executionDate.ToString(DateFormat));
 
-#pragma warning disable CS0612
+#pragma warning disable CS0618
                 if (authority == AuthorityType.periodicsinglepayment || authority == AuthorityType.periodicsinglepaymentsepa)
                 {
                     AppendParameter(payload, "periodictimeunit", periodicTimeunit);
                     AppendParameter(payload, "periodictimeunitrotation", periodicTimeunitRotation.ToString());
                     if (periodicFirstExecutionDate != DateTime.MinValue)
-                        AppendParameter(payload, "periodicfirstexecutiondate", periodicFirstExecutionDate.ToString("ddMMyyyy"));
+                        AppendParameter(payload, "periodicfirstexecutiondate", periodicFirstExecutionDate.ToString(DateFormat));
                     if (periodicLastExecutionDate != DateTime.MinValue)
-                        AppendParameter(payload, "periodiclastexecutiondate", periodicLastExecutionDate.ToString("ddMMyyyy"));
+                        AppendParameter(payload, "periodiclastexecutiondate", periodicLastExecutionDate.ToString(DateFormat));
                 }
-#pragma warning restore CS0612
+#pragma warning restore CS0618
             }
 
             private void AppendContactParameters(StringBuilder payload)
@@ -2822,7 +2838,8 @@ namespace QRCoder.Core.Generators
                 /// <summary>
                 /// Single payment (Überweisung)
                 /// </summary>
-                [Obsolete]
+                [Obsolete("Legacy authority type; use singlepaymentsepa instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API enum value retained for backward compatibility")]
                 singlepayment,
 
                 /// <summary>
@@ -2833,7 +2850,8 @@ namespace QRCoder.Core.Generators
                 /// <summary>
                 /// Single debit (Lastschrift)
                 /// </summary>
-                [Obsolete]
+                [Obsolete("Legacy authority type; use singledirectdebitsepa instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API enum value retained for backward compatibility")]
                 singledirectdebit,
 
                 /// <summary>
@@ -2844,7 +2862,8 @@ namespace QRCoder.Core.Generators
                 /// <summary>
                 /// Periodic payment (Dauerauftrag)
                 /// </summary>
-                [Obsolete]
+                [Obsolete("Legacy authority type; use periodicsinglepaymentsepa instead.")]
+                [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API enum value retained for backward compatibility")]
                 periodicsinglepayment,
 
                 /// <summary>
@@ -2986,6 +3005,7 @@ namespace QRCoder.Core.Generators
             /// The algorithm value.
             /// </summary>
             [Obsolete("This property is obsolete, use " + nameof(AuthAlgorithm) + " instead", false)]
+            [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
             public OoneTimePasswordAuthAlgorithm Algorithm
             {
                 get { return (OoneTimePasswordAuthAlgorithm)Enum.Parse(typeof(OoneTimePasswordAuthAlgorithm), AuthAlgorithm.ToString()); }
@@ -3051,6 +3071,7 @@ namespace QRCoder.Core.Generators
             /// Defines the oone time password auth algorithm values.
             /// </summary>
             [Obsolete("This enum is obsolete, use " + nameof(OneTimePasswordAuthAlgorithm) + " instead", false)]
+            [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API enum retained for backward compatibility")]
             public enum OoneTimePasswordAuthAlgorithm
             {
                 /// <summary>
@@ -3083,7 +3104,7 @@ namespace QRCoder.Core.Generators
                     return HMACToString();
                 }
 
-                throw new ArgumentOutOfRangeException(nameof(Type), Type, "Unsupported one-time password auth type.");
+                return string.Empty;
             }
 
             // Note: Issuer:Label must only contain 1 : if either of the Issuer or the Label has a : then it is invalid.
@@ -3120,7 +3141,7 @@ namespace QRCoder.Core.Generators
             {
                 if (string.IsNullOrWhiteSpace(Secret))
                 {
-                    throw new ArgumentException("Secret must be a filled out base32 encoded string", nameof(Secret));
+                    throw new InvalidOperationException("Secret must be a filled out base32 encoded string");
                 }
                 string strippedSecret = Secret.Replace(" ", "");
                 string escapedIssuer = null;
@@ -3130,14 +3151,14 @@ namespace QRCoder.Core.Generators
                 {
                     if (Issuer.Contains(":"))
                     {
-                        throw new ArgumentException("Issuer must not have a ':'", nameof(Issuer));
+                        throw new InvalidOperationException("Issuer must not have a ':'");
                     }
                     escapedIssuer = Uri.EscapeDataString(Issuer);
                 }
 
                 if (!string.IsNullOrWhiteSpace(Label) && Label.Contains(":"))
                 {
-                    throw new ArgumentException("Label must not have a ':'", nameof(Label));
+                    throw new InvalidOperationException("Label must not have a ':'");
                 }
 
                 if (Label != null && Issuer != null)
@@ -3174,10 +3195,9 @@ namespace QRCoder.Core.Generators
         public class ShadowSocksConfig : Payload
         {
             private readonly string hostname, password, tag, methodStr, parameter;
-            private readonly Method method;
             private readonly int port;
 
-            private Dictionary<string, string> encryptionTexts = new Dictionary<string, string>() {
+            private readonly Dictionary<string, string> encryptionTexts = new Dictionary<string, string>() {
                 { "Chacha20IetfPoly1305", "chacha20-ietf-poly1305" },
                 { "Aes128Gcm", "aes-128-gcm" },
                 { "Aes192Gcm", "aes-192-gcm" },
@@ -3274,7 +3294,6 @@ namespace QRCoder.Core.Generators
                     throw new ShadowSocksConfigException("Value of 'port' must be within 0 and 65535.");
                 this.port = port;
                 this.password = password;
-                this.method = method;
                 this.methodStr = encryptionTexts[method.ToString()];
                 this.tag = tag;
 
@@ -3286,7 +3305,7 @@ namespace QRCoder.Core.Generators
                         ).ToArray());
             }
 
-            private Dictionary<string, string> UrlEncodeTable = new Dictionary<string, string>
+            private readonly Dictionary<string, string> UrlEncodeTable = new Dictionary<string, string>
             {
                 [" "] = "+",
                 ["\0"] = "%00",
@@ -3640,19 +3659,19 @@ namespace QRCoder.Core.Generators
             //Keep in mind, that the ECC level has to be set to "M", version to 15 and ECI to EciMode.Iso8859_2 when generating a SlovenianUpnQr!
             //SlovenianUpnQr specification: https://www.upn-qr.si/uploads/files/NavodilaZaProgramerjeUPNQR.pdf
 
-            private readonly string _payerName = "";
-            private readonly string _payerAddress = "";
-            private readonly string _payerPlace = "";
-            private readonly string _amount = "";
-            private readonly string _code = "";
-            private readonly string _purpose = "";
-            private readonly string _deadLine = "";
-            private readonly string _recipientIban = "";
-            private readonly string _recipientName = "";
-            private readonly string _recipientAddress = "";
-            private readonly string _recipientPlace = "";
-            private readonly string _recipientSiModel = "";
-            private readonly string _recipientSiReference = "";
+            private readonly string _payerName;
+            private readonly string _payerAddress;
+            private readonly string _payerPlace;
+            private readonly string _amount;
+            private readonly string _code;
+            private readonly string _purpose;
+            private readonly string _deadLine;
+            private readonly string _recipientIban;
+            private readonly string _recipientName;
+            private readonly string _recipientAddress;
+            private readonly string _recipientPlace;
+            private readonly string _recipientSiModel;
+            private readonly string _recipientSiReference;
 
             /// <summary>
             /// The version value.
@@ -3692,6 +3711,7 @@ namespace QRCoder.Core.Generators
             /// <param name="recipientSiModel">The recipient si model.</param>
             /// <param name="recipientSiReference">The recipient si reference.</param>
             /// <param name="code">The code.</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
             public SlovenianUpnQr(string payerName, string payerAddress, string payerPlace, string recipientName, string recipientAddress, string recipientPlace, string recipientIban, string description, double amount, string recipientSiModel = "SI00", string recipientSiReference = "", string code = "OTHR") :
                 this(payerName, payerAddress, payerPlace, recipientName, recipientAddress, recipientPlace, recipientIban, description, amount, null, recipientSiModel, recipientSiReference, code)
             { }
@@ -3712,6 +3732,7 @@ namespace QRCoder.Core.Generators
             /// <param name="recipientSiModel">The recipient si model.</param>
             /// <param name="recipientSiReference">The recipient si reference.</param>
             /// <param name="code">The code.</param>
+            [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy constructor with many parameters")]
             public SlovenianUpnQr(string payerName, string payerAddress, string payerPlace, string recipientName, string recipientAddress, string recipientPlace, string recipientIban, string description, double amount, DateTime? deadline, string recipientSiModel = "SI99", string recipientSiReference = "", string code = "OTHR")
             {
                 _payerName = LimitLength(payerName.Trim(), 33);
@@ -4507,11 +4528,6 @@ namespace QRCoder.Core.Generators
             }
             var checksum = (10 - remainder) % 10;
             return checksum == Convert.ToInt32(digits[digits.Length - 1]) - 48;
-        }
-
-        private static bool isHexStyle(string inp)
-        {
-            return (System.Text.RegularExpressions.Regex.IsMatch(inp, @"\A\b[0-9a-fA-F]+\b\Z") || System.Text.RegularExpressions.Regex.IsMatch(inp, @"\A\b(0[xX])?[0-9a-fA-F]+\b\Z"));
         }
     }
 }
