@@ -29,21 +29,12 @@ namespace QRCoder.Core.Extensions
 
             hex = hex.StartsWith("#") ? hex.Substring(1) : hex;
 
-            if (hex.Length == 6)
+            if (hex.Length == 6 || hex.Length == 8)
             {
-                // RGB (assume opaque)
                 return SKColor.Parse(hex);
             }
-            else if (hex.Length == 8)
-            {
-                // ARGB
-                return SKColor.Parse(hex);
-            }
-            else
-            {
-                // Invalid format, return transparent or throw an exception
-                return SKColors.Transparent;
-            }
+
+            return SKColors.Transparent;
         }
     }
 }

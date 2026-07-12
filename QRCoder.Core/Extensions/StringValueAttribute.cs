@@ -5,14 +5,14 @@ namespace QRCoder.Core.Extensions
     /// <summary>
     /// Used to represent a string value for a value in an enum
     /// </summary>
-    public class StringValueAttribute : Attribute
+    public sealed class StringValueAttribute : Attribute
     {
         #region Properties
 
         /// <summary>
         /// Holds the string value associated with the enum member.
         /// </summary>
-        public string StringValue { get; protected set; }
+        public string StringValue { get; private set; }
 
         #endregion Properties
 
@@ -39,7 +39,12 @@ namespace QRCoder.Core.Extensions
         public static string GetStringValue(this Enum value)
         {
             var fieldInfo = value.GetType().GetField(value.ToString());
-            var attr = fieldInfo.GetCustomAttributes(typeof(StringValueAttribute), false) as StringValueAttribute[];
+            if (fieldInfo == null)
+            {
+                return null;
+            }
+
+            var attr = (StringValueAttribute[])fieldInfo.GetCustomAttributes(typeof(StringValueAttribute), false);
             return attr.Length > 0 ? attr[0].StringValue : null;
         }
     }
