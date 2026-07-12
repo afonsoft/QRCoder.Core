@@ -67,5 +67,33 @@ namespace QRCoder.Core.Tests.Renderers
             var b64Qr = new Base64QRCode();
             b64Qr.ShouldNotBeNull();
         }
+
+        [Fact]
+        public void can_set_data_and_dispose()
+        {
+            // Arrange
+            using (var gen = new QRCodeGenerator())
+            using (var data = gen.CreateQrCode("SetQRCodeData test", QRCodeGenerator.ECCLevel.M))
+            using (var b64Qr = new Base64QRCode())
+            {
+                // Act
+                b64Qr.SetQRCodeData(data);
+                var base64 = b64Qr.GetGraphic(10);
+
+                // Assert
+                base64.ShouldNotBeNullOrEmpty();
+                Convert.FromBase64String(base64).Length.ShouldBeGreaterThan(0);
+            }
+        }
+
+        [Fact]
+        public void parameterless_dispose_does_not_throw()
+        {
+            // Arrange
+            var b64Qr = new Base64QRCode();
+
+            // Act & Assert
+            Should.NotThrow(() => b64Qr.Dispose());
+        }
     }
 }
