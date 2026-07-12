@@ -27,7 +27,7 @@ namespace QRCoder.Core.Extensions
                 return SKColors.Transparent;
             }
 
-            hex = hex.StartsWith('#') ? hex.Substring(1) : hex;
+            hex = hex[0] == '#' ? hex.Substring(1) : hex;
 
             if (hex.Length == 6 || hex.Length == 8)
             {
