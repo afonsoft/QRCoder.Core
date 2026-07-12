@@ -750,7 +750,7 @@ namespace QRCoder.Core.Generators
                 {
                     if (vertical)
                     {
-                        return (qrCode.ModuleMatrix[x][y] &&
+                    return (qrCode.ModuleMatrix[x][y] &&
                             !qrCode.ModuleMatrix[x + 1][y] &&
                             qrCode.ModuleMatrix[x + 2][y] &&
                             qrCode.ModuleMatrix[x + 3][y] &&
@@ -770,8 +770,8 @@ namespace QRCoder.Core.Generators
                             qrCode.ModuleMatrix[x + 6][y] &&
                             qrCode.ModuleMatrix[x + 7][y] &&
                             qrCode.ModuleMatrix[x + 8][y] &&
-                            qrCode.ModuleMatrix[x + 9][y] &&
-                            !qrCode.ModuleMatrix[x + 10][y]);
+                            !qrCode.ModuleMatrix[x + 9][y] &&
+                            qrCode.ModuleMatrix[x + 10][y]);
                     }
 
                     return (qrCode.ModuleMatrix[y][x] &&
@@ -794,8 +794,8 @@ namespace QRCoder.Core.Generators
                         qrCode.ModuleMatrix[y][x + 6] &&
                         qrCode.ModuleMatrix[y][x + 7] &&
                         qrCode.ModuleMatrix[y][x + 8] &&
-                        qrCode.ModuleMatrix[y][x + 9] &&
-                        !qrCode.ModuleMatrix[y][x + 10]);
+                        !qrCode.ModuleMatrix[y][x + 9] &&
+                        qrCode.ModuleMatrix[y][x + 10]);
                 }
 
                 private static int ScoreBalance(QRCodeData qrCode, int size)
