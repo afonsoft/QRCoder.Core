@@ -216,10 +216,9 @@ namespace QRCoder.Core.Models
         {
             if (disposing)
             {
+                this.ModuleMatrix = null;
+                this.Version = 0;
             }
-
-            this.ModuleMatrix = null;
-            this.Version = 0;
         }
 
         /// <summary>
