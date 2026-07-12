@@ -312,8 +312,8 @@ jobs:
             - ✅ Performance Tests
 
             ---
-            *Este PR foi criado automaticamente pelo pipeline CI/CD*
-          branch: main
+              *Este PR foi criado automaticamente pelo pipeline CI/CD*
+          branch: auto-pr/${{ github.ref_name }}
           delete-branch: true
           draft: false
           labels: |
