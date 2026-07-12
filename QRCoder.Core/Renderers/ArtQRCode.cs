@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using SkiaSharp;
 using static QRCoder.Core.Renderers.ArtQRCode;
 using static QRCoder.Core.Generators.QRCodeGenerator;
@@ -131,6 +132,8 @@ namespace QRCoder.Core.Renderers
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
         [Obsolete("Use GetGraphic(ArtQRCodeGraphicOptions) instead.")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Legacy public API overload")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S1133", Justification = "Public API; retained for backward compatibility")]
         public SKBitmap GetGraphic(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                  bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Dotted,
                                  BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
@@ -165,6 +168,8 @@ namespace QRCoder.Core.Renderers
         /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Internal rendering helper with closely related parameters")]
+        [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "Rendering logic is inherently sequential")]
         private SKBitmap RenderGraphicCore(int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                  bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Dotted,
                                  BackgroundImageStyle backgroundImageStyle = BackgroundImageStyle.DataAreaOnly, SKBitmap finderPatternImage = null)
@@ -243,13 +248,13 @@ namespace QRCoder.Core.Renderers
         /// <param name="pixelSize">Size of the dots</param>
         /// <param name="brush">SKColor of the pixels</param>
         /// <returns></returns>
-        private SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
+        private static SKBitmap MakeDotPixel(int pixelsPerModule, int pixelSize, SKPaint brush)
         {
             // draw a dot
             var bitmap = new SKBitmap(pixelSize, pixelSize);
             using (var graphics = new SKCanvas(bitmap))
             {
-                graphics.DrawCircle(pixelSize / 2, pixelSize / 2, pixelSize / 2, brush);
+                graphics.DrawCircle(pixelSize / 2f, pixelSize / 2f, pixelSize / 2f, brush);
                 graphics.Flush();
             }
 
@@ -275,7 +280,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="y">Y position</param>
         /// <param name="numModules">Total number of modules per row</param>
         /// <returns>true, if position is part of quiet zone</returns>
-        private bool IsPartOfQuietZone(int x, int y, int numModules)
+        private static bool IsPartOfQuietZone(int x, int y, int numModules)
         {
             return
                 x < 4 || //left
@@ -292,7 +297,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="numModules">Total number of modules per row</param>
         /// <param name="offset">Offset in modules (usually depending on drawQuietZones parameter)</param>
         /// <returns>true, if position is part of any finder pattern</returns>
-        private bool IsPartOfFinderPattern(int x, int y, int numModules, int offset)
+        private static bool IsPartOfFinderPattern(int x, int y, int numModules, int offset)
         {
             var cornerSize = 11 - offset;
             var outerLimitLow = (numModules - cornerSize - 1);
@@ -393,6 +398,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="backgroundImageStyle">Style of the background image (if set). Fill=spanning complete graphic; DataAreaOnly=Don't paint background into quietzone</param>
         /// <param name="finderPatternImage">Optional image that should be used instead of the default finder patterns</param>
         /// <returns>QRCode graphic as bitmap</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static SKBitmap GetQRCode(string plainText, int pixelsPerModule, SKColor darkSKColor, SKColor lightSKColor, SKColor backgroundSKColor, ECCLevel eccLevel, bool forceUtf8 = false,
                                        bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1, SKBitmap backgroundImage = null, double pixelSizeFactor = 0.8,
                                        bool drawQuietZones = true, QuietZoneStyle quietZoneRenderingStyle = QuietZoneStyle.Flat,

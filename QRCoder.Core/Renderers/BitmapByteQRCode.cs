@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using static QRCoder.Core.Generators.QRCodeGenerator;
 
@@ -58,6 +59,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="darkSKColorRgb">The dark sk color rgb.</param>
         /// <param name="lightSKColorRgb">The light sk color rgb.</param>
         /// <returns>The byte[] result.</returns>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S3776", Justification = "BMP byte rendering is inherently sequential")]
         public byte[] GetGraphic(int pixelsPerModule, byte[] darkSKColorRgb, byte[] lightSKColorRgb)
         {
             var sideLength = this.QrCodeData.ModuleMatrix.Count * pixelsPerModule;
@@ -108,9 +110,9 @@ namespace QRCoder.Core.Renderers
             return bmp.ToArray();
         }
 
-        private byte[] HexSKColorToByteArray(string colorString)
+        private static byte[] HexSKColorToByteArray(string colorString)
         {
-            if (colorString.StartsWith("#"))
+            if (colorString.StartsWith('#'))
                 colorString = colorString.Substring(1);
             byte[] byteSKColor = new byte[colorString.Length / 2];
             for (int i = 0; i < byteSKColor.Length; i++)
@@ -118,7 +120,7 @@ namespace QRCoder.Core.Renderers
             return byteSKColor;
         }
 
-        private byte[] IntTo4Byte(int inp)
+        private static byte[] IntTo4Byte(int inp)
         {
             byte[] bytes = new byte[2];
             unchecked
@@ -138,6 +140,7 @@ namespace QRCoder.Core.Renderers
         /// <summary>
         /// Generates a QR code from the given data and returns the rendered output.
         /// </summary>
+        [SuppressMessage("SonarAnalyzer.CSharp", "S107", Justification = "Convenience helper with many optional parameters")]
         public static byte[] GetQRCode(string plainText, int pixelsPerModule, string darkSKColorHtmlHex,
             string lightSKColorHtmlHex, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false,
             EciMode eciMode = EciMode.Default, int requestedVersion = -1)
