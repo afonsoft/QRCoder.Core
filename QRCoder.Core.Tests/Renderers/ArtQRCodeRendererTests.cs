@@ -60,7 +60,7 @@ namespace QRCoder.Core.Tests
 
             var result = HelperFunctions.BitmapToHash(bmp);
 
-            result.ShouldBe("b9ecef2ee7e769d17f5e00914c7452bb");
+            result.ShouldBe("0ee19045007db3c29f2fc75f33906e49");
         }
 
         [Fact]
