@@ -15,18 +15,18 @@ jobs:
     name: 🔍 Qodana Analysis
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
       pull-requests: write
       checks: write
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: 🔍 Qodana Scan
-        uses: JetBrains/qodana-action@v2026.1.3
+        uses: JetBrains/qodana-action@4861e015da555e86a72b862892aba6c2b93e6891
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
         with:
@@ -37,7 +37,7 @@ jobs:
           additional-cache-key: qodana-2025.3-refs/heads/main
 
       - name: 📊 Upload Qodana Results
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
           name: qodana-report
@@ -48,23 +48,25 @@ jobs:
     name: 📊 SonarQube Analysis
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           fetch-depth: 0
 
       - name: 📦 Setup NuGet
-        uses: NuGet/setup-nuget@v4
+        uses: NuGet/setup-nuget@fd55a6f3b34392fa83fde1454582407d8c714123
 
       - name: 🗄️ Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
           dotnet-version: "10.0.x"
 
       - name: ☕ Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a
         with:
           java-version: 17
           distribution: "zulu"
@@ -79,12 +81,17 @@ jobs:
         run: dotnet tool install --global --ignore-failed-sources coverlet.console
 
       - name: 🔧 Fix Permission
-        run: chmod 777 sonar/ -R || true
+        run: |
+          if [ -d sonar ]; then
+            chmod -R u+rwX,go+rX,go-w sonar
+          fi
 
       - name: 🔍 Prepare analysis on SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
         run: |
           echo "🔍 Checking SonarQube configuration..."
-          if [ -z "${{ secrets.SONNAR_TOKEN }}" ]; then
+          if [ -z "$SONAR_TOKEN" ]; then
             echo "❌ SONNAR_TOKEN is not set or empty"
             echo "⚠️ Skipping SonarQube analysis"
             exit 0
@@ -95,7 +102,7 @@ jobs:
             /o:"afonsoft" \
             /k:"afonsoft_QRCoder.Core" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="${{ secrets.SONNAR_TOKEN }}" \
+            /d:sonar.login="$SONAR_TOKEN" \
             /d:sonar.scm.provider=git \
             /d:sonar.coverage.exclusions="**Test*.cs"
 
@@ -103,26 +110,31 @@ jobs:
         run: dotnet build QRCoder.Core.sln --configuration release
 
       - name: 🔍 Run Code Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
         run: |
           echo "🔍 Finalizing SonarQube analysis..."
-          if [ -z "${{ secrets.SONNAR_TOKEN }}" ]; then
+          if [ -z "$SONAR_TOKEN" ]; then
             echo "⚠️ SONNAR_TOKEN not configured, skipping analysis"
             exit 0
           fi
 
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONNAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
 
   # Snyk Security Analysis
   snyk:
     name: 🛡️ Snyk Security
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: 🗄️ Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
           dotnet-version: "10.0.x"
 
@@ -130,7 +142,7 @@ jobs:
         run: dotnet restore QRCoder.Core.sln --ignore-failed-sources
 
       - name: 🛡️ Run Snyk
-        uses: snyk/actions/dotnet@master
+        uses: snyk/actions/dotnet@8e119fbb6c251787721d34ba683ed48eba792766
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -139,7 +151,7 @@ jobs:
           args: --file=QRCoder.Core.sln --severity-threshold=high --sarif-file-output=snyk.sarif --json-output=snyk.json
 
       - name: 📊 Upload Snyk Results
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9
         if: always() && hashFiles('snyk.sarif') != ''
         with:
           sarif_file: snyk.sarif
@@ -195,13 +207,15 @@ jobs:
   quality-metrics:
     name: 📈 Quality Metrics
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
 
       - name: 🗄️ Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9
         with:
           dotnet-version: "10.0.x"
 
@@ -224,8 +238,8 @@ jobs:
           # Count projects
           echo "Projects: $(find src -name '*.csproj' | wc -l)"
 
-          # Check for TODO comments
-          echo "TODO Comments: $(grep -r 'TODO' src --include='*.cs' | wc -l)"
+          # Count pending markers in source files
+          echo "Pending markers: $(grep -r 'TODO' src --include='*.cs' | wc -l)"
 
           echo "Quality metrics analysis completed!"
 
@@ -235,6 +249,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [qodana, sonarqube, snyk, quality-metrics]
     if: always()
+    permissions:
+      contents: read
 
     steps:
       - name: 📋 Generate Quality Report
