@@ -177,6 +177,7 @@ namespace QRCoder.Core.Renderers
             if (pixelSizeFactor > 1)
                 throw new ArgumentOutOfRangeException(nameof(pixelSizeFactor), "The parameter pixelSizeFactor must be between 0 and 1. (0-100%)");
             int pixelSize = (int)Math.Min(pixelsPerModule, Math.Floor(pixelsPerModule / pixelSizeFactor));
+            float pixelsPerModuleF = pixelsPerModule;
 
             var numModules = QrCodeData.ModuleMatrix.Count - (drawQuietZones ? 0 : 8);
             var offset = (drawQuietZones ? 0 : 4);
@@ -208,10 +209,11 @@ namespace QRCoder.Core.Renderers
                             else if (backgroundImageStyle == BackgroundImageStyle.DataAreaOnly)
                             {
                                 var bgOffset = 4 - offset;
-                                using (var resizedImage = Resize(backgroundImage, size - (2 * bgOffset * pixelsPerModule)))
+                                var dataAreaSize = size - (int)(2f * bgOffset * pixelsPerModule);
+                                using (var resizedImage = Resize(backgroundImage, dataAreaSize))
                                 {
                                     if (resizedImage != null)
-                                        graphics.DrawBitmap(resizedImage, 0 + (bgOffset * pixelsPerModule), (bgOffset * pixelsPerModule));
+                                        graphics.DrawBitmap(resizedImage, (float)bgOffset * pixelsPerModule, (float)bgOffset * pixelsPerModule);
                                     graphics.Flush();
                                 }
                             }
@@ -224,7 +226,7 @@ namespace QRCoder.Core.Renderers
                             {
                                 for (var y = 0; y < numModules; y += 1)
                                 {
-                                    var rectangleF = new SKRect(x * pixelsPerModule, y * pixelsPerModule, (x + 1) * pixelsPerModule, (y + 1) * pixelsPerModule);
+                                    var rectangleF = new SKRect(x * pixelsPerModuleF, y * pixelsPerModuleF, (x + 1) * pixelsPerModuleF, (y + 1) * pixelsPerModuleF);
 
                                     var pixelIsDark = this.QrCodeData.ModuleMatrix[offset + y][offset + x];
                                     var solidBrush = pixelIsDark ? darkBrush : lightBrush;
