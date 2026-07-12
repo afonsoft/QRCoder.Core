@@ -89,7 +89,23 @@ namespace QRCoder.Core.Renderers
         /// <param name="data">The data.</param>
         public override void SetQRCodeData(QRCodeData data)
         {
+            base.SetQRCodeData(data);
             this.qr.SetQRCodeData(data);
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.qr?.Dispose();
+                this.QrCodeData = null;
+            }
+
+            base.Dispose(disposing);
         }
 
         /// <summary>
