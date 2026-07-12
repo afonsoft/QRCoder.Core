@@ -88,6 +88,7 @@ namespace QRCoder.Core.Renderers
         /// <param name="data">The data.</param>
         public override void SetQRCodeData(QRCodeData data)
         {
+            base.SetQRCodeData(data);
             this.qr.SetQRCodeData(data);
         }
 
@@ -198,6 +199,17 @@ namespace QRCoder.Core.Renderers
                 base64 = SKBitmapToBase64(bmp, imgType);
             }
             return base64;
+        }
+
+        /// <inheritdoc />
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.qr.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
 
         private static string SKBitmapToBase64(SKBitmap bmp, ImageType imgType)
