@@ -1091,7 +1091,7 @@ namespace QRCoder.Core.Generators
             return codeText;
         }
 
-        private string PlainTextToBinaryECI(string plainText)
+        private static string PlainTextToBinaryECI(string plainText)
         {
             var codeText = string.Empty;
             byte[] _bytes = Encoding.GetEncoding("ascii").GetBytes(plainText);
@@ -1533,7 +1533,7 @@ namespace QRCoder.Core.Generators
             public int Exponent { get; }
         }
 
-        private class Polynom
+        private sealed class Polynom
         {
             public Polynom()
             {
@@ -1555,7 +1555,7 @@ namespace QRCoder.Core.Generators
             }
         }
 
-        private class Point
+        private sealed class Point
         {
             public int X { get; }
             public int Y { get; }
