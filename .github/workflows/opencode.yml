@@ -26,7 +26,7 @@ jobs:
       OMNIROUTE_BASE_URL: https://omniroute.afonsoft.dev/v1
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7.0.0
         with:
           fetch-depth: 1
           persist-credentials: false
