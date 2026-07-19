@@ -9,7 +9,9 @@ jobs:
   delete-merged-branch:
     name: 🗑️ Delete merged branch
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: |
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository
     permissions:
       contents: write
 
@@ -32,5 +34,6 @@ jobs:
           esac
 
           echo "🗑️ Deleting merged branch: $BRANCH_NAME"
-          gh api "repos/${{ github.repository }}/git/refs/heads/${BRANCH_NAME}" --method DELETE
-          echo "✅ Branch '$BRANCH_NAME' deleted successfully."
+          gh api "repos/${{ github.repository }}/git/refs/heads/${BRANCH_NAME}" --method DELETE \
+            || echo "⚠️ Could not delete branch '$BRANCH_NAME' (already removed or from a fork)."
+          echo "✅ Branch '$BRANCH_NAME' cleanup completed."

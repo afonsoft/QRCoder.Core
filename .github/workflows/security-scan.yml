@@ -152,7 +152,7 @@ jobs:
   security-summary:
     name: 📋 Security Summary
     runs-on: ubuntu-latest
-    needs: [codeql, snyk]
+    needs: [codeql, snyk, sonarqube]
     if: always()
 
     steps:
@@ -164,17 +164,17 @@ jobs:
           echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| 🔍 CodeQL | ${{ needs.codeql.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🛡️ Snyk | ${{ needs.snyk.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| 📊 SonarQube | ${{ contains(needs.*.result, 'skipped') && 'skipped' || 'N/A' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 📊 SonarQube | ${{ needs.sonarqube.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
-          if [[ "${{ needs.codeql.result }}" == "failure" || "${{ needs.snyk.result }}" == "failure" ]]; then
+          if [[ "${{ needs.codeql.result }}" == "failure" || "${{ needs.snyk.result }}" == "failure" || "${{ needs.sonarqube.result }}" == "failure" ]]; then
             echo "❌ **Security issues detected! Please review the scan results.**" >> $GITHUB_STEP_SUMMARY
           else
             echo "✅ **All security scans passed successfully!**" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: 🚨 Security Alert
-        if: needs.codeql.result == 'failure' || needs.snyk.result == 'failure'
+        if: needs.codeql.result == 'failure' || needs.snyk.result == 'failure' || needs.sonarqube.result == 'failure'
         run: |
           echo "🚨 SECURITY ISSUES DETECTED!"
           echo "Please review the security scan results immediately."
