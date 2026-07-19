@@ -114,20 +114,22 @@ jobs:
         run: chmod 777 sonar/ -R || true
 
       - name: 🔍 Prepare analysis on SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN || secrets.SONAR_TOKEN }}
         run: |
           echo "🔍 Checking SonarQube configuration..."
-          if [ -z "${{ secrets.SONNAR_TOKEN }}" ]; then
-            echo "❌ SONNAR_TOKEN is not set or empty"
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "❌ SONAR_TOKEN is not set or empty"
             echo "⚠️ Skipping SonarQube analysis"
             exit 0
           fi
 
-          echo "✅ SONNAR_TOKEN is configured"
+          echo "✅ SONAR_TOKEN is configured"
           dotnet sonarscanner begin \
             /o:"afonsoft" \
             /k:"afonsoft_QRCoder.Core" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="${{ secrets.SONNAR_TOKEN }}" \
+            /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.scm.provider=git \
             /d:sonar.coverage.exclusions="**Test*.cs"
 
@@ -135,14 +137,16 @@ jobs:
         run: dotnet build QRCoder.Core.sln --configuration release
 
       - name: 🔍 Run Code Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN || secrets.SONAR_TOKEN }}
         run: |
           echo "🔍 Finalizing SonarQube analysis..."
-          if [ -z "${{ secrets.SONNAR_TOKEN }}" ]; then
-            echo "⚠️ SONNAR_TOKEN not configured, skipping analysis"
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "⚠️ SONAR_TOKEN not configured, skipping analysis"
             exit 0
           fi
 
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONNAR_TOKEN }}"
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
   # Security Summary
   security-summary:

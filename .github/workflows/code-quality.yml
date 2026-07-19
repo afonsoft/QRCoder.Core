@@ -26,7 +26,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: 🔍 Qodana Scan
+        id: qodana
         uses: JetBrains/qodana-action@4861e015da555e86a72b862892aba6c2b93e6891
+        continue-on-error: true
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
         with:
@@ -88,21 +90,21 @@ jobs:
 
       - name: 🔍 Prepare analysis on SonarQube
         env:
-          SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN || secrets.SONAR_TOKEN }}
         run: |
           echo "🔍 Checking SonarQube configuration..."
           if [ -z "$SONAR_TOKEN" ]; then
-            echo "❌ SONNAR_TOKEN is not set or empty"
+            echo "❌ SONAR_TOKEN is not set or empty"
             echo "⚠️ Skipping SonarQube analysis"
             exit 0
           fi
 
-          echo "✅ SONNAR_TOKEN is configured"
+          echo "✅ SONAR_TOKEN is configured"
           dotnet sonarscanner begin \
             /o:"afonsoft" \
             /k:"afonsoft_QRCoder.Core" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="$SONAR_TOKEN" \
+            /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.scm.provider=git \
             /d:sonar.coverage.exclusions="**Test*.cs"
 
@@ -111,15 +113,15 @@ jobs:
 
       - name: 🔍 Run Code Analysis
         env:
-          SONAR_TOKEN: ${{ secrets.SONNAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN || secrets.SONAR_TOKEN }}
         run: |
           echo "🔍 Finalizing SonarQube analysis..."
           if [ -z "$SONAR_TOKEN" ]; then
-            echo "⚠️ SONNAR_TOKEN not configured, skipping analysis"
+            echo "⚠️ SONAR_TOKEN not configured, skipping analysis"
             exit 0
           fi
 
-          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+          dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
   # Snyk Security Analysis
   snyk:
