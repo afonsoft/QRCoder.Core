@@ -1,10 +1,16 @@
 # QRCoder.Core - QR Code Generator Library
 
-[![Build status](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml)
+[![License](https://img.shields.io/github/license/afonsoft/QRCoder.Core)](https://github.com/afonsoft/QRCoder.Core/blob/main/LICENSE.txt)
+[![Build](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/ci-build-test.yml)
+[![Code Quality](https://github.com/afonsoft/QRCoder.Core/actions/workflows/code-quality.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/code-quality.yml)
+[![Security Scan](https://github.com/afonsoft/QRCoder.Core/actions/workflows/security-scan.yml/badge.svg?branch=main)](https://github.com/afonsoft/QRCoder.Core/actions/workflows/security-scan.yml)
 [![codecov](https://codecov.io/gh/afonsoft/QRCoder.Core/graph/badge.svg?token=N8RED1A0D7)](https://codecov.io/gh/afonsoft/QRCoder.Core)
-[![NuGet Badge](https://img.shields.io/nuget/v/QRCoder.Core.svg)](https://www.nuget.org/packages/QRCoder.Core/)
-[![Code Quality](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=alert_status)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
+[![NuGet](https://img.shields.io/nuget/v/QRCoder.Core.svg)](https://www.nuget.org/packages/QRCoder.Core/)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=alert_status)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=security_rating)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=afonsoft_QRCoder.Core&metric=coverage)](https://sonarcloud.io/project/overview?id=afonsoft_QRCoder.Core)
+[![GitHub issues](https://img.shields.io/github/issues/afonsoft/QRCoder.Core)](https://github.com/afonsoft/QRCoder.Core/issues)
+![GitHub top language](https://img.shields.io/github/languages/top/afonsoft/QRCoder.Core)
 
 > **[Leia em Portugues (pt-BR)](README.pt-br.md)**
 
@@ -337,7 +343,7 @@ reportgenerator \
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/chart?repos=afonsoft/QRCoder.Core&type=date&legend=top-left&sealed_token=a1KQPztifboHTq3RlLRkwvvPGw3dtFbndqZQpJxDeVkKCiIiJQyi1kuTEocyVlxTQ_wR7U0f6lQ1gBk00x7MNA3wOhureCKWKGRw0nT27SQSXMsSECsH8w)](https://www.star-history.com/?repos=afonsoft%2FQRCoder.Core&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=afonsoft/qrcoder.core&type=Date)](https://star-history.com/#afonsoft/qrcoder.core&Date)
 
 ## StarMapper
 
