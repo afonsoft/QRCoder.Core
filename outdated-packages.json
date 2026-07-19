@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "parameters": "--outdated",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "/home/runner/work/QRCoder.Core/QRCoder.Core/QRCoder.Core/QRCoder.Core.csproj",
+      "frameworks": [
+        {
+          "framework": "net48",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.Extensions.ObjectPool",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            },
+            {
+              "id": "Microsoft.SourceLink.GitHub",
+              "requestedVersion": "8.0.0",
+              "resolvedVersion": "8.0.0",
+              "latestVersion": "10.0.301"
+            },
+            {
+              "id": "SkiaSharp",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "System.Buffers",
+              "requestedVersion": "4.5.1",
+              "resolvedVersion": "4.5.1",
+              "latestVersion": "4.6.1"
+            },
+            {
+              "id": "System.Memory",
+              "requestedVersion": "4.5.5",
+              "resolvedVersion": "4.5.5",
+              "latestVersion": "4.6.3"
+            },
+            {
+              "id": "System.Text.Encoding.CodePages",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            }
+          ]
+        },
+        {
+          "framework": "netstandard2.1",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.Extensions.ObjectPool",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            },
+            {
+              "id": "Microsoft.SourceLink.GitHub",
+              "requestedVersion": "8.0.0",
+              "resolvedVersion": "8.0.0",
+              "latestVersion": "10.0.301"
+            },
+            {
+              "id": "SkiaSharp",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "System.Buffers",
+              "requestedVersion": "4.5.1",
+              "resolvedVersion": "4.5.1",
+              "latestVersion": "4.6.1"
+            },
+            {
+              "id": "System.Memory",
+              "requestedVersion": "4.5.5",
+              "resolvedVersion": "4.5.5",
+              "latestVersion": "4.6.3"
+            },
+            {
+              "id": "System.Text.Encoding.CodePages",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            }
+          ]
+        },
+        {
+          "framework": "net10.0",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.Extensions.ObjectPool",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            },
+            {
+              "id": "Microsoft.SourceLink.GitHub",
+              "requestedVersion": "8.0.0",
+              "resolvedVersion": "8.0.0",
+              "latestVersion": "10.0.301"
+            },
+            {
+              "id": "SkiaSharp",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "System.Buffers",
+              "requestedVersion": "4.5.1",
+              "resolvedVersion": "4.5.1",
+              "latestVersion": "4.6.1"
+            },
+            {
+              "id": "System.Memory",
+              "requestedVersion": "4.5.5",
+              "resolvedVersion": "4.5.5",
+              "latestVersion": "4.6.3"
+            },
+            {
+              "id": "System.Text.Encoding.CodePages",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            }
+          ]
+        },
+        {
+          "framework": "net8.0",
+          "topLevelPackages": [
+            {
+              "id": "Microsoft.Extensions.ObjectPool",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            },
+            {
+              "id": "Microsoft.SourceLink.GitHub",
+              "requestedVersion": "8.0.0",
+              "resolvedVersion": "8.0.0",
+              "latestVersion": "10.0.301"
+            },
+            {
+              "id": "SkiaSharp",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "System.Buffers",
+              "requestedVersion": "4.5.1",
+              "resolvedVersion": "4.5.1",
+              "latestVersion": "4.6.1"
+            },
+            {
+              "id": "System.Memory",
+              "requestedVersion": "4.5.5",
+              "resolvedVersion": "4.5.5",
+              "latestVersion": "4.6.3"
+            },
+            {
+              "id": "System.Text.Encoding.CodePages",
+              "requestedVersion": "9.0.7",
+              "resolvedVersion": "9.0.7",
+              "latestVersion": "10.0.10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/home/runner/work/QRCoder.Core/QRCoder.Core/QRCoder.Core.Tests/QRCoder.Core.Tests.csproj",
+      "frameworks": [
+        {
+          "framework": "net48",
+          "topLevelPackages": [
+            {
+              "id": "coverlet.collector",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "coverlet.msbuild",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "Microsoft.NET.Test.Sdk",
+              "requestedVersion": "17.14.1",
+              "resolvedVersion": "17.14.1",
+              "latestVersion": "18.8.1"
+            },
+            {
+              "id": "NUnit.Analyzers",
+              "requestedVersion": "4.9.2",
+              "resolvedVersion": "4.9.2",
+              "latestVersion": "4.14.0"
+            },
+            {
+              "id": "NUnit3TestAdapter",
+              "requestedVersion": "5.0.0",
+              "resolvedVersion": "5.0.0",
+              "latestVersion": "6.2.0"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "xunit.runner.visualstudio",
+              "requestedVersion": "3.1.1",
+              "resolvedVersion": "3.1.1",
+              "latestVersion": "3.1.5"
+            }
+          ]
+        },
+        {
+          "framework": "net10.0",
+          "topLevelPackages": [
+            {
+              "id": "coverlet.collector",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "coverlet.msbuild",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "Microsoft.NET.Test.Sdk",
+              "requestedVersion": "17.14.1",
+              "resolvedVersion": "17.14.1",
+              "latestVersion": "18.8.1"
+            },
+            {
+              "id": "NUnit.Analyzers",
+              "requestedVersion": "4.9.2",
+              "resolvedVersion": "4.9.2",
+              "latestVersion": "4.14.0"
+            },
+            {
+              "id": "NUnit3TestAdapter",
+              "requestedVersion": "5.0.0",
+              "resolvedVersion": "5.0.0",
+              "latestVersion": "6.2.0"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "xunit.runner.visualstudio",
+              "requestedVersion": "3.1.1",
+              "resolvedVersion": "3.1.1",
+              "latestVersion": "3.1.5"
+            }
+          ]
+        },
+        {
+          "framework": "net8.0",
+          "topLevelPackages": [
+            {
+              "id": "coverlet.collector",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "coverlet.msbuild",
+              "requestedVersion": "6.0.4",
+              "resolvedVersion": "6.0.4",
+              "latestVersion": "10.0.1"
+            },
+            {
+              "id": "Microsoft.NET.Test.Sdk",
+              "requestedVersion": "17.14.1",
+              "resolvedVersion": "17.14.1",
+              "latestVersion": "18.8.1"
+            },
+            {
+              "id": "NUnit.Analyzers",
+              "requestedVersion": "4.9.2",
+              "resolvedVersion": "4.9.2",
+              "latestVersion": "4.14.0"
+            },
+            {
+              "id": "NUnit3TestAdapter",
+              "requestedVersion": "5.0.0",
+              "resolvedVersion": "5.0.0",
+              "latestVersion": "6.2.0"
+            },
+            {
+              "id": "SkiaSharp.NativeAssets.Linux",
+              "requestedVersion": "3.119.0",
+              "resolvedVersion": "3.119.0",
+              "latestVersion": "4.150.1"
+            },
+            {
+              "id": "xunit.runner.visualstudio",
+              "requestedVersion": "3.1.1",
+              "resolvedVersion": "3.1.1",
+              "latestVersion": "3.1.5"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
