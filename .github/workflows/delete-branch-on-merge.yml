@@ -1,0 +1,39 @@
+name: 🗑️ Delete Branch on Merge
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  delete-merged-branch:
+    name: 🗑️ Delete merged branch
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: 🗑️ Delete merged branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
+
+          # Protect default and release branches
+          case "$BRANCH_NAME" in
+            main|develop|master|releases/*)
+              echo "⚠️ Protected branch '$BRANCH_NAME' will not be deleted."
+              exit 0
+              ;;
+          esac
+
+          echo "🗑️ Deleting merged branch: $BRANCH_NAME"
+          gh api "repos/${{ github.repository }}/git/refs/heads/${BRANCH_NAME}" --method DELETE \
+            || echo "⚠️ Could not delete branch '$BRANCH_NAME' (already removed or from a fork)."
+          echo "✅ Branch '$BRANCH_NAME' cleanup completed."
